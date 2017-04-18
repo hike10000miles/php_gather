@@ -42,8 +42,10 @@ class EventModel
         if(isset($queryResult["CategoryTitle"])) {
             $this->_categoryTitle =$queryResult["CategoryTitle"];
         }
-        $this->_name = $queryResult["EventName"];
-        $this->_description = $queryResult["EventDescription"];
+        //$this->_name = $queryResult["EventName"];
+        $this->setName($queryResult["EventName"]);
+        //$this->_description = $queryResult["EventDescription"];
+        $this->setDescription( $queryResult["EventDescription"]);
         $this->_startDateTime = $this->formatDateTime($queryResult["StartDateTime"]);
         $this->_endDateTime = $this->formatDateTime($queryResult["EndDateTime"]);
         $this->_businessId = $queryResult["BusinessId"];
@@ -59,7 +61,7 @@ class EventModel
             //$formattedTime = $formattedTime . ":00";
             return $formattedTime;
         } else {
-            return $dateTime;
+            throw new Exception('Date and time is not valide.');
         }
     }
 
@@ -72,7 +74,7 @@ class EventModel
             $formattedTime = preg_replace($replacePattern, $replacement, $dateTime);
             return $formattedTime;
         } else {
-            return $dateTime;
+            throw new Exception('Date and time is not valide.');
         }   
     }
 
@@ -93,7 +95,12 @@ class EventModel
 
     public function setName($value)
     {
-        $this->_name = $value;
+        $value = trim($value);
+        if(strlen($value) > 5) {
+            $this->_name = $value;
+        } else {
+            throw new Exception('Event Name is not valide.');
+        }
     }
 
     public function getDescription()
@@ -103,7 +110,12 @@ class EventModel
 
     public function setDescription($value)
     {
-        $this->_description = $value;
+        $value = trim($value);
+        if(strlen($value) > 5) {
+            $this->_description = $value;
+        } else {
+            throw new Exception('Event description is not valide.');
+        }
     }
 
     public function getStartDateTime($flag="detail")

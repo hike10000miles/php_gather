@@ -23,14 +23,25 @@ if(isset($_POST["subbtn"])) {
     if(isset($_SESSION['UserId']) && isset($_POST['EventName']) 
         && isset($_POST['EndDateTime']) && isset($_POST['StartDateTime']) 
         && isset($_POST['BusinessId']) && isset($_POST['EventDescription'])) {
-        $event = new EventModel($_POST);
-        $eventConnect = new EventConnect($db);
-        $result = $eventConnect->createEvent($event);
-        if($result) {
+        $result = null;
+        try {
+            $event = new EventModel($_POST);
+        } catch(Exception $e){
+            $message = $e->getMessage();
+        }
+        if($event != null) {
+            $eventConnect = new EventConnect($db);
+            $result = $eventConnect->createEvent($event);
+        } 
+        if($result != null && $result) {
             header("Location: http://localhost/views/Business.php/");
             exit;
+        } else if(is_a($result, "Exception")) {
+            $message = $result->getMessage();
         } else {
-            $message = "The event is not successfully submitted!";
+            if($message == null) {
+                $message = "The event is not successfully submitted!";
+            }
         }
     } else {
         $message = "The event is not successfully submitted!";

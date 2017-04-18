@@ -48,6 +48,7 @@
             $query = "INSERT INTO events
                         (EventName, StartDateTime, EndDateTime, BusinessId, EventDescription)
                         VALUES(:eventName, :startDateTime, :endDateTime, :businessId, :eventDescription);";
+            try{
             $pdostmt = $this->_db->prepare($query);
             $pdostmt->bindValue(':eventName', $eventModel->getName(), PDO::PARAM_STR);
             $pdostmt->bindValue(':startDateTime', $eventModel->getStartDateTime(), PDO::PARAM_STR);
@@ -56,6 +57,9 @@
             $pdostmt->bindValue(':eventDescription', $eventModel->getDescription(), PDO::PARAM_STR);
             //$pdostmt->bindValue(':userId', $eventModel->getUserId(), PDO::PARAM_STR);
             $result = $pdostmt->execute();
+            } catch (Exception $e) {
+                return $e;
+            }
             return $result;
         }
         public function linkEventAndCategory($eventId, $categoryId)
