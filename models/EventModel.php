@@ -53,12 +53,18 @@ class EventModel
 
     private function formatDateTime($dateTime)
     {
-        $matchPattern = '/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/';
-        $replacePattern = '/T/';
-        $replacement = " ";
-        if(preg_match($matchPattern, $dateTime)) {
-            $formattedTime = preg_replace($replacePattern, $replacement, $dateTime);
+        $matchPattern1 = '/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/';
+        $matchPattern2 = '/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/';
+        $replacePattern1 = '/T/';
+        $replacePattern2 = '/ /';
+        $replacement1 = " ";
+        $replacement2 = "T";
+        if(preg_match($matchPattern1, $dateTime)) {
+            $formattedTime = preg_replace($replacePattern1, $replacement, $dateTime);
             //$formattedTime = $formattedTime . ":00";
+            return $formattedTime;
+        } else if(preg_match($matchPattern2, $dateTime)) {
+            $formattedTime = preg_replace($replacePattern2, $replacement2, $dateTime);
             return $formattedTime;
         } else {
             throw new Exception('Date and time is not valide.');
