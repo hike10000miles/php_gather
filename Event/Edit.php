@@ -1,6 +1,6 @@
 <?php
  if(!defined("__root")) {
-    require( $_SERVER['DOCUMENT_ROOT']. "\gather_finial\configer.php");
+    require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/Business.php';
@@ -18,6 +18,14 @@ $_SESSION['id']= 3;
 $_SESSION['UserId'] = 4;
 
 $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+
+if(isset($_GET["id"])) {
+    try {
+        $event = $eventConnect->getEvent($_GET["id"]);
+    } catch(Exception $e) {
+        $message = $e->getMessage();
+    }
+}
 
 if(isset($_POST["subbtn"])) {
     if(isset($_SESSION['UserId']) && isset($_POST['EventName']) 
@@ -60,7 +68,7 @@ if(isset($_POST["subbtn"])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Create Event | Gather</title>
+    <title>Edit Event | Gather</title>
 </head>
 <body>
 <?php if(isset($message)): ?>
@@ -138,28 +146,32 @@ if(isset($_POST["subbtn"])) {
                 <div class="panel-heading"><?php echo $bd['businessName']; ?> Information</div>
                 <div class="panel-body"><?php echo $bd['businessDescription']; ?></div>
             </div>
-
+                <?php if(is_a($event, "EventModel")): ?>
                 <form action="create.php" method="POST">
                     <input type="text" value='<?php echo $_SESSION['id']; ?>' name="BusinessId" hidden/>
                     <div class="form-group">
                         <label for="EventName">Event Name:</label>
-                        <input type="text" name="EventName" class="form-control"/>
+                        <input type="text" name="EventName" class="form-control" value='<?php echo $event->getName();?>' />
                     </div>
                     <div class="form-group">
                         <label for="StartDateTime">Event Start Time</label>
-                        <input type="datetime-local" name="StartDateTime" class="form-control"/>
+                        <input type="datetime-local" name="StartDateTime" class="form-control" value='<?php echo $event->getStartDateTime("detail"); ?>' />
                     </div>
                     <div class="form-group">
                         <label for="EndDateTime">Event End Time</label>
-                        <input type="datetime-local" name="EndDateTime" class="form-control"/>
+                        <input type="datetime-local" name="EndDateTime" class="form-control" value='<?php echo $event->getStartDateTime("detail"); ?>' />
                     </div>
                     <div class="form-group">
                         <label for="EventDescription">Description</label>
-                        <textarea name="EventDescription"  class="form-control"></textarea>
+                        <textarea name="EventDescription"  class="form-control"><?php echo $event->getDescription(); ?></textarea>
                     </div>
                     <input type="submit" value="Submit" name="subbtn" class="btn btn-default"/>
                 </form>
-
+                <?php elseif(is_a($event, "Exception")):?>
+                <div class="alert alert-warning">
+                    <?php echo $event->getMessage(); ?>
+                </div>
+                <?php endif ?>
         </div>
     </div>
     <?php endforeach; ?>

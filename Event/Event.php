@@ -1,25 +1,38 @@
 <?php
  if(!defined("__root")) {
-    require( $_SERVER['DOCUMENT_ROOT']. "\gather_finial\configer.php");
+    require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/Business.php';
 include __root . 'controllers/EventController.php';
+include __root . 'controllers/CategoryController.php';
 
 $db = Connect::dbConnect();
 $eventConnect = new EventConnect($db);
+$categoryConnect = new CategoryConnect($db);
 $businessview = new BusinessDAO();
 $event = null;
+$eventCategories = null;
 
 session_start();
 
 $_SESSION['id']= 3;
+$_SESSION['role'] = "business";
 
 $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
 if(isset($_GET["id"])) {
-    $event = $eventConnect->getEvent($_GET["id"]); 
+    try {
+        $event = $eventConnect->getEvent($_GET["id"]);
+        $eventCategories = $categoryConnect->getEventCategories($_GET["id"]);
+    } catch(Exception $e) {
+        $message = $e->getMessage();
+    }
+    // !!useful!!
+    //if(!($event->getBusinessId() == $_SESSION['id']) && $_SESSION['role'] == 'business') {
+    //    $event = new Exception("This event is not yours.");
+    //}
 } else {
-    $event = "not set";
+    $event = new Exception("Event not found!");
 }
 
 ?>
@@ -35,7 +48,7 @@ if(isset($_GET["id"])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Business | Gather</title>
+    <title> <?php echo $businessdetails[0]['businessName'];?> Event | Gather</title>
 </head>
 <body>
 <hr class="">
@@ -108,19 +121,39 @@ if(isset($_GET["id"])) {
                 <div class="panel-heading"><?php echo $bd['businessName']; ?> Information</div>
                 <div class="panel-body"><?php echo $bd['businessDescription']; ?></div>
             </div>
-            <?php if($event != null || $event != "not set"): ?>
+            <?php if(is_a($event, "EventModel")): ?>
             <div class="panel panel-default">
                 <div class="panel-heading"><?php echo $event->getName(); ?></div>
                 <div class="panel-body">
                     <p>Description: <?php echo $event->getDescription(); ?></p>
                     <p>Start at: <?php echo $event->getStartDateTime("detail"); ?></p>
                     <p>End at: <?php echo $event->getEndDateTime("detail"); ?></p>
+                    <p>Price: <?php echo $event->getPrice(); ?></p>
                 </div>
+                <?php if(!is_a($eventCategories, "Exception")) :?>
+                <div class="panel-footer event-categories">
+                    <?php foreach($eventCategories as $eventCategory) :?>
+                    <p class="categoryTitle"><?php echo $eventCategory->getTitle(); ?></p>
+                    <?php endforeach ?>
+                </div>
+                <?php endif?>
+            </div>
+            <form action='Edit.php' method='get'>
+                <input type='hidden' name='id' value='<?php echo $event->getEventId(); ?>'>
+                <input type='submit' value='Edit' class="btn btn-default">
+            </form>
+            <form action='Delete.php' method='post'>
+                <input type='hidden' name='id' value='<?php echo $event->getEventId(); ?>'>
+                <input type='submit'value='Delete' class="btn btn-danger">
+            </form>
+            <?php elseif(is_a($event, "Exception")):?>
+            <div class="alert alert-warning">
+                <?php echo $event->getMessage(); ?>
             </div>
             <?php endif; ?>
         </div>
     </div>
-    <?php endforeach; ?>
+    <?php endforeach ?>
     <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

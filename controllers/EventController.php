@@ -1,6 +1,6 @@
 <?php
     if(!defined("__root")) {
-        require( $_SERVER['DOCUMENT_ROOT']. "\gather_finial\configer.php");
+        require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
     }
     include __root . "models\EventModel.php";
 
@@ -15,8 +15,8 @@
         public function getEvents()
         {
             $allEvents = array();
-            $sqlQuery = "SELECT e.*, l.*, b.businessName BusinessName FROM events e JOIN business b ON b.id = e.businessId JOIN locations l ON l.id = b.locationid;";
-            //$sqlQuery = "SELECT * FROM events e JOIN business b ON e.businessid = e.id;";
+            //$sqlQuery = "SELECT e.*, l.*, b.businessName BusinessName FROM events e JOIN business b ON b.id = e.businessId JOIN locations l ON l.id = b.locationid;";
+            $sqlQuery = "SELECT * FROM events;";
             $pdostmt = $this->_db->prepare($sqlQuery);
             $pdostmt -> execute();
             $results = $pdostmt -> fetchAll();
@@ -46,17 +46,17 @@
         public function createEvent($eventModel)
         {
             $query = "INSERT INTO events
-                        (EventName, StartDateTime, EndDateTime, BusinessId, EventDescription)
-                        VALUES(:eventName, :startDateTime, :endDateTime, :businessId, :eventDescription);";
+                        (EventName, StartDateTime, EndDateTime, BusinessId, EventDescription, price)
+                        VALUES(:eventName, :startDateTime, :endDateTime, :businessId, :eventDescription, :price);";
             try{
-            $pdostmt = $this->_db->prepare($query);
-            $pdostmt->bindValue(':eventName', $eventModel->getName(), PDO::PARAM_STR);
-            $pdostmt->bindValue(':startDateTime', $eventModel->getStartDateTime(), PDO::PARAM_STR);
-            $pdostmt->bindValue(':endDateTime', $eventModel->getEndDateTime(), PDO::PARAM_STR);
-            $pdostmt->bindValue(':businessId', $eventModel->getBusinessId(), PDO::PARAM_STR);
-            $pdostmt->bindValue(':eventDescription', $eventModel->getDescription(), PDO::PARAM_STR);
-            //$pdostmt->bindValue(':userId', $eventModel->getUserId(), PDO::PARAM_STR);
-            $result = $pdostmt->execute();
+                $pdostmt = $this->_db->prepare($query);
+                $pdostmt->bindValue(':eventName', $eventModel->getName(), PDO::PARAM_STR);
+                $pdostmt->bindValue(':startDateTime', $eventModel->getStartDateTime(), PDO::PARAM_STR);
+                $pdostmt->bindValue(':endDateTime', $eventModel->getEndDateTime(), PDO::PARAM_STR);
+                $pdostmt->bindValue(':businessId', $eventModel->getBusinessId(), PDO::PARAM_STR);
+                $pdostmt->bindValue(':eventDescription', $eventModel->getDescription(), PDO::PARAM_STR);
+                $pdostmt->bindValue(':price', $eventModel->getPrice(), PDO::PARAM_STR);
+                $result = $pdostmt->execute();
             } catch (Exception $e) {
                 return $e;
             }
@@ -80,8 +80,13 @@
             $pdostmt->bindValue(":id", $id, PDO::PARAM_STR);
             $pdostmt -> execute();
             $result = $pdostmt -> fetch();
-            $event = new EventModel($result);
-            return $event;
+            if($result) {
+                $event = new EventModel($result);
+                return $event;
+            } else {
+                return new Exception("Event not found!");
+            }
+
         }
         public function deleteEvent($eventModel)
         {

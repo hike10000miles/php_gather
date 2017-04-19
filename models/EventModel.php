@@ -30,25 +30,24 @@ class EventModel
         if(isset($queryResult['UsersId'])) {
             $this->_userId = $queryResult['UsersId'];
         }
-        /*if(isset($queryResult[0])) {
+        if(isset($queryResult['id'])) {
             $this->_eventId = $queryResult[0]; 
-        }*/
+        }
         if(isset($queryResult["EventId"])) {
             $this->_eventId = $queryResult["EventId"]; 
         }
         if(isset($queryResult["CategoryId"])) {
-            $this->_categoryId = $queryResult["CategoryId"];
+            $this->setCategoryId($queryResult["CategoryId"]);
         }
         if(isset($queryResult["CategoryTitle"])) {
             $this->_categoryTitle =$queryResult["CategoryTitle"];
         }
-        //$this->_name = $queryResult["EventName"];
+        $this->setPrice($queryResult["price"]);
         $this->setName($queryResult["EventName"]);
-        //$this->_description = $queryResult["EventDescription"];
         $this->setDescription( $queryResult["EventDescription"]);
         $this->_startDateTime = $this->formatDateTime($queryResult["StartDateTime"]);
         $this->_endDateTime = $this->formatDateTime($queryResult["EndDateTime"]);
-        $this->_businessId = $queryResult["BusinessId"];
+        $this->setBusinessId($queryResult["BusinessId"]);
     }
 
     private function formatDateTime($dateTime)
@@ -60,7 +59,7 @@ class EventModel
         $replacement1 = " ";
         $replacement2 = "T";
         if(preg_match($matchPattern1, $dateTime)) {
-            $formattedTime = preg_replace($replacePattern1, $replacement, $dateTime);
+            $formattedTime = preg_replace($replacePattern1, $replacement1, $dateTime);
             //$formattedTime = $formattedTime . ":00";
             return $formattedTime;
         } else if(preg_match($matchPattern2, $dateTime)) {
@@ -105,7 +104,7 @@ class EventModel
         if(strlen($value) > 5) {
             $this->_name = $value;
         } else {
-            throw new Exception('Event Name is not valide.');
+            throw new Exception('Event Name is too short.');
         }
     }
 
@@ -120,7 +119,7 @@ class EventModel
         if(strlen($value) > 5) {
             $this->_description = $value;
         } else {
-            throw new Exception('Event description is not valide.');
+            throw new Exception('Event description is too short.');
         }
     }
 
@@ -190,6 +189,15 @@ class EventModel
         return $this->_businessId;
     }
 
+    public function setBusinessId($value)
+    {
+        if(intval($value) > 0) {
+            $this->_businessId = $value;
+        } else {
+            throw new Exception("Business not found!");
+        }        
+    }
+
     public function getUserId()
     {
         return $this->_userId;
@@ -197,17 +205,35 @@ class EventModel
 
     public function getCategoryId()
     {
-        return $this->_categoryId();
+        return $this->_categoryId;
     }
 
     public function setCategoryId($value)
     {
-        $this->_categoryId = $value;
+        if(intval($value) > 0) {
+            $this->_categoryId = $value;
+        } else {
+            throw new Exception("Category not found!");
+        }
     }
 
     public function getCategoryTitle()
     {
         return $this->_categoryTitle;
+    }
+
+    public function getPrice()
+    {
+        return $this->_price;
+    }
+
+    public function setPrice($value)
+    {
+        if(intval($value) >= 0) {
+            $this->_price = intval($value);
+        } else {
+            throw new Exception("Price must be bigger or equal than 0.");
+        }
     }
 }
 ?>

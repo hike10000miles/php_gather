@@ -1,24 +1,49 @@
 <?php
  if(!defined("__root")) {
-    require( $_SERVER['DOCUMENT_ROOT']. "\gather_finial\configer.php");
+    require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/Business.php';
 include __root . 'controllers/EventController.php';
+include __root . 'controllers/CategoryController.php';
 
 $db = Connect::dbConnect();
+$eventConnect = new EventConnect($db);
 $businessview = new BusinessDAO();
-$eventController = new EventConnect($db);
+$event = null;
+$message = null;
 
 session_start();
 
 $_SESSION['id']= 3;
+$_SESSION['role'] = "business";
 
 $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+if(isset($_POST["id"])) {
+    try {
+        $event = $eventConnect->getEvent($_POST["id"]);
+    } catch(Exception $e) {
+        $message = $e->getMessage();
+    }
+    // !!useful!!
+    //if(!($event->getBusinessId() == $_SESSION['id']) && $_SESSION['role'] == 'business') {
+    //    $event = new Exception("This event is not yours.");
+    //}
+} else {
+    $event = new Exception("Event not found!");
+}
 
-$events = $eventController->getEventList($_SESSION['id']);
-
+    if(is_a($event, 'EventModel')) {
+        $result = $eventConnect->deleteEvent($event);
+        if($result) {
+            header("Location: http://localhost/php_gather/Business/Business.php");
+            exit;
+        } else {
+            $message= "Something went wrong!";
+        }
+    }
 ?>
+
 <!DOCTYPE>
 <html>
 <head>
@@ -28,14 +53,19 @@ $events = $eventController->getEventList($_SESSION['id']);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
-    <?php include("components/globalhead.php"); ?>
+    <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Business | Gather</title>
+    <title> <?php echo $businessdetails[0]['businessName'];?> Event | Gather</title>
 </head>
 <body>
+<?php if(isset($message)): ?>
+    <div class="alert alert-warning">
+        <?php echo $message; ?>
+    </div>
+<?php endif?>
 <hr class="">
 <div class="container">
-    <?php include("components/header.php"); ?>
+    <?php include(__root."views/components/header.php"); ?>
     <?php foreach ($businessdetails as $bd) : ?>
     <div class="row">
         <div class="col-md-3">
@@ -103,51 +133,10 @@ $events = $eventController->getEventList($_SESSION['id']);
                 <div class="panel-heading"><?php echo $bd['businessName']; ?> Information</div>
                 <div class="panel-body"><?php echo $bd['businessDescription']; ?></div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading" contenteditable="false">Events<span class="pull-right"><a href="#">View More</a></span></a></span></div>
-                <div class="panel-body">
-                    <div class="row">
-                        <?php foreach($events as $event) : ?>
-                        <div class="col-md-4">
-                            <div class="thumbnail">
-                                <img alt="300x200" src="http://lorempixel.com/300/150/technics">
-                                <div class="caption">
-                                    <h4 class="pull-right">$24.99</h4>
-                                    <h4><a href='<?php echo __httpRoot . "Views/Event/Event.php?id=" . $event->getEventId(); ?>'><?php echo $event->getName(); ?></a></h4>
-                                    <p><?php echo $event->getDescription(); ?></p>
-                                </div>
-                                <div class="ratings">
-                                    <p class="pull-right">15 reviews</p>
-                                    <p>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                    </p>
-                                </div>
-                               <!-- <?php /*if(isset($event['discount'])): */?>
-                                    <div class="panel-footer text-center">
-                                        Apply <?php /*echo $event['discount'];*/?>% off Today!
-                                    </div>
-                                --><?php /*endif; */?>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-
-                    </div>
-
-                </div>
-
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">Review</div>
-                <div class="panel-body"> Insert Reviews Here. </div>
-            </div>
         </div>
     </div>
-    <?php endforeach; ?>
-    <?php include("components/footer.php"); ?>
+    <?php endforeach ?>
+    <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

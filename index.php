@@ -1,6 +1,6 @@
 <?php
      if(!defined("__root")) {
-        require( $_SERVER['DOCUMENT_ROOT']. "\gather_finial\configer.php");
+        require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
     }
 ?>
 
