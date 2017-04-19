@@ -1,6 +1,6 @@
 <?php
      if(!defined("__root")) {
-        require( $_SERVER['DOCUMENT_ROOT']. "\gather_finial\configer.php");
+        require( $_SERVER['DOCUMENT_ROOT']. "\\configer.php");
     }
 ?>
 
@@ -51,14 +51,14 @@
 				<div class="img_box">
 					<img src="assest/images/Icon1.png" class="icon"/>
 				</div>
-				<h4 class="text-center">START A GATHERING</h3>
+				<h4 class="text-center">START A GATHERING</h4>
 				<p>Begin one of the old rituals in human history. Invite your group to commonarea, where all the decision will be made. </p>
 			</div>
 			<div class="col-sm-3 col-sm-offset-1 col-xs-6 col-xs-offset-3">
 				<div class="img_box">
 					<img src="assest/images/Icon2.png" class="icon"/>
 				</div>
-				<h4 class="text-center">PLAN ALL THE DETAILS</h3>
+				<h4 class="text-center">PLAN ALL THE DETAILS</h4>
 				<p>As a group, beginning planning all the details. Discover new events, vote on the location reserve your spot, split the bill, figure out logistics and plan the carpooling - 
 ALL IN  ONE SPOT</p>
 			</div>
