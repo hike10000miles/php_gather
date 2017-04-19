@@ -82,9 +82,9 @@ $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
         <?php echo $message; ?>
     </div>
 <?php endif?>
-<hr class="">
+<?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-    <?php include(__root."views/components/header.php"); ?>
+
     <?php if($_SESSION['role'] == 'business'):?>
     <?php foreach ($businessdetails as $bd) : ?>
     <div class="row">

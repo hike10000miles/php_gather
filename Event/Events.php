@@ -47,14 +47,15 @@ $categories = $categoryConnect->getCategories();
     <title> All Event | Gather</title>
 </head>
 <body>
+
+<?php include(__root."views/components/userheader.php"); ?>
 <?php if(is_a($category, "Exception")): ?>
     <div class="alert alert-warning">
         <?php echo $category->getMessage(); ?>
     </div>
 <?php endif?>
-<hr class="">
 <div class="container">
-    <?php include(__root."views/components/header.php"); ?>
+
     <?php if(is_a($category, "CategoryModel")): ?>
         <h1>List of <?php echo $category->getTitle(); ?> Events</h1>
     <?php else:?>

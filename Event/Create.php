@@ -76,14 +76,14 @@ if($_SESSION['role'] == 'business') {
     <title>Create Event | Gather</title>
 </head>
 <body>
+<?php include(__root."views/components/userheader.php"); ?>
 <?php if(isset($message)): ?>
     <div class="alert alert-warning">
         <?php echo $message; ?>
     </div>
 <?php endif?>
-<hr class="">
 <div class="container">
-    <?php include(__root."views/components/header.php"); ?>
+
     <?php if(isset($businessdetails)):?>
     <?php foreach ($businessdetails as $bd) : ?>
     <div class="row">
