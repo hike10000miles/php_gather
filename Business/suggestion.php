@@ -54,7 +54,7 @@ foreach ($list as $l)
     echo "
 
                     <tr>
-                        <td><a href='index.php?id=" . $l->id . "'>" . $l->title . "</a>
+                        <td><a href='blog.php?id=" . $l->id . "'>" . $l->title . "</a>
                         </td>
                         <td>";if($l->Reply == null)
                         {
