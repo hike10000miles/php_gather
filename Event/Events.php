@@ -13,10 +13,22 @@ $categoryConnect = new CategoryConnect($db);
 $businessview = new BusinessDAO();
 $events = null;
 $categories = null;
+$category = null;
 
-session_start();
+//session_start();
+if(isset($_GET['category'])) {
+    try {
+        $category = $categoryConnect->getCategory($_GET['category']);
+    } catch (Exception $e) {
+        $category = $e;
+    }
+    if(is_a($category, "CategoryModel")){
+        $events = $categoryConnect->getEventsByCategory($_GET['category']);
+    }
+} else {
+    $events = $eventConnect->getEvents();
+}
 
-$events = $eventConnect->getEvents();
 $categories = $categoryConnect->getCategories();
 
 ?>
@@ -35,10 +47,19 @@ $categories = $categoryConnect->getCategories();
     <title> All Event | Gather</title>
 </head>
 <body>
+<?php if(is_a($category, "Exception")): ?>
+    <div class="alert alert-warning">
+        <?php echo $category->getMessage(); ?>
+    </div>
+<?php endif?>
 <hr class="">
 <div class="container">
     <?php include(__root."views/components/header.php"); ?>
-    <h1>List of Event</h1>
+    <?php if(is_a($category, "CategoryModel")): ?>
+        <h1>List of <?php echo $category->getTitle(); ?> Events</h1>
+    <?php else:?>
+        <h1>List of Event</h1>
+    <?php endif?>
     <div class="row">
 
         <div class="col-md-3">
@@ -51,7 +72,7 @@ $categories = $categoryConnect->getCategories();
 
         <div class="col-md-9">
         <div class="row">
-
+        <?php if(count($events) > 0) :?>
         <?php foreach($events as $event) : ?>
             <div class="col-sm-4 fixheight">
                 <div class="thumbnail">
@@ -80,6 +101,11 @@ $categories = $categoryConnect->getCategories();
                 </div>
             </div>
         <?php endforeach; ?>
+        <?php else: ?>
+            <div class="alert alert-warning">
+                No events in this category yet!
+            </div>
+        <?php endif;?>
         </div>
     </div>
     <div class="clearfix"></div>

@@ -7,15 +7,20 @@
         private $_eventId;
 
         public function __construct($queryResult)
-        {
-            if(isset($queryResult["Id"])) {
-                $this->_categoryId = $queryResult["Id"];
+        {   
+            try {
+                if(isset($queryResult["Id"])) {
+                    $this->setId($queryResult["Id"]);
+                }
+                if(isset($queryResult["EventId"])) {
+                    $this->_eventId = $queryResult["EventId"];
+                }
+                $this->setTitle($queryResult['CategoryTitle']);
+                $this->setDescription($queryResult["CategoryDescription"]);
+            } catch(Exception $e){
+              throw $e;
             }
-            if(isset($queryResult["EventId"])) {
-                $this->_eventId = $queryResult["EventId"];
-            }
-            $this->_categoryTitle = $queryResult["CategoryTitle"];
-            $this->_categoryDescription = $queryResult["CategoryDescription"];
+
         }
 
         public function getTitle()
@@ -25,11 +30,15 @@
 
         public function setTitle($title)
         {
-            $value = trim($value);
-            if(strlen($value) > 5) {
-                $this->_categoryTitl = $value;
+            if(isset($title)) {
+                $value = trim($title);
+                if(strlen($value) > 3) {
+                    $this->_categoryTitle = $value;
+                } else {
+                    return null;
+                }
             } else {
-                throw new Exception('Category title is too short.');
+                throw new Exception("Category title cannot be empty.");
             }
         }
 
@@ -39,12 +48,16 @@
         }
 
         public function setDescription($description)
-        {
-            $value = trim($value);
-            if(strlen($value) > 5) {
-                $this->_categoryDescription = $value;
+        {   
+            if(isset($description)) {
+                $value = trim($description);
+                if(strlen($value) > 5) {
+                    $this->_categoryDescription = $value;
+                } else {
+                    return null;
+                }
             } else {
-                throw new Exception('Category description is too short.');
+                throw new Exception("Category description cannot be empty.");
             }
         }
 
@@ -54,8 +67,13 @@
         }
 
         public function setId($id)
-        {
-            $this->_categoryId = $id;
+        {   
+            $value = intval($id);
+            if($value > 0) {
+                $this->_categoryId = $id;
+            } else {
+                throw new Exception('Category must have ID.');
+            }
         }
 
     }

@@ -9,5 +9,5 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <!-- Bootstrap -->
 <link href='<?php echo __httpRoot."assest/"?>bootstrap/css/bootstrap.min.css' rel="stylesheet">
-<link href='<?php echo __httpRoot."assest/style/"?>master_stylesheet.css'' rel="stylesheet">
+<link href='<?php echo __httpRoot."assest/style/"?>master_stylesheet.css' rel="stylesheet">
 

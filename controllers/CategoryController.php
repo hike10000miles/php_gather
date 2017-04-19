@@ -38,14 +38,18 @@
             return $result;
         }
         public function getCategory($id) 
-        {
+        {   
             $sqlQuery = "SELECT * FROM category WHERE Id = :id";
             $pdostmt = $this->_db->prepare($sqlQuery);
             $pdostmt->bindValue(":id", $id, PDO::PARAM_STR);
             $pdostmt -> execute();
             $result = $pdostmt -> fetch();
-            $category = new CategoryModel($result);
-            return $category;
+            if($result) {
+                $category = new CategoryModel($result);
+                return $category;
+            } else {
+                return new Exception("Category not found!");
+            }
         }
         public function deleteCategory($categoryModel)
         {
@@ -68,7 +72,7 @@
         }
         public function getEventsByCategory($id)
         {
-            include_once __root . "models\Event\EventModel.php";
+            include_once __root . "models\EventModel.php";
             $allEvents = array();
             $query = "SELECT e.*, eg.CategoryId, c.CategoryTitle, b.*, l.* FROM events e JOIN eventcategory eg ON e.id = eg.EventId JOIN category c ON eg.CategoryId = c.Id JOIN business b ON e.BusinessId = b.id JOIN locations l ON l.Id = b.locationid WHERE eg.CategoryId = :id";
             $pdostmt = $this->_db->prepare($query);

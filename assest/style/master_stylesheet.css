@@ -1,6 +1,5 @@
 html {
 	box-sizing:border-box;
-	
 }
 
 *,*:before,*:after {
@@ -10,6 +9,7 @@ html {
 h4{
 	color: #f06d3c;
 }
+
 .container{
 	max-width:980px;
 	margin: 0 auto;
@@ -64,15 +64,12 @@ h4{
 	text-align: center;
 	text-transform: uppercase;
 	font-weight: bold;
-
-
 }
 
 #main{
 	position: relative;
 	opacity: 0.9;
 	filter: alpha(opacity=90); /*for IE8 and earlier */
-	
 }
 
 .big_text{
@@ -138,49 +135,47 @@ footer{
  font-weight: normal;	
  text-transform: none;
 }
-
+.fixheight {
+	min-height: 360px;
+}
 
 @media only screen and (min-width: 768px){
-
-#first{
-	margin-left: 5%;
-}
+	#first{
+		margin-left: 5%;
+	}
 }
 
 @media only screen and (max-width: 767px){
-.big_text{
-	font-size: 50px;
-}
+	.big_text{
+		font-size: 50px;
+	}
+	.subtext{
+		font-size: 20px;
+	}
 
-.subtext{
-	font-size: 20px;
-}
+	#login li{
+		font-size:12px;
+	}
 
-#login li{
-	font-size:12px;
-}
-
-.menu li {
-	font-size: 10px;
+	.menu li {
+		font-size: 10px;
+	}
 }
 
 @media only screen and (max-width: 660px){
-.big_text{
-	font-size: 40px;
-}
-
-.subtext{
-	font-size: 18px;
-}
+	.big_text{
+		font-size: 40px;
+	}
+	.subtext{
+		font-size: 18px;
+	}
 }
 
 @media only screen and (max-width: 545px){
-.big_text{
-	font-size: 30px;
+	.big_text{
+		font-size: 30px;
+	}
+	.subtext{
+		font-size: 16px;
+	}
 }
-
-.subtext{
-	font-size: 16px;
-}
-}
-
