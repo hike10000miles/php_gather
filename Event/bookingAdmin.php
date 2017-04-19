@@ -38,7 +38,7 @@ foreach ($list as $l)
     echo "
                 <tbody>
                     <tr>
-                        <td><a href='index.php?id=" . $l->id . "'>" . $l->user_name . "</a></td>
+                        <td><a href='blog.php?id=" . $l->id . "'>" . $l->user_name . "</a></td>
                     
                         <td id='rowbtn'><form action=\"deleteBookingAdmin.php\" method=\"post\">
                             <input type=\"hidden\" value='" . $l->id . "' name=\"id\">
