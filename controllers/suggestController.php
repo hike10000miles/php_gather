@@ -28,11 +28,11 @@ class Suggest
         return $details;
     }
 
-    public function addSuggest($fname, $lname ,$email, $date, $title, $suggest)
+    public function addSuggest($fname, $lname ,$email, $date, $title, $suggest, $sugg_id)
     {
         $query3 = "INSERT INTO suggestions
-                    (first_name, last_name, email, date, title, suggest)
-                    VALUES(:first_name, :last_name, :email, :date, :title, :suggest)";
+                    (first_name, last_name, email, date, title, suggest, BusinessId)
+                    VALUES(:first_name, :last_name, :email, :date, :title, :suggest, :BusinessId)";
         $pdostmt3 = $this->db->prepare($query3);
         $pdostmt3->bindValue(':first_name',$fname, PDO::PARAM_STR);
         $pdostmt3->bindValue(':last_name',$lname, PDO::PARAM_STR);
@@ -40,6 +40,7 @@ class Suggest
         $pdostmt3->bindValue(':date',$date,PDO::PARAM_STR);
         $pdostmt3->bindValue(':title',$title,PDO::PARAM_STR);
         $pdostmt3->bindValue(':suggest',$suggest,PDO::PARAM_STR);
+        $pdostmt3->bindValue(':BusinessId',$sugg_id,PDO::PARAM_INT);
         $add = $pdostmt3->execute();
         return $add;
     }
@@ -89,6 +90,25 @@ class Suggest
         $pdostmt7->bindValue(':id', $id, PDO::PARAM_INT);
         $msg = $pdostmt7->execute();
         return $msg;
+    }
+
+    public function blogDetails($id)
+    {
+        $query8 = "SELECT * FROM business
+                    WHERE id = :id ";
+        $pdostmt8 = $this->db->prepare($query8);
+        $pdostmt8->bindValue(':id',$id, PDO::PARAM_INT);
+        $pdostmt8->execute();
+        $details = $pdostmt8->fetch(PDO::FETCH_OBJ);
+        return $details;
+    }
+
+    public function listBusiness(){
+        $query10 = "SELECT * FROM business";
+        $pdostmt10 = $this->db->prepare($query10);
+        $pdostmt10->execute();
+        $list = $pdostmt10->fetchAll(PDO::FETCH_OBJ);
+        return $list;
     }
 }
 

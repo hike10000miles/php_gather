@@ -43,6 +43,30 @@ class Blog
         return $add;
     }
 
+    public function deletePost($id)
+    {
+        $query4 = "DELETE FROM blog WHERE id = :id";
+        $pdostmt4 = $this->db->prepare($query4);
+        $pdostmt4->bindValue(':id',$id, PDO::PARAM_INT);
+        $delete = $pdostmt4->execute();
+        return $delete;
+    }
+
+    public function updateDetails($id,$date, $title, $content, $image)
+    {
+        $query5 = "UPDATE suggestions SET date= :date, title= :title, content= :content,
+                    image= :image
+                    WHERE id= :id";
+        $pdostmt5= $this->db->prepare($query5);
+        $pdostmt5->bindValue(':id',$id, PDO::PARAM_INT);
+        $pdostmt5->bindValue(':date',$date,PDO::PARAM_STR);
+        $pdostmt5->bindValue(':title',$title,PDO::PARAM_STR);
+        $pdostmt5->bindValue(':content',$content,PDO::PARAM_STR);
+        $pdostmt5->bindValue(':image',$image,PDO::PARAM_STR);
+        $update = $pdostmt5->execute();
+        return $update;
+    }
+
     public function postMsg($user, $comment, $blog_id)
     {
         $query6 = "INSERT INTO comments
@@ -69,27 +93,4 @@ class Blog
         return $detailss;
     }
 
-    public function deletePost($id)
-    {
-        $query4 = "DELETE FROM blog WHERE id = :id";
-        $pdostmt4 = $this->db->prepare($query4);
-        $pdostmt4->bindValue(':id',$id, PDO::PARAM_INT);
-        $delete = $pdostmt4->execute();
-        return $delete;
-    }
-
-    public function updateDetails($id,$date, $title, $content, $image)
-    {
-        $query5 = "UPDATE suggestions SET date= :date, title= :title, content= :content,
-                    image= :image
-                    WHERE id= :id";
-        $pdostmt5= $this->db->prepare($query5);
-        $pdostmt5->bindValue(':id',$id, PDO::PARAM_INT);
-        $pdostmt5->bindValue(':date',$date,PDO::PARAM_STR);
-        $pdostmt5->bindValue(':title',$title,PDO::PARAM_STR);
-        $pdostmt5->bindValue(':content',$content,PDO::PARAM_STR);
-        $pdostmt5->bindValue(':image',$image,PDO::PARAM_STR);
-        $update = $pdostmt5->execute();
-        return $update;
-    }
 }
