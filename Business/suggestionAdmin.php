@@ -31,7 +31,7 @@ foreach ($list as $l)
     echo "
                 <tbody>
                     <tr>
-                        <td><a href='index.php?id=" . $l->id . "'>" . $l->title . "</a></td>
+                        <td><a href='blog.php?id=" . $l->id . "'>" . $l->title . "</a></td>
                     
                         <td>$l->first_name $l->last_name</td>
                         <td id='rowbtn'><form action=\"deleteSuggestAdmin.php\" method=\"post\">
