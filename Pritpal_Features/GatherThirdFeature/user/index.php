@@ -26,7 +26,7 @@
 <?php
 
 require_once "../connect.php";
-require_once "../blog.php";
+require_once "../blogController.php";
 
 $db = Connect::dbConnect();
 
