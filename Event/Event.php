@@ -13,13 +13,20 @@ $categoryConnect = new CategoryConnect($db);
 $businessview = new BusinessDAO();
 $event = null;
 $eventCategories = null;
+$businessdetails = null;
+$user = null;
 
 session_start();
 
-$_SESSION['id']= 3;
+//$_SESSION['id']= 3;
 $_SESSION['role'] = "business";
+//$_SESSION['role'] = "normal";
+$_SESSION['UserId'] = "3";
 
-$businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+if($_SESSION['role'] == 'business') {
+    $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+} 
+
 if(isset($_GET["id"])) {
     try {
         $event = $eventConnect->getEvent($_GET["id"]);
@@ -31,6 +38,10 @@ if(isset($_GET["id"])) {
     //if(!($event->getBusinessId() == $_SESSION['id']) && $_SESSION['role'] == 'business') {
     //    $event = new Exception("This event is not yours.");
     //}
+    if($_SESSION['role'] == 'normal' && is_a($event, "EventModel")) {
+        $_SESSION['id'] = $event->getBusinessId();
+        $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+    }
 } else {
     $event = new Exception("Event not found!");
 }
@@ -69,10 +80,12 @@ if(isset($_GET["id"])) {
                     </span>
                     <span>15 reviews</span><br/><br/>
                 </div>
+                <?php if($_SESSION['role'] == 'normal'):?>
                 <div>
                     <button type="button" class="btn btn-danger">Leave A Review</button>
                     <button type="button" class="btn btn-info" style="margin-top:1em;">Send me a message</button>
                 </div>
+                <?php endif?>
         </div>
         <div class="col-md-9">
             <img title="profile image" class="img-responsive" src="http://lorempixel.com/850/250/nightlife">
@@ -138,6 +151,7 @@ if(isset($_GET["id"])) {
                 </div>
                 <?php endif?>
             </div>
+            <?php if($_SESSION['role'] == 'business'):?>
             <form action='Edit.php' method='get'>
                 <input type='hidden' name='id' value='<?php echo $event->getEventId(); ?>'>
                 <input type='submit' value='Edit' class="btn btn-default">
@@ -146,6 +160,7 @@ if(isset($_GET["id"])) {
                 <input type='hidden' name='id' value='<?php echo $event->getEventId(); ?>'>
                 <input type='submit'value='Delete' class="btn btn-danger">
             </form>
+            <?php endif?>
             <?php elseif(is_a($event, "Exception")):?>
             <div class="alert alert-warning">
                 <?php echo $event->getMessage(); ?>

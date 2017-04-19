@@ -7,62 +7,18 @@ include __root . 'controllers/Business.php';
 include __root . 'controllers/EventController.php';
 
 $db = Connect::dbConnect();
-$eventConnect = new EventConnect($db);
 $businessview = new BusinessDAO();
-$event = null;
-$message = null;
+$eventController = new EventConnect($db);
 
 session_start();
 
 $_SESSION['id']= 3;
-$_SESSION['UserId'] = 4;
-//$_SESSION['role'] = 'normal';
-
-if($_SESSION['role'] == 'business') {
 
 $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
 
-    if(isset($_GET["id"])) {
-        try {
-            $event = $eventConnect->getEvent($_GET["id"]);
-        } catch(Exception $e) {
-            $message = $e->getMessage();
-        }
-    }
+$events = $eventController->getEventList($_SESSION['id']);
 
-    if(isset($_POST["subbtn"])) {
-        if(isset($_SESSION['UserId']) && isset($_POST['EventName']) 
-            && isset($_POST['EndDateTime']) && isset($_POST['StartDateTime']) 
-            && isset($_POST['BusinessId']) && isset($_POST['EventDescription'])) {
-            $result = null;
-            try {
-                $event = new EventModel($_POST);
-            } catch(Exception $e){
-                $message = $e->getMessage();
-            }
-            if($event != null) {
-                $eventConnect = new EventConnect($db);
-                $result = $eventConnect->createEvent($event);
-            } 
-            if($result != null && $result) {
-                header("Location: http://localhost/views/Business.php/");
-                exit;
-            } else if(is_a($result, "Exception")) {
-                $message = $result->getMessage();
-            } else {
-                if($message == null) {
-                    $message = "The event is not successfully submitted!";
-                }
-            }
-        } else {
-            $message = "The event is not successfully submitted!";
-        }
-    }
-} else {
-    $message = "You are not logged in as a business account!";
-}
 ?>
-
 <!DOCTYPE>
 <html>
 <head>
@@ -74,18 +30,12 @@ $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Edit Event | Gather</title>
+    <title>Business | Gather</title>
 </head>
 <body>
-<?php if(isset($message)): ?>
-    <div class="alert alert-warning">
-        <?php echo $message; ?>
-    </div>
-<?php endif?>
 <hr class="">
 <div class="container">
     <?php include(__root."views/components/header.php"); ?>
-    <?php if($_SESSION['role'] == 'business'):?>
     <?php foreach ($businessdetails as $bd) : ?>
     <div class="row">
         <div class="col-md-3">
@@ -100,6 +50,10 @@ $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
                         <span class="glyphicon glyphicon-star"></span>
                     </span>
                     <span>15 reviews</span><br/><br/>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-danger">Leave A Review</button>
+                    <button type="button" class="btn btn-info" style="margin-top:1em;">Send me a message</button>
                 </div>
         </div>
         <div class="col-md-9">
@@ -149,36 +103,50 @@ $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
                 <div class="panel-heading"><?php echo $bd['businessName']; ?> Information</div>
                 <div class="panel-body"><?php echo $bd['businessDescription']; ?></div>
             </div>
-                <?php if(is_a($event, "EventModel")): ?>
-                <form action="create.php" method="POST">
-                    <input type="text" value='<?php echo $_SESSION['id']; ?>' name="BusinessId" hidden/>
-                    <div class="form-group">
-                        <label for="EventName">Event Name:</label>
-                        <input type="text" name="EventName" class="form-control" value='<?php echo $event->getName();?>' />
+            <div class="panel panel-default">
+                <div class="panel-heading" contenteditable="false">Events<span class="pull-right"><a href="#">View More</a></span></a></span></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <?php foreach($events as $event) : ?>
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img alt="300x200" src="http://lorempixel.com/300/150/technics">
+                                <div class="caption">
+                                    <h4 class="pull-right">$24.99</h4>
+                                    <h4><a href='<?php echo __httpRoot . "Event/Event.php?id=" . $event->getEventId(); ?>'><?php echo $event->getName(); ?></a></h4>
+                                    <p><?php echo $event->getDescription(); ?></p>
+                                </div>
+                                <div class="ratings">
+                                    <p class="pull-right">15 reviews</p>
+                                    <p>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                    </p>
+                                </div>
+                               <!-- <?php /*if(isset($event['discount'])): */?>
+                                    <div class="panel-footer text-center">
+                                        Apply <?php /*echo $event['discount'];*/?>% off Today!
+                                    </div>
+                                --><?php /*endif; */?>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+
                     </div>
-                    <div class="form-group">
-                        <label for="StartDateTime">Event Start Time</label>
-                        <input type="datetime-local" name="StartDateTime" class="form-control" value='<?php echo $event->getStartDateTime("detail"); ?>' />
-                    </div>
-                    <div class="form-group">
-                        <label for="EndDateTime">Event End Time</label>
-                        <input type="datetime-local" name="EndDateTime" class="form-control" value='<?php echo $event->getStartDateTime("detail"); ?>' />
-                    </div>
-                    <div class="form-group">
-                        <label for="EventDescription">Description</label>
-                        <textarea name="EventDescription"  class="form-control"><?php echo $event->getDescription(); ?></textarea>
-                    </div>
-                    <input type="submit" value="Submit" name="subbtn" class="btn btn-default"/>
-                </form>
-                <?php elseif(is_a($event, "Exception")):?>
-                <div class="alert alert-warning">
-                    <?php echo $event->getMessage(); ?>
+
                 </div>
-                <?php endif ?>
+
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Review</div>
+                <div class="panel-body"> Insert Reviews Here. </div>
+            </div>
         </div>
     </div>
     <?php endforeach; ?>
-    <?php endif; ?>
     <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

@@ -16,42 +16,49 @@ session_start();
 
 $_SESSION['id']= 3;
 $_SESSION['UserId'] = 4;
+$_SESSION['role'] = "business";
 
-try{
-    $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
-} catch(Exception $e) {
-    $message = $e->getMessage();
-}
-
-
-if(isset($_POST["subbtn"])) {
-    if(isset($_SESSION['UserId']) && isset($_POST['EventName']) 
-        && isset($_POST['EndDateTime']) && isset($_POST['StartDateTime']) 
-        && isset($_POST['BusinessId']) && isset($_POST['EventDescription'])
-         && isset($_POST['price'])) {
-        $result = null;
-        try {
-            $event = new EventModel($_POST);
-        } catch(Exception $e){
-            $message = $e->getMessage();
-        }
-        if($event != null) {
-            $eventConnect = new EventConnect($db);
-            $result = $eventConnect->createEvent($event);
-        } 
-        if($result != null && $result && !is_a($result, "Exception")) {
-            header("Location: http://localhost/views/Business.php/");
-            exit;
-        } else if(is_a($result, "Exception")) {
-            $message = $result->getMessage();
-        } else {
-            if($message == null) {
-                $message = "The event is not successfully submitted!";
-            }
-        }
-    } else {
-        $message = "The event is not successfully submitted!";
+if($_SESSION['role'] == 'business') {
+    try{
+        $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+    } catch(Exception $e) {
+        $message = $e->getMessage();
     }
+
+    if(isset($_POST["subbtn"])) {
+        if(isset($_SESSION['UserId']) && isset($_POST['EventName']) 
+            && isset($_POST['EndDateTime']) && isset($_POST['StartDateTime']) 
+            && isset($_POST['BusinessId']) && isset($_POST['EventDescription'])
+            && isset($_POST['price'])) {
+            if(date("Y-m-d H:i:s") < $_POST['StartDateTime'] && date("Y-m-d H:i:s") < $_POST['EndDateTime'] && $_POST['StartDateTime'] < $_POST['EndDateTime']) {
+                try {
+                    $event = new EventModel($_POST);
+                } catch(Exception $e){
+                    $message = $e->getMessage();
+                }
+                if($event != null) {
+                    $eventConnect = new EventConnect($db);
+                    $result = $eventConnect->createEvent($event);
+                } 
+                if($result != null && $result && !is_a($result, "Exception")) {
+                    header("Location: http://localhost/Business/Business.php/");
+                    exit;
+                } else if(is_a($result, "Exception")) {
+                    $message = $result->getMessage();
+                } else {
+                    if($message == null) {
+                        $message = "The event is not successfully submitted!";
+                    }
+                }
+            } else {
+                $message = "The event is not successfully submitted! The date and time must be in the furture.";
+            }
+        } else {
+            $message = "The event is not successfully submitted!";
+        }
+    }
+} else {
+    $message = "You are not logged in as a business account!";
 }
 ?>
 
@@ -92,10 +99,6 @@ if(isset($_POST["subbtn"])) {
                         <span class="glyphicon glyphicon-star"></span>
                     </span>
                     <span>15 reviews</span><br/><br/>
-                </div>
-                <div>
-                    <button type="button" class="btn btn-danger">Leave A Review</button>
-                    <button type="button" class="btn btn-info" style="margin-top:1em;">Send me a message</button>
                 </div>
         </div>
         <div class="col-md-9">
