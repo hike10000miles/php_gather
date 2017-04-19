@@ -33,9 +33,9 @@ $events = $eventController->getEventList($_SESSION['id']);
     <title>Business | Gather</title>
 </head>
 <body>
-<hr class="">
+<?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-    <?php include(__root."views/components/header.php"); ?>
+
     <?php foreach ($businessdetails as $bd) : ?>
     <div class="row">
         <div class="col-md-3">
