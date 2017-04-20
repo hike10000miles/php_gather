@@ -37,11 +37,10 @@ if(isset($_GET['id'])){
     <title>Business Discounts | Gather</title>
 </head>
 <body>
-    <?php include(__root."views/components/header.php"); ?>
+    <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-    <?php include("../bootstrap/css/header.php"); ?>
 <h1>Manage Promotions</h1>
-    <form action="addPromotion.php" method="get">
+    <form action="addDiscount.php" method="get">
         <input type="submit" value="Add Promotion" name="ADD"><br /><br />
     </form>
     <div class="table-responsive">
@@ -59,18 +58,18 @@ if(isset($_GET['id'])){
         <tr>
             <td><?php echo $listdis['title']; ?></td>
             <td><?php echo $listdis['discount']; ?></td>
-            <td><?php echo $listdis['name']; ?></td>
+            <td><?php echo $listdis['EventName']; ?></td>
             <td><?php echo $listdis['datestart']; ?></td>
             <td><?php echo $listdis['expiry']; ?></td>
             <td>
                 <!--add new foreach for just promotions table-->
-                <form action="updatePromotion.php" method="get">
+                <form action="updateDiscount.php" method="get">
                     <input type="hidden" value="<?php echo $listdis['id'];?>" name=id>
                     <input type="submit" value="Update" name="update">
                 </form>
             </td>
             <td>
-                <form action="deletePromotion.php" method="get">
+                <form action="deleteDiscount.php" method="get">
                     <input type="hidden" value="<?php echo $listdis['id'];?>" name=id>
                     <input type="submit" value="Delete" name="delete">
                 </form>
@@ -80,11 +79,11 @@ if(isset($_GET['id'])){
         <?php endforeach; ?>
     </table>
     </div>
-    <?php include("../bootstrap/css/footer.php"); ?>
+    <?php include(__root."views/components/footer.php"); ?>
 </div>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
 </body>
 </html>
