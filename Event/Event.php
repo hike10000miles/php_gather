@@ -19,8 +19,8 @@ $user = null;
 session_start();
 
 //$_SESSION['id']= 3;
-//$_SESSION['role'] = "business";
-$_SESSION['role'] = "normal";
+$_SESSION['role'] = "business";
+//$_SESSION['role'] = "normal";
 $_SESSION['UserId'] = "3";
 
 if($_SESSION['role'] == 'business') {

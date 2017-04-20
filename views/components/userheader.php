@@ -23,8 +23,13 @@
             <div class="navbar-collapse style= collapse in" id="bs-megadropdown-tabs">
 
                 <ul class="nav navbar-nav">
-                    <li><a href="#"><i class="fa fa-globe"></i>GATHERINGS</a></li>
-                    <li><a href="#"><i class="fa fa-university"></i>EVENTS</a></li>
+                    <li><a href="#"><i class="fa fa-group"></i>GATHERINGS</a></li>
+                    <li><a href="<?php echo __httpRoot."Event/Events.php"?>"><i class="fa fa-calendar"></i>EVENTS</a></li>
+                    <?php if(isset($_SESSION['role'])) : if($_SESSION['role'] == 'business'): ?>
+                    <li><a href="<?php echo __httpRoot."Business/Business.php"?>"><i class="fa fa-bank"></i>MANAGE BUSINESS</a></li>
+                  <?php endif; ?>
+                    <?php endif; ?>
+
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
