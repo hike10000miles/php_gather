@@ -10,6 +10,9 @@ include __root . 'controllers/DiscountController.php';
 $db = Connect::dbConnect();
 $list = new DiscountDAO();
 
+session_start();
+
+$_SESSION['businessid']= 3;
 
 if(isset($_GET['add'])){
 
@@ -23,7 +26,7 @@ if(isset($_GET['add'])){
     header("Location: Discounts.php");
 }
 
-$events = $list->getEventName($db);
+$events = $list->getEventName($db,$_SESSION['businessid']);
 ?>
 
 <!DOCTYPE>
@@ -42,18 +45,17 @@ $events = $list->getEventName($db);
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-    <?php include("../bootstrap/css/header.php"); ?>
     <h3>Add Promotion For Event</h3>
-<form action="addPromotion.php" method="get">
+<form action="addDiscount.php" method="get">
     <label> Event Name: </label><select name="eventid">
         <?php
         foreach($events as $event){
-            echo "<option value=".$event['id'].">".$event['id']."</option>";
+            echo "<option value=".$event['id'].">".$event['EventName']."</option>";
         }
         ?>
     </select><br/><br/>
     <label>Title: </label><input type="text" name="title" /><br/><br />
-    <label>Discount: </label><input type="text" name="discount" /><br/><br />
+    <label>Discount(%): </label><input type="text" name="discount" /><br/><br />
     <label>DateStart: </label><input type="date" name="startdate" /><br/><br />
     <label>Expiry: </label><input type="date" name="expiry" /><br/><br />
     <input type="submit" value="Add Promotion" name="add" />
@@ -61,12 +63,12 @@ $events = $list->getEventName($db);
     <button id="back">Go Back To List</button>
     <br/><br/>
 
-    <?php include("../bootstrap/css/footer.php"); ?>
+    <?php include(__root."views/components/footer.php"); ?>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
 <script>
     var btn = document.getElementById('back');
     btn.addEventListener('click', function() {

@@ -14,6 +14,15 @@ class DiscountDAO
         return $business;
     }
 
+    public function getEventDropdown($db){
+        $query = "SELECT DISTINCT EventName, id FROM events";
+        $pdostmt = $db->prepare($query);
+        $pdostmt->execute();
+
+        $business = $pdostmt->fetchAll();
+        return $business;
+    }
+
     public function getEventName($db, $businessid){
         $query = "SELECT DISTINCT EventName, id FROM events WHERE id = :businessid";
         $pdostmt = $db->prepare($query);
