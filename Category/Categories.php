@@ -3,7 +3,6 @@
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 include __root . 'DbConnect/connect.php';
-include __root . 'controllers/Business.php';
 include __root . 'controllers/CategoryController.php';
 
 $db = Connect::dbConnect();
@@ -39,19 +38,31 @@ if($_SESSION['role'] == 'admin') {
     <?php include(__root."views/components/header.php"); ?>
     <?php if(isset($categories) && ($_SESSION['role'] == 'admin')):?>
     <h1>List of all categories</h1>
-        <section class="container">
-            <div class="row" id="admin-categories-list">
+        <div class="allList-menu row">
+            <p class="col-4">
+                <a href="<?php echo __httpRoot . "Category/Create.php";?>" class="btn btn-default">Create New Category</a>
+            </p>
+        </div>
+        <div class="row" id="admin-categories-list">
     <?php foreach ($categories as $category) : ?>
-                <div class="panel panel-default col-sm-6">
-                    <div class="panel-heading"><a href="<?php echo __httpRoot . "Event/Events.php?id=" . $category->getId();?>"><?php echo $category->getTitle(); ?></a></div>
-                    <div class="panel-body">
-                        <p><?php echo $category->getDescription()?></p>
-                        <p>Total events in this category: <?php echo $category->getTotal()?></p>
+            <div class="panel panel-default col-sm-6">
+                <div class="panel-heading">
+                    <a href="<?php echo __httpRoot . "Event/Events.php?id=" . $category->getId();?>"><?php echo $category->getTitle(); ?></a>
+                </div>
+                <div class="panel-body">
+                    <p><?php echo $category->getDescription()?></p>
+                    <p>Total events in this category: <?php echo $category->getTotal()?></p>
+                    <div class="row">
+                        <p class='col-sm-2'><a href="<?php echo __httpRoot . "Category/Edit.php?id=" . $category->getId();?>" class="btn btn-default">Edit</a></p>
+                        <form action="Delete.php" method='POST' class="col-sm-2">
+                            <input name="Id" value='<?php echo $category->getId();?>' hidden>
+                            <input type="submit" name="subbtn" value='Delete' class="btn btn-danger" />
+                        </form>
                     </div>
                 </div>
+            </div>
     <?php endforeach; ?>
-                </div>
-        </section>
+        </div>
     <?php else: ?>
     <div class="alert alert-warning">
         You do not have access to this page.
