@@ -13,8 +13,8 @@ $eventController = new EventConnect($db);
 session_start();
 
 $_SESSION['businessid']= 3;
-$_SESSION['role'] = "business";
-//$_SESSION['role'] = "normal";
+//$_SESSION['role'] = "business";
+$_SESSION['role'] = "normal";
 
 $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['businessid']);
 

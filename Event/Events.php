@@ -17,8 +17,8 @@ $category = null;
 
 session_start();
 
-//$_SESSION['role'] = "normal";
-$_SESSION['role'] = "business";
+$_SESSION['role'] = "normal";
+//$_SESSION['role'] = "business";
 
 //session_start();
 if(isset($_GET['category'])) {
