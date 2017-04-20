@@ -59,8 +59,16 @@ $events = $eventController->getEventList($_SESSION['businessid']);
                     </div>
                 <?php else: ?>
                     <div>
-                       <button type="button" class="btn btn-danger">Update Details</button>
-                       <button type="button" class="btn btn-info" style="margin-top:1em;">Manage Promotion</button>
+                        <form action="#" method="get">
+                            <input type="hidden" value="<?php echo $_SESSION['businessid'];?>" name=businessid>
+                            <input type="submit" class="btn btn-info" value="Update Profile" name="update">
+                        </form>
+                        </td>
+                        <td>
+                            <form action="Discounts.php" method="POST">
+                                <input type="hidden" value="<?php echo $_SESSION['businessid'];?>" name=businessid>
+                                <input type="submit" class="btn btn-info" value="Manage Discounts" name="discount">
+                            </form>
                     </div>
                 <?php endif; ?>
         </div>

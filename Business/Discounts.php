@@ -12,7 +12,10 @@ $discountcontroller = new DiscountDAO();
 
 session_start();
 
-$_SESSION['businessid'] = 3;
+if(isset($_POST['discount'])) {
+    $_SESSION['businessid'] = $_POST['businessid'];
+}
+
 
 $listdiscounts = $discountcontroller->getDiscountListbyBusiness($db,$_SESSION['businessid']);
 
@@ -40,9 +43,12 @@ if(isset($_GET['id'])){
     <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
 <h1>Manage Promotions</h1>
-    <form action="addDiscount.php" method="get">
-        <input type="submit" value="Add Promotion" name="ADD"><br /><br />
-    </form>
+        <span>
+            <form action="addDiscount.php" method="get">
+                <input type="submit" value="Add Promotion" name="ADD">
+            </form>
+            <button id="back">Go Back To Business</button><br/><br/>
+        </span>
     <div class="table-responsive">
     <table class="table">
         <tr>
@@ -85,5 +91,11 @@ if(isset($_GET['id'])){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
+    <script>
+        var btn = document.getElementById('back');
+        btn.addEventListener('click', function() {
+            document.location.href = 'Business.php';
+        });
+    </script>
 </body>
 </html>
