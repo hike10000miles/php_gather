@@ -16,7 +16,7 @@ session_start();
 
 $_SESSION['id']= 3;
 $_SESSION['UserId'] = 4;
-$_SESSION['role'] = "business";
+$_SESSION['role'] = "normal";
 
 if($_SESSION['role'] == 'business') {
     try{

@@ -19,8 +19,8 @@ $user = null;
 session_start();
 
 //$_SESSION['id']= 3;
-$_SESSION['role'] = "business";
-//$_SESSION['role'] = "normal";
+//$_SESSION['role'] = "business";
+$_SESSION['role'] = "normal";
 $_SESSION['UserId'] = "3";
 
 if($_SESSION['role'] == 'business') {
@@ -142,12 +142,19 @@ if(isset($_GET["id"])) {
                     <p>Start at: <?php echo $event->getStartDateTime("detail"); ?></p>
                     <p>End at: <?php echo $event->getEndDateTime("detail"); ?></p>
                     <p>Price: <?php echo $event->getPrice(); ?></p>
+                    <?php if($event->getStartDateTime("detail") < date("Y-m-d H:i:s")):?>
+                        <p class="alert alert-danger">Past Event</p>
+                    <?php else: ?>
+                        <a type="" class="btn btn-default">Add to my Gathering</a>
+                    <?php endif; ?>
                 </div>
                 <?php if(!is_a($eventCategories, "Exception")) :?>
                 <div class="panel-footer event-categories">
+                    <p class="categoryTitle">
                     <?php foreach($eventCategories as $eventCategory) :?>
-                    <p class="categoryTitle"><?php echo $eventCategory->getTitle(); ?></p>
+                    <span class="label label-default"><?php echo $eventCategory->getTitle(); ?></span>
                     <?php endforeach ?>
+                    </p>
                 </div>
                 <?php endif?>
             </div>
