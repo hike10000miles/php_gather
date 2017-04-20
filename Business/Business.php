@@ -121,11 +121,11 @@ $events = $eventController->getEventList($_SESSION['businessid']);
                 <div class="panel-body"><?php echo $bd['businessDescription']; ?></div>
             </div>
             <div class="panel panel-default">
-                <div class="panel-heading" contenteditable="false">Events<span class="pull-right"><a href="#">View More</a></span></div>
+                <div class="panel-heading" contenteditable="false">Events<?php if($_SESSION['role'] == 'business'): ?> <span class="pull-right"><a href="#">View More</a></span><?php endif; ?></div>
                 <div class="panel-body">
                     <div class="row">
                         <?php foreach($events as $event): ?>
-                            <div class="col-md-4">
+                            <div class="col-sm-4 fixheight">
                                 <div class="thumbnail">
                                     <img alt="300x200" src="http://lorempixel.com/300/150/technics">
                                     <div class="caption">

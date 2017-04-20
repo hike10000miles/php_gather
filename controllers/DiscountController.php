@@ -23,6 +23,16 @@ class DiscountDAO
         return $business;
     }
 
+    public function getAllDiscount($db){
+        $query = "SELECT e.id,e.EventName,e.EventDescription,d.discount FROM events e LEFT JOIN discounts d ON e.id = d.eventid";
+        $pdostmt = $db->prepare($query);
+        $pdostmt->execute();
+
+        $events = $pdostmt->fetchAll();
+        return $events;
+    }
+
+
     public function getEventName($db, $businessid){
         $query = "SELECT DISTINCT EventName, id FROM events WHERE id = :businessid";
         $pdostmt = $db->prepare($query);
