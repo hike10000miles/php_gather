@@ -5,7 +5,7 @@ class DiscountDAO
 
 {
     public function getBusinessName($db){
-        $query = "SELECT DISTINCT name, id FROM business";
+        $query = "SELECT DISTINCT businessName, id FROM business";
         $pdostmt = $db->prepare($query);
         $pdostmt->execute();
 
@@ -14,7 +14,7 @@ class DiscountDAO
     }
 
     public function getEventName($db){
-        $query = "SELECT DISTINCT name, id FROM events";
+        $query = "SELECT DISTINCT EventName, id FROM events";
         $pdostmt = $db->prepare($query);
         $pdostmt->execute();
 
@@ -22,9 +22,10 @@ class DiscountDAO
         return $business;
     }
 
-    public function getDiscountList($db){
-    $query = "SELECT d.*,name, description FROM discounts d JOIN events e ON d.eventid = e.id ";
+    public function getDiscountListbyBusiness($db,$businessid){
+    $query = "SELECT d.*,EventName, EventDescription FROM discounts d JOIN events e ON d.eventid = e.id WHERE businessid = :businessid";
     $pdostmt = $db->prepare($query);
+    $pdostmt->bindValue(':businessid',$businessid);
     $pdostmt->execute();
 
     $discounts = $pdostmt->fetchAll();
@@ -32,7 +33,7 @@ class DiscountDAO
     }
 
     public function getEventList($db){
-        $query = "SELECT e.id,e.name,e.description,d.discount FROM events e LEFT JOIN discounts d ON e.id = d.eventid";
+        $query = "SELECT e.id,e.EventName,e.EventDescription,d.discount FROM events e LEFT JOIN discounts d ON e.id = d.eventid";
         $pdostmt = $db->prepare($query);
         $pdostmt->execute();
 
