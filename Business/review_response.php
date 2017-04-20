@@ -6,16 +6,16 @@ if(!defined("__root")) {
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/ReviewsController.php';
 
-//require_once "database.php";
-//require_once "ReviewsController.php";
 
 $db= Connect::dbConnect();
+$a = new Admin($db);
 
 
 $fname=$_REQUEST['fname'];
 $email=$_REQUEST['email'];
 $review=$_REQUEST['review'];
 $businessId=$_REQUEST['BID'];
+
 
 
 $valid = true;
@@ -37,8 +37,6 @@ if (empty($email)) {
 header('Content-Type: application/json');
 if ($valid) {
 
-    $a = new Admin($db);
-// var_dump($businessId);
     $row = $a->insertdata($fname, $email, $review, $businessId);
     echo json_encode(array('code' => 200, 'msg' => 'success'));
 } else {
@@ -46,7 +44,5 @@ if ($valid) {
 }
 
 
-
-?>
 
 
