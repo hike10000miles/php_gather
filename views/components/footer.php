@@ -10,7 +10,7 @@
                         <li><a href="#">Pre-Planning</a>
                             <ul>
                                 <li><a href="#">Most Popular</a></li>
-                                <li><a href="#">Suggestions</a></li>
+                                <li><a href="<?php echo __httpRoot . "Business/suggestion.php" ?>">Suggestions</a></li>
                                 <li><a href="#">FAQ</a></li>
                             </ul>
                         </li>

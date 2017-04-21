@@ -17,8 +17,8 @@ $rating = new Ratings($db);
 session_start();
 
 $_SESSION['businessid']= 3;
-$_SESSION['role'] = "business";
-//$_SESSION['role'] = "normal";
+//$_SESSION['role'] = "business";
+$_SESSION['role'] = "normal";
 
 /*$reviews = $reviewController->*/
 $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['businessid']);
@@ -72,8 +72,8 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
                 </div>
                 <?php if($_SESSION['role'] == 'normal'): ?>
                     <div>
-                        <button type="button" class="btn btn-danger">Leave A Review</button>
-                        <button type="button" class="btn btn-info" style="margin-top:1em;">Send me a message</button>
+                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['businessid']; ?>" class="btn btn-danger" role="button">Leave A Review</a><br /><br/>
+                        <a href="<?php echo __httpRoot . "Business/suggestionForm.php?id=" .$_SESSION['businessid']; ?>" class="btn btn-info" role="button">Make Suggestion</a>
                     </div>
                 <?php else: ?>
                     <div>
@@ -81,8 +81,6 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
                             <input type="hidden" value="<?php echo $_SESSION['businessid'];?>" name=businessid>
                             <input type="submit" class="btn btn-info" value="Update Profile" name="update">
                         </form>
-                        </td>
-                        <td>
                             <form action="Discounts.php" method="POST">
                                 <input type="hidden" value="<?php echo $_SESSION['businessid'];?>" name=businessid>
                                 <input type="submit" class="btn btn-info" value="Manage Discounts" name="discount">
@@ -138,7 +136,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
                 <div class="panel-body"><?php echo $bd['businessDescription']; ?></div>
             </div>
             <div class="panel panel-default">
-                <div class="panel-heading" contenteditable="false">Events</div>
+                <div class="panel-heading" contenteditable="false">Events<span class="pull-right"><?php if($_SESSION['role'] == 'business'): ?><a href="<?php echo __httpRoot . "Business/SuggestionAdmin.php?id=" .$_SESSION['businessid']; ?>">Manage Suggestions</a></span><?php endif; ?></div>
                 <div class="panel-body">
                     <div class="row">
                         <!-----------------------------------------EVENTS (CHEN)------------------------------------>
@@ -161,7 +159,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
             <!-----------------------------------------4. REVIEWS (SIJI)------------------------------------>
             <div class="panel panel-default">
 
-                <div class="panel-heading">Review<span class="pull-right"><?php if($_SESSION['role'] == 'business'): ?><a href="<?php echo __httpRoot . "Business/ReviewAdmin.php?id=" .$_SESSION['businessid']; ?>">Manage Reviews</a><?php else: ?><a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['businessid']; ?>">Add Review</a></span><?php endif; ?></div>
+                <div class="panel-heading">Review<span class="pull-right"><?php if($_SESSION['role'] == 'business'): ?><a href="<?php echo __httpRoot . "Business/ReviewAdmin.php?id=" .$_SESSION['businessid']; ?>">Manage Reviews</a></span><?php endif; ?></div>
                 <div class="panel-body">
                     <!-----------4.1 USER REVIEW ------>
                     <div class="row">
