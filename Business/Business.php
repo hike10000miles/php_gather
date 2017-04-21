@@ -20,27 +20,27 @@ if(!isset($_SESSION['LoggedIn']['UserId'])) {
     header("Location: " . __httpRoot);
     exit;
 }
-$_SESSION['LoggedIn']['BusinessId'] = $_GET['id'];
 /*$reviews = $reviewController->*/
-$businessdetails = $businessview->getBusinessInfo($db,$_SESSION['LoggedIn']['BusinessId']);
-$events = $eventController->getEventList($_SESSION['LoggedIn']['BusinessId']);
+
 
 if (isset($_SESSION['LoggedIn']['BusinessId'])) {
     $businessId = $_SESSION['LoggedIn']['BusinessId'];
-    $reviews = $reviewController->displayreviewsbybusinessid($businessId);
 }
 
 if(isset($_POST['like'])) {
     $row4 = $reviewController->getlikes($_POST['post_id']);
 }
 
-$ratings = $rating->getmostpopularbyId($_SESSION['LoggedIn']['BusinessId']);
-$totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['BusinessId']);
-
 if(isset($_GET['id'])){
-    $id = $_GET['id'];
-    $businessdetails = $businessview->getBusinessInfo($db,$id);
+    $businessId = $_GET['id'];
+} else {
+    $businessId = $_SESSION['LoggedIn']['BusinessId'];
 }
+$businessdetails = $businessview->getBusinessInfo($db,$businessId);
+$events = $eventController->getEventList($businessId);
+$reviews = $reviewController->displayreviewsbybusinessid($businessId);
+$ratings = $rating->getmostpopularbyId($businessId);
+$totalreview = $reviewController->getCountReviews($businessId);
 
 ?>
 <!DOCTYPE>
@@ -78,14 +78,14 @@ if(isset($_GET['id'])){
                 </div>
                 <?php if(($_SESSION['LoggedIn']['UserRole'] == 'normal')): ?>
                     <div>
-                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-danger" role="button">Leave A Review</a><br /><br/>
-                        <a href="<?php echo __httpRoot . "Business/suggestionForm.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info" role="button">Make Suggestion</a>
+                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$businessId; ?>" class="btn btn-danger" role="button">Leave A Review</a><br /><br/>
+                        <a href="<?php echo __httpRoot . "Business/suggestionForm.php?id=" .$businessId; ?>" class="btn btn-info" role="button">Make Suggestion</a>
                     </div>
                 <?php endif; ?>
                 <?php if(($_SESSION['LoggedIn']['UserRole']== 'business')&&(!isset($_GET['id']))) :?>
                      <div>
-                        <a href="<?php echo __httpRoot . "Business/updateBusiness.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Update User Profile</a></span><br /><br />
-                        <a href="<?php echo __httpRoot . "Business/Discounts.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Manage Discount</a></span>
+                        <a href="<?php echo __httpRoot . "Business/updateBusiness.php?id=" .$businessId; ?>" class="btn btn-info">Update User Profile</a></span><br /><br />
+                        <a href="<?php echo __httpRoot . "Business/Discounts.php?id=" .$businessId; ?>" class="btn btn-info">Manage Discount</a></span>
                     </div>
                 <?php endif; ?>
         </div>
@@ -140,7 +140,7 @@ if(isset($_GET['id'])){
                 <div class="panel-heading" contenteditable="false">Events<span class="pull-right">
                 <?php if(($_SESSION['LoggedIn']['UserRole']== 'business')&&(!isset($_GET['id']))): ?>
                     <a href='<?php echo __httpRoot . "Event\Create.php";?>' >Add Event</a>
-                    <a href="<?php echo __httpRoot . "Business/SuggestionAdmin.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">Manage Suggestions</a></span>
+                    <a href="<?php echo __httpRoot . "Business/SuggestionAdmin.php?id=" .$businessId; ?>">Manage Suggestions</a></span>
                 <?php endif; ?>
                 </div>
                 <div class="panel-body">
@@ -168,12 +168,12 @@ if(isset($_GET['id'])){
                 <div class="panel-heading">
                     Review<span class="pull-right">
                     <?php if(($_SESSION['LoggedIn']['UserRole']== 'business')&&(!isset($_GET['id']))): ?>
-                        <a href="<?php echo __httpRoot . "Business/ReviewAdmin.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">
+                        <a href="<?php echo __httpRoot . "Business/ReviewAdmin.php?id=" .$businessId; ?>">
                         Manage Reviews
                         </a>
                     <?php endif; ?>
                     <?php if(($_SESSION['LoggedIn']['UserRole']== 'normal')): ?>
-                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">
+                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$businessId; ?>">
                         Add Review
                         </a></span>
                     <?php endif; ?>
@@ -344,7 +344,7 @@ if(isset($_GET['id'])){
                                                 type:'POST',
                                                 cache:false,
                                                 url:'rating_response.php',
-                                                data:{'clicked_val':clicked_val, 'BId' :  <?php echo $_SESSION['businessid']; ?>},
+                                                data:{'clicked_val':clicked_val, 'BId' :  <?php echo $businessId; ?>},
                                                 success:function (response) {
 //alert(response);
                                                     $('#response').html("Your rating will be " + response);
