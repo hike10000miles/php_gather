@@ -1,4 +1,5 @@
 <?php
+//by chen
  if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -18,10 +19,12 @@ $category = null;
 
 session_start();
 
-$_SESSION['role'] = "normal";
-//$_SESSION['role'] = "business";
 
-//session_start();
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
+
 if(isset($_GET['category'])) {
     try {
         $category = $categoryConnect->getCategory($_GET['category']);

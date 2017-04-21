@@ -6,23 +6,25 @@ if(!defined("__root")) {
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/ReviewsController.php';
 
-
 $value = (isset($_POST["value"])) ? $_POST["value"] :"";
 
 $db=Connect::dbConnect();
 
+session_start();
+
+$_SESSION['LoggedIn']['BusinessId'];
 
 $a=new Admin($db);
-$review = $a->getalldata();
+
+
+$review = $a->getalldatabyId($_SESSION['LoggedIn']['BusinessId']);
 
 
 if (isset($_POST["search"]) && $value != "" )
 {
-    $ad = new Admin($db);
-    $review = $ad->searchdata($_POST["value"]);
+    $review = $a->searchdata($_POST["value"]);
 } elseif ($value == "" && isset($_POST["search"])) {
-    $a=new Admin($db);
-    $review = $a->getalldata();
+    $review = $a->getalldatabyId($_SESSION['LoggedIn']['BusinessId']);
 }
 
 $post_id="";
@@ -36,12 +38,7 @@ if(isset($_POST['delete'])){
 
 }
 
-
-
 ?>
-
-
-
 
 <!DOCTYPE>
 <html>
@@ -179,27 +176,12 @@ if(isset($_POST['delete'])){
     </tbody>
 </table>
 
-
-
-
-<?php
-
-
- include(__root."views/components/footer.php"); ?>
     <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
 
-
-
-</div>
-</body>
-</html>
-
-
-=======
 </div>
 </body>
 <script>

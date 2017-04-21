@@ -9,13 +9,18 @@ include __root . 'controllers/ReviewsController.php';
 //require_once "ReviewsController.php";
 
 $db= Connect::dbConnect();
-
+session_start();
 $error_text=$fname=$review=$email_error=""; ?>
 
 <?php
 $a= new Admin($db);
 
 session_start();
+
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
 $business = $_SESSION['businessid'];
 

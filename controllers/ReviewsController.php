@@ -22,6 +22,17 @@ class Admin
         return $review;
     }
 
+    public function getalldatabyId($id)
+    {
+        $query = "SELECT * FROM review  WHERE business_id= :id ORDER BY date DESC";
+        $pdostmt = $this->db->prepare($query);
+        $pdostmt->bindValue(':id',$id);
+        $pdostmt->execute();
+
+        $review = $pdostmt->fetchAll(PDO::FETCH_OBJ);
+        return $review;
+    }
+
 
     public function displayalldata($post_id)
     {

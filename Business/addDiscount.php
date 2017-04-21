@@ -5,28 +5,34 @@ if(!defined("__root")) {
 }
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/DiscountController.php';
+include __root . 'controllers/EventController.php';
 
 
 $db = Connect::dbConnect();
 $list = new DiscountDAO();
+$eventController = new EventConnect($db);
 
 session_start();
 
-$_SESSION['businessid']= 3;
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
-if(isset($_GET['add'])){
+if(isset($_POST['add'])){
 
-    $eventid = $_GET['eventid'];
-    $title = $_GET['title'];
-    $discount = $_GET['discount'];
-    $startdate = $_GET['startdate'];
-    $expiry = $_GET['expiry'];
+    $eventid = $_POST['eventid'];
+    $title = $_POST['title'];
+    $discount = $_POST['discount'];
+    $startdate = $_POST['startdate'];
+    $expiry = $_POST['expiry'];
 
     $list->addPromotion($db,$eventid, $title, $discount, $startdate, $expiry);
     header("Location: Discounts.php");
 }
 
-$events = $list->getEventName($db,$_SESSION['businessid']);
+$event = $eventController->getEventList($_SESSION['LoggedIn']['BusinessId']);
+$events = $list->getEventName($db,$_SESSION['LoggedIn']['BusinessId']);
 ?>
 
 <!DOCTYPE>
@@ -46,11 +52,11 @@ $events = $list->getEventName($db,$_SESSION['businessid']);
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
     <h3>Add Promotion For Event</h3>
-<form action="addDiscount.php" method="get">
+<form action="addDiscount.php" method="post">
     <label> Event Name: </label><select name="eventid">
         <?php
-        foreach($events as $event){
-            echo "<option value=".$event['id'].">".$event['EventName']."</option>";
+        foreach($event as $events){
+            echo "<option value=".$events->getEventId().">".$events->getName()."</option>";
         }
         ?>
     </select><br/><br/>

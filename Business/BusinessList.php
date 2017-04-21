@@ -1,22 +1,28 @@
 <?php
-//fake credit card number- 4242 4242 4242 4242
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 include __root . 'DbConnect/connect.php';
-include __root . 'controllers/PaymentsController.php';
+include __root . 'controllers/Business.php';
 
 
-//require_once "database.php";
-//require_once "PaymentsController.php";
+$db = Connect::dbConnect();
+
+$business = new BusinessDAO();
+
+session_start();
+
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
+
+$_SESSION['LoggedIn']['BusinessId'];
 
 
-$db= Connect::dbConnect();
-
-$a=new Admin($db);
+$list = $business->getAll($db);
 
 ?>
-
 <!DOCTYPE>
 <html>
 <head>
@@ -28,65 +34,35 @@ $a=new Admin($db);
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Business | Gather</title>
+    <title>Business Discounts | Gather</title>
 </head>
 <body>
-<?php include(__root."views/components/userheader.php"); ?>
+    <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
+<h1>List of Businesses</h1>
 
-
-<table id="table">
-    <thead>
-    <tr>
-
-        <th>Event Name</th>
-
-
-    </tr>
-    </thead>
-    <tbody>
-
-    <?php
-
-    $row=$a->getevents();
-
-
-    if (isset($row)){
-        foreach($row as $r) {
-            //echo "<tr>";
-
-            echo "<td>$r->EventName</td>";
-
-            echo "<td>$r->price</td>";
-
-
-            echo "<td style='display: inline-flex;'>";
-            echo "<form method='post' action='StripePaymentForm.php '>
-<input type='hidden' name='price' value='$r->price'/>
-                                    <input type='hidden' name='id' value='$r->id'/>
-                                    <input  type='submit' name='view_images' value='goto pay'/>
-                              </form>";
-
-            echo "</td>";
-            echo "</tr>";
-
-        }
-
-    }
-
-
-    ?>
-
-    </tbody>
-</table>
-
-    <?php
-
-    include(__root."views/components/footer.php"); ?>
+    <div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>Business Name</th>
+            <th>Description</th>
+            <th>Capacity</th>
+        </tr>
+        <?php foreach($list as $listbus): ?>
+        <tr>
+            <td><a href="<?php echo __httpRoot . "Business/Business.php?id=" . $listbus->id; ?>"><?php echo $listbus->businessName; ?></a></td>
+            <td><?php echo $listbus->businessDescription; ?></td>
+            <td><?php echo $listbus->businessCapacity; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+    </div>
+    <?php include(__root."views/components/footer.php"); ?>
+</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
-</div>
+
 </body>
 </html>

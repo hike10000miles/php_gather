@@ -48,7 +48,7 @@ $token  = $_POST['stripeToken'];
 //echo $_SESSION['eventid'];
 $event_id=$_SESSION['eventid'];
 $user_email=$_POST['stripeEmail'];
-$payment_amount=$_SESSION['totalCost'];
+$payment_amount=$_SESSION['price'];
 $user="siji";
 
 $row2=$a->insertdata($user_email,$payment_amount,$event_id);
@@ -141,12 +141,12 @@ $charge = \Stripe\Charge::create(array(
     'currency' => 'usd'
 ));
 
-echo '<h1>Successfully charged $' . $_SESSION['totalCost'] .'</h1>'."<br>";
+echo '<h1>Successfully charged $' . $_SESSION['price'] .'</h1>'."<br>";
 echo '<h1>Thank You! '."</h1>" ;
 
 ?>
 
-<h3><a href="stripe_payment.php">Back to List</a></h3>
+<h3><a href="Gatherings.php">Back to List</a></h3>
 
 
     <?php

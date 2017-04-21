@@ -1,13 +1,16 @@
 <?php
 
-include_once "Connect.php";
-include_once "DiscountDAO.php";
+if(!defined("__root")) {
+    require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
+}
+include __root . 'DbConnect/connect.php';
+include __root . 'controllers/DiscountController.php';
+include __root . 'controllers/EventController.php';
 
+$db = Connect::dbConnect();
+$discountController = new DiscountDAO();
 
-$mydi = new Connect();
-$list = new DiscountDAO();
-
-$pdoconn = $mydi->getDb();
+session_start();
 
 if(isset($_GET['delete'])){
     $id = $_GET['id'];

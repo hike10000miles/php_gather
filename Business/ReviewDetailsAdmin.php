@@ -12,8 +12,6 @@ include __root . 'controllers/ReviewsController.php';
 //require_once "ReviewsController.php";
 ?>
 
-
-
 <?php
 
 

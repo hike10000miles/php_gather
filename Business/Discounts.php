@@ -4,6 +4,7 @@ if(!defined("__root")) {
 }
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/DiscountController.php';
+include __root . 'controllers/EventController.php';
 
 
 $db = Connect::dbConnect();
@@ -12,18 +13,21 @@ $discountcontroller = new DiscountDAO();
 
 session_start();
 
-if(isset($_POST['discount'])) {
-    $_SESSION['businessid'] = $_POST['businessid'];
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
 }
 
+$_SESSION['LoggedIn']['BusinessId'];
 
-$listdiscounts = $discountcontroller->getDiscountListbyBusiness($db,$_SESSION['businessid']);
 
 
-if(isset($_GET['id'])){
-    $id = $_GET['id'];
-    $discounts = $dataAO->getDiscount($db,$id);
-}
+$listdiscounts = $discountcontroller->getDiscountListbyBusiness($db,$_SESSION['LoggedIn']['BusinessId']);
+
+
+
+$discounts = $discountcontroller->getDiscount($db,$_SESSION['LoggedIn']['BusinessId']);
+
 
 ?>
 <!DOCTYPE>

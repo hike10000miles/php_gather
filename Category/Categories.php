@@ -1,4 +1,5 @@
 <?php
+//by Chen
  if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -12,9 +13,12 @@ $categories = null;
 
 session_start();
 
-$_SESSION['role']= 'admin';
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
-if($_SESSION['role'] == 'admin') {
+if($_SESSION['LoggedIn']['UserRole'] == 'admin') {
     $categories = $categoryController->getCategoriesWithTotal();
 }
 
@@ -30,13 +34,12 @@ if($_SESSION['role'] == 'admin') {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>List of categories | Gather</title>
+    <title> All Categories | Gather</title>
 </head>
 <body>
-<hr class="">
+<?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-    <?php include(__root."views/components/header.php"); ?>
-    <?php if(isset($categories) && ($_SESSION['role'] == 'admin')):?>
+    <?php if(isset($categories) && ($_SESSION['LoggedIn']['UserRole'] == 'admin')):?>
     <h1>List of all categories</h1>
         <div class="allList-menu row">
             <p class="col-4">

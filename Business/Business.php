@@ -16,16 +16,17 @@ $rating = new Ratings($db);
 
 session_start();
 
-$_SESSION['businessid']= 3;
-//$_SESSION['role'] = "business";
-$_SESSION['role'] = "normal";
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
 /*$reviews = $reviewController->*/
-$businessdetails = $businessview->getBusinessInfo($db,$_SESSION['businessid']);
-$events = $eventController->getEventList($_SESSION['businessid']);
+$businessdetails = $businessview->getBusinessInfo($db,$_SESSION['LoggedIn']['BusinessId']);
+$events = $eventController->getEventList($_SESSION['LoggedIn']['BusinessId']);
 
-if (isset($_SESSION['businessid'])) {
-    $businessId = $_SESSION['businessid'];
+if (isset($_SESSION['LoggedIn']['BusinessId'])) {
+    $businessId = $_SESSION['LoggedIn']['BusinessId'];
     $reviews = $reviewController->displayreviewsbybusinessid($businessId);
 }
 
@@ -33,8 +34,13 @@ if(isset($_POST['like'])) {
     $row4 = $reviewController->getlikes($_POST['post_id']);
 }
 
-$ratings = $rating->getmostpopularbyId($_SESSION['businessid']);
-$totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
+$ratings = $rating->getmostpopularbyId($_SESSION['LoggedIn']['BusinessId']);
+$totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['BusinessId']);
+
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+    $businessdetails = $businessview->getBusinessInfo($db,$id);
+}
 
 ?>
 <!DOCTYPE>
@@ -70,23 +76,16 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
                     </span>
                     <span><?php foreach($totalreview as $tr): echo $tr['totalreview']; endforeach; ?> Reviews</span><br/><br/>
                 </div>
-                <?php if($_SESSION['role'] == 'normal'): ?>
+                <?php if(($_SESSION['LoggedIn']['UserRole'] == 'normal')): ?>
                     <div>
-                        <button type="button" class="btn btn-danger">Leave A Review</button>
-                        <button type="button" class="btn btn-info" style="margin-top:1em;">Send me a message</button>
+                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-danger" role="button">Leave A Review</a><br /><br/>
+                        <a href="<?php echo __httpRoot . "Business/suggestionForm.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info" role="button">Make Suggestion</a>
                     </div>
-                <?php else: ?>
-                    <div>
-                        <form action="#" method="get">
-                            <input type="hidden" value="<?php echo $_SESSION['businessid'];?>" name=businessid>
-                            <input type="submit" class="btn btn-info" value="Update Profile" name="update">
-                        </form>
-                        </td>
-                        <td>
-                            <form action="Discounts.php" method="POST">
-                                <input type="hidden" value="<?php echo $_SESSION['businessid'];?>" name=businessid>
-                                <input type="submit" class="btn btn-info" value="Manage Discounts" name="discount">
-                            </form>
+                <?php endif; ?>
+                <?php if(($_SESSION['LoggedIn']['UserRole']== 'business')&&(!isset($_GET['id']))) :?>
+                     <div>
+                        <a href="<?php echo __httpRoot . "Business/updateBusiness.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Update User Profile</a></span><br /><br />
+                        <a href="<?php echo __httpRoot . "Business/Discounts.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Manage Discount</a></span>
                     </div>
                 <?php endif; ?>
         </div>
@@ -131,17 +130,22 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
             </div>
         </div>
 
-        <!-----------------------------------------BUSINESS MAIN------------------------------------>
+        <!-----------------------------------------BUSINESS MAIN (KEVIN)------------------------------------>
         <div class="col-sm-9" contenteditable="false" >
             <div class="panel panel-default">
                 <div class="panel-heading"><?php echo $bd['businessName']; ?> Description</div>
                 <div class="panel-body"><?php echo $bd['businessDescription']; ?></div>
             </div>
             <div class="panel panel-default">
-                <div class="panel-heading" contenteditable="false">Events</div>
+                <div class="panel-heading" contenteditable="false">Events<span class="pull-right">
+                <?php if(($_SESSION['LoggedIn']['UserRole']== 'business')&&(!isset($_GET['id']))): ?>
+                    <a href='<?php echo __httpRoot . "Event\Create.php";?>' >Add Event</a>
+                    <a href="<?php echo __httpRoot . "Business/SuggestionAdmin.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">Manage Suggestions</a></span>
+                <?php endif; ?>
+                </div>
                 <div class="panel-body">
                     <div class="row">
-                        <!-----------------------------------------EVENTS------------------------------------>
+                        <!-----------------------------------------EVENTS (CHEN)------------------------------------>
                         <?php foreach($events as $event): ?>
                             <div class="col-sm-4 fixheight">
                                 <div class="thumbnail">
@@ -158,10 +162,22 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
                              </div>
                          </div>
                     </div>
-            <!-----------------------------------------4. REVIEWS------------------------------------>
+            <!-----------------------------------------4. REVIEWS (SIJI)------------------------------------>
             <div class="panel panel-default">
 
-                <div class="panel-heading">Review<span class="pull-right"><?php if($_SESSION['role'] == 'business'): ?><a href="<?php echo __httpRoot . "Business/ReviewAdmin.php?id=" .$_SESSION['businessid']; ?>">Manage Reviews</a><?php else: ?><a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['businessid']; ?>">Add Review</a></span><?php endif; ?></div>
+                <div class="panel-heading">
+                    Review<span class="pull-right">
+                    <?php if(($_SESSION['LoggedIn']['UserRole']== 'business')&&(!isset($_GET['id']))): ?>
+                        <a href="<?php echo __httpRoot . "Business/ReviewAdmin.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">
+                        Manage Reviews
+                        </a>
+                    <?php endif; ?>
+                    <?php if(($_SESSION['LoggedIn']['UserRole']== 'normal')): ?>
+                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">
+                        Add Review
+                        </a></span>
+                    <?php endif; ?>
+                </div>
                 <div class="panel-body">
                     <!-----------4.1 USER REVIEW ------>
                     <div class="row">
@@ -192,7 +208,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
                                         endforeach;?>
                         </div>
                     <!----4.2 Rating -------->
-                    <?php if($_SESSION['role'] == 'normal'): ?>
+                    <?php if(($_SESSION['LoggedIn']['UserRole']== 'normal')): ?>
                     <form action="" name="ratings" id="ratings">
                         <script>
                             $(document).ready(function(){

@@ -99,6 +99,8 @@ class DiscountDAO
 
     }
 
+
+
     public function addPromotion($db, $eventid, $title, $discount, $datestart, $expiry)
     {
         $query5 = "INSERT INTO discounts (eventid, title, discount, datestart, expiry) VALUES (:eventid, :title, :discount, :datestart, :expiry)";
