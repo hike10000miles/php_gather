@@ -5,23 +5,24 @@ if(!defined("__root")) {
 }
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/DiscountController.php';
+include __root . 'controllers/EventController.php';
 
 
 $db = Connect::dbConnect();
-$list = new DiscountDAO();
+$discountController = new DiscountDAO();
+$eventController = new EventConnect($db);
 
 session_start();
 
-$_SESSION['businessid']= 3;
+$_SESSION['LoggedIn']['BusinessId'];
 
-if(isset($_GET['update'])) {
-    $id = $_GET['id'];
-    $listall = $list->getDiscount($db, $id);
-}
+$listall = $discountController->getDiscount($db, 18);
+$event = $eventController->getEventList($_SESSION['LoggedIn']['BusinessId']);
+
 
 if(isset($_POST['upd'])){
 
-    $id = $_POST['aid'];
+    $id = $_SESSION['LoggedIn']['BusinessId'];
     $title = $_POST['title'];
     $discount = $_POST['discount'];
     $businessid = $_POST['eventid'];
@@ -33,7 +34,7 @@ if(isset($_POST['upd'])){
 }
 
 
-$events = $list->getEventName($db,$_SESSION['businessid']);
+
 
 
 ?>
@@ -55,13 +56,13 @@ $events = $list->getEventName($db,$_SESSION['businessid']);
 <div class="container">
 <h3>Update Promotion</h3>
 <form action="updateDiscount.php" method="POST">
-    <input type="hidden" name="aid" value="<?php echo $id ?>" />
+
     <label>Title: </label><input type="text" name="title" value="<?php echo $listall['title']; ?>"/><br /><br />
     <label>Discount(%): </label><input type="text" name="discount" value="<?php echo $listall['discount']; ?>"/><br /><br />
     <label>Event Name: </label><select name="eventid">
         <?php
-        foreach($events as $item){
-            echo "<option value=".$item['id'].">".$item['EventName']."</option>";
+        foreach($event as $events){
+            echo "<option value=".$events->getEventId().">".$events->getName()."</option>";
         }
         ?>
     </select><br /><br />

@@ -79,7 +79,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
                 <?php else: ?>
                      <div>
                         <a href="<?php echo __httpRoot . "Business/updateBusiness.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Update User Profile</a></span><br /><br />
-                        <a href="<?php echo __httpRoot . "Business/ManageDiscounts.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Manage Discount</a></span>
+                        <a href="<?php echo __httpRoot . "Business/Discounts.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Manage Discount</a></span>
                     </div>
                 <?php endif; ?>
         </div>
