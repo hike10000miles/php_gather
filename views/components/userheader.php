@@ -25,9 +25,8 @@
                 <ul class="nav navbar-nav">
                     <li><a href="#"><i class="fa fa-group"></i>GATHERINGS</a></li>
                     <li><a href="<?php echo __httpRoot."Event/Events.php"?>"><i class="fa fa-calendar"></i>EVENTS</a></li>
-                    <?php if(isset($_SESSION['role'])) : if($_SESSION['role'] == 'business'): ?>
+                    <?php if(isset($_SESSION['LoggedIn']) && ($_SESSION['LoggedIn']['UserRole'] == 'business')): ?>
                     <li><a href="<?php echo __httpRoot."Business/Business.php"?>"><i class="fa fa-bank"></i>MANAGE BUSINESS</a></li>
-                  <?php endif; ?>
                     <?php endif; ?>
 
                 </ul>
@@ -49,10 +48,11 @@
                                             </p>
                                         </div>
                                         <div class="col-lg-8">
-                                            <p class="text-left"><strong>Kevin Sanabria</strong></p>
-                                            <p class="text-left small">notmadeup@email.com</p>
+                                            <p class="text-left"><strong><?php echo $_SESSION['LoggedIn']['Firstname']." ".$_SESSION['LoggedIn']['Firstname'];?></strong></p>
+                                            <p class="text-left small"><?php echo $_SESSION['LoggedIn']['Email'];?></p>
                                             <p class="text-left">
-                                                <a href="#" class="btn btn-primary btn-block btn-sm">Update Details</a>
+                                                <a href="#" class="btn btn-primary btn-block btn-sm">Update Login Details</a>
+                                                <a href="#" class="btn btn-primary btn-block btn-sm">Update Login Details</a>
                                             </p>
                                         </div>
                                     </div>

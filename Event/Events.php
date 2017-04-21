@@ -17,10 +17,6 @@ $category = null;
 
 session_start();
 
-$_SESSION['role'] = "normal";
-//$_SESSION['role'] = "business";
-
-//session_start();
 if(isset($_GET['category'])) {
     try {
         $category = $categoryConnect->getCategory($_GET['category']);

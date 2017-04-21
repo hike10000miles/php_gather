@@ -56,6 +56,9 @@ class LoginController
         }
         
         $sql = "SELECT u.id UserId,
+                       u.email,
+                       u.firstname,
+                       u.lastname,
                        u.passwordhash, 
                        u.passwordsalt, 
                        b.id BusinessId, 
@@ -76,6 +79,9 @@ class LoginController
                 $_SESSION['LoggedIn']['UserId'] = $result['UserId'];
                 $_SESSION['LoggedIn']['BusinessId'] = $result['BusinessId'];
                 $_SESSION['LoggedIn']['UserRole'] = $result['UserRole'];
+                $_SESSION['LoggedIn']['Email'] = $result['email'];
+                $_SESSION['LoggedIn']['Firstname'] = $result['firstname'];
+                $_SESSION['LoggedIn']['Lastname'] = $result['lastname'];
                 
                 // DEBUG(batuhan): Not tested.
                 if ($rememberme && !isset($_COOKIE['UserId'])) {
