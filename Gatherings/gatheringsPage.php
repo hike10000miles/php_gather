@@ -205,7 +205,10 @@ $events = $getEventsforGather->getgatheringsEvents($db);
                                             <?php echo $event->EventName;
                                             echo $event->EventDescription;
                                             echo "<br/> ";
-                                            echo '$'. $event->price;?>
+                                            echo '$'. $event->price;
+                                            echo "<br/>";?>
+                                            <input type="button" class="btn-success" value="Pay">
+                                            <input type="button" class="btn-success" value="Book">
                                         </div>
                                         <div class="ratings">
                                             <p class="pull-right">15 reviews</p>
@@ -219,6 +222,7 @@ $events = $getEventsforGather->getgatheringsEvents($db);
                                         </div>
                                     </div>
                                 </div>
+
 
                             <?php endforeach; ?>
                         </div>
