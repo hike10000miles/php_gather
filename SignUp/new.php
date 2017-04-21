@@ -37,7 +37,8 @@ if(isset($_POST['submit'])) {
             $login = new LoginController($_db);
             $result = $login->signup($user);
             if($result && !is_a($result, "Exception")) {
-                header("Location: " . __httpRoot . "User\UserProfile.php?id=" . $user->getId());
+                $login->login($user->getUsername(), $user->getPassword());
+                header("Location: " . __httpRoot . "User\UserProfile.php");
                 exit;
             } 
         } 
