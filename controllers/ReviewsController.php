@@ -1,7 +1,5 @@
 
 <?php
-
-
 class Admin
 {
     private $db;

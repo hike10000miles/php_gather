@@ -14,6 +14,7 @@ $businessview = new BusinessDAO();
 $eventController = new EventConnect($db);
 $reviewController = new Admin($db);
 $rating = new Ratings($db);
+$error_text=$fname=$review=$email_error=""; 
 $error = null;
 
 if(!isset($_SESSION['LoggedIn']['UserId'])) {
@@ -175,12 +176,14 @@ $totalreview = $reviewController->getCountReviews($businessId);
                                     </div>
                                 </div>
                             </div>
-
                         <?php endforeach; ?>
                     </div>
                 </div>
             </div>
-        <?php include "Business_reviews.php";?>
+            <?php if($_SESSION['LoggedIn']['UserRole'] == "normal"):?>
+                <?php include "addReviews.php";?>
+            <?php endif;?>
+            <?php include "Business_reviews.php";?>
         </div>
     <?php endforeach; ?>
 </div>

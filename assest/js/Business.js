@@ -2,6 +2,9 @@ $(document).ready(function(){
         var businessId = $('#rating-id').val();
         var clicked_val=0;
         var path = "/php_gather";
+        var review_username = $('#review-username').val();
+        var review_email = $('#review-email').val();
+        var review_businessid = $('#review-businessid').val();
 
         $('#1_star').hover(function () {
             $('#1_star').attr('src', ' http://' + location.host + path +'/assest/images/starn.png');
@@ -146,6 +149,30 @@ $(document).ready(function(){
                     }
                 });
             }
+        });
+
+        $('#submit_review').click(function(e)
+        {
+            e.preventDefault();
+            $.ajax({
+                url: 'review_response.php',
+                type:'POST',
+                data:
+                    {
+                        'fname': review_username,
+                        'email': review_email,
+                        'review':$('#review').val(),
+                        'BID': review_businessid
+                    },
+                success: function(res)
+                {
+                    if (res.code == 200) {
+                        $('#review_response').html("Your review is submitted.Thank You!");
+                    } else {
+                        $('#review_response').html("Invalid Input");
+                    }
+                }
+            });
         });
     }
 );
