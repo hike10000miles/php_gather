@@ -1,4 +1,5 @@
 <?php
+//by chen
     class CategoryModel 
     {
         private $_categoryId;

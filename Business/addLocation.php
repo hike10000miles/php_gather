@@ -1,4 +1,5 @@
 <?php
+//By Chen
     if(!defined("__root")) {
         require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
     }
@@ -26,6 +27,7 @@
 
 ?>
 <!DOCTYPE>
+
 <html>
 <head>
     <meta charset="utf-8">

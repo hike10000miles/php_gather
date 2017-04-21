@@ -1,4 +1,5 @@
 <?php
+//by chen
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }

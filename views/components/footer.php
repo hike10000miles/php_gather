@@ -25,7 +25,7 @@
                         </li>
                     </div>
                     <div class="col-sm-4">
-                        <?php if($_SESSION['role'] =='business'): ?>
+                        <?php if($_SESSION['LoggedIn']['UserRole'] =='business'): ?>
                         <li><a href="#">Business Tools</a>
                             <ul>
                                 <li><a href="#">Offer Discounts</a></li>

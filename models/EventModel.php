@@ -1,4 +1,5 @@
 <?php
+//by chen
 class EventModel
 {
     private $_eventId;
