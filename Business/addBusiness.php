@@ -5,22 +5,30 @@ if (!defined("__root")) {
 
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/Business.php';
+include __root . 'controllers/LoginController.php';
 
 
 $_db = Connect::dbConnect();
 $addbusiness = new BusinessDAO();
+$login = new LoginController($_db);
 
 
 session_start();
 
+if (!isset($_SESSION['LoggedIn']['UserRole']) && ($_SESSION['LoggedIn']['UserRole'] == 'business')) {
+    header("Location: " . __httpRoot);
+}
+
 if(isset($_POST['submit'])){
 
     $businessName = $_POST['businessName'];
-    $businessDescription = $_POST['businessName'];
+    $businessDescription = $_POST['businessDescription'];
     $businessCapacity = $_POST['businessCapacity'];
+    $userId = $_SESSION['LoggedIn']['UserId'];
 
-    $addbusiness->add($db,$businessName, $businessDescription, $businessCapacity);
-    header("Location: Business.php");
+    $addbusiness->addBusiness($_db,$businessName, $businessDescription, $businessCapacity, $userId);
+    $loginResult = $login->loginBySession($_SESSION['LoggedIn']['UserId']);
+    header("Location: addLocation.php");
 }
 ?>
 
@@ -51,18 +59,18 @@ if(isset($_POST['submit'])){
         </header>
         <h2>Create Business Profile</
         h2>
-        <form action="Business.php" method="POST">
+        <form action="addBusiness.php" method="POST">
             <div class="form-group">
                 <label for="username">Business Name:</label>
-                <input type="text" name="description" value="" class="form-control"/>
+                <input type="text" name="businessName" value="" class="form-control"/>
             </div>
             <div class="form-group">
                 <label for="password">Description:</label>
-                <input type="text" name="description" value="" class="form-control"/>
+                <input type="text" name="businessDescription" value="" class="form-control"/>
             </div>
             <div class="form-group">
                 <label for="passwordConform">Max Capacity:</label>
-                <input type="text" name="capactiy" value="" class="form-control"/>
+                <input type="text" name="businessCapacity" value="" class="form-control"/>
             </div>
             <input type="submit" name="submit" value="Create Profile" class="btn btn-default">
         </form>

@@ -139,6 +139,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
             <div class="panel panel-default">
                 <div class="panel-heading" contenteditable="false">Events<span class="pull-right">
                 <?php if($_SESSION['LoggedIn']['UserRole'] == 'business'): ?>
+                    <a href='<?php echo __httpRoot . "Event\Create.php";?>' >Add Event</a>
                     <a href="<?php echo __httpRoot . "Business/SuggestionAdmin.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">Manage Suggestions</a></span>
                 <?php endif; ?>
                 </div>

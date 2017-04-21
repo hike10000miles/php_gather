@@ -1,4 +1,5 @@
 <?php
+//by chen
 class UserModel
 {
     private $_username;

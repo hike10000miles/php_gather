@@ -1,5 +1,5 @@
 <?php
-if (!defined("__root")) {
+//by chen
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 

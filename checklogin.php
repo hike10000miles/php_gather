@@ -1,6 +1,6 @@
 <?php
 /**
- * @Author: mindfog
+ * @Author: mindfog, chen
  */
 if (!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
@@ -22,8 +22,6 @@ if (isset($_POST['identifier']) && isset($_POST['password'])) {
     
     $login = new LoginController($_db);
     $loginResult = $login->login($identifier, $password);
-    if ($loginResult != false) {
-        header("Location: http://localhost/php_gather/");
-    }
+    header("Location: " . __httpRoot);
     ob_end_flush();
 }
