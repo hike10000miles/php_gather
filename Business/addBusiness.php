@@ -57,8 +57,7 @@ if(isset($_POST['submit'])){
                 </div>
             </div>
         </header>
-        <h2>Create Business Profile</
-        h2>
+        <h2>Create Business Profile</h2>
         <form action="addBusiness.php" method="POST">
             <div class="form-group">
                 <label for="username">Business Name:</label>
