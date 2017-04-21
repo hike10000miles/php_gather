@@ -17,7 +17,7 @@
 
                 <ul class="nav navbar-nav">
                     <?php if(isset($_SESSION['LoggedIn']) && ($_SESSION['LoggedIn']['UserRole'] ==  'normal')): ?>
-                        <li><a href="#"><i class="fa fa-group"></i>GATHERINGS</a></li>
+                        <li><a href="<?php echo __httpRoot."Gatherings/GatherList.php"?>"><i class="fa fa-group"></i>GATHERINGS</a></li>
                     <?php endif; ?>
                         <li><a href="<?php echo __httpRoot."Event/Events.php"?>"><i class="fa fa-calendar"></i>EVENTS</a></li>
                         <li><a href="<?php echo __httpRoot."Business/BusinessList.php"?>"><i class="fa fa-money"></i>BUSINESSES</a></li>
