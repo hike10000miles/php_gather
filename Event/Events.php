@@ -7,6 +7,7 @@ include __root . 'controllers/Business.php';
 include __root . 'controllers/EventController.php';
 include __root . 'controllers/CategoryController.php';
 
+
 $db = Connect::dbConnect();
 $eventConnect = new EventConnect($db);
 $categoryConnect = new CategoryConnect($db);
@@ -95,11 +96,6 @@ $categories = $categoryConnect->getCategories();
                             <span class="glyphicon glyphicon-star"></span>
                         </p>
                     </div>
-                     <?php //if(isset($le['discount'])): ?>
-                        <div class="panel-footer text-center">
-                            Apply <?php //echo $le['discount'];?>% off Today!
-                        </div>
-                    <?php //endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>

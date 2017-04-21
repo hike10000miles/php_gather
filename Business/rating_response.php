@@ -15,7 +15,7 @@ $db= Connect::dbConnect();
 //$clicked_val="";
 $clicked_val=$_REQUEST['clicked_val'];
 $businessid=$_REQUEST['BId'];
-//var_dump($businessid);
+
 if($clicked_val === 0 || $clicked_val > 5)
 {
     echo "Please give a rating.";

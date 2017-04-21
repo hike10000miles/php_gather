@@ -12,9 +12,6 @@ class Admin
          $this->db=$db;
     }
 
-
-
-
     public function getalldata()
     {
         $query = "SELECT * FROM review ORDER BY date DESC";
@@ -66,7 +63,6 @@ class Admin
     public function searchdata($value)
 
     {
-        //var_dump($value);
         $query3="SELECT * FROM review WHERE status = :value";
         $pdostmt3 = $this->db->prepare($query3);
         $pdostmt3->bindValue(':value',$value, PDO::PARAM_STR);
@@ -126,7 +122,7 @@ class Admin
 
     public function displayreviewsbybusinessid($businessId)
     {
-        var_dump($businessId);
+
         $query6="SELECT * FROM review WHERE business_id = :businessId ORDER BY date DESC";
         $pdostmt3 = $this->db->prepare($query6);
         $pdostmt3->bindValue(':businessId',$businessId, PDO::PARAM_INT);
@@ -151,6 +147,22 @@ class Admin
 
         return $row7;
     }
+
+    public function getCountReviews($bid){
+        $query = "SELECT COUNT(review) AS totalreview FROM review WHERE business_id = :bid AND status = 'Approved'";
+
+        $pdostmt = $this->db->prepare($query);
+
+
+        $pdostmt->bindValue(':bid', $bid, PDO::PARAM_INT);
+        $pdostmt->execute();
+
+        $row11 = $pdostmt->fetchall();
+
+        return $row11;
+    }
+
+
 
 
     public function getratingbybusinessid($bid)
