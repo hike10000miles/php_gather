@@ -38,8 +38,6 @@ if(isset($_POST['delete'])){
 
 }
 
-
-
 ?>
 <!DOCTYPE>
 <html>

@@ -24,6 +24,15 @@ class BusinessDAO
         return $businessprofile;
     }
 
+    public function getAll($db){
+        $query = "SELECT * FROM business";
+        $pdostmt = $db->prepare($query);
+        $pdostmt->execute();
+
+        $businessall = $pdostmt->fetchAll(PDO::FETCH_OBJ);
+        return $businessall;
+    }
+
     public function getEventList($db,$id){
         $query = "SELECT e.id,e.EventName,e.EventDescription,d.discount FROM events e LEFT JOIN discounts d ON e.id = d.eventid WHERE businessid = :id";
 
