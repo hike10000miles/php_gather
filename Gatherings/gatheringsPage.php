@@ -42,6 +42,12 @@ $fetchEvents = $eventsInGathering->get_GatheringusersModified($db, $_SESSION['ga
 var_dump($fetchEvents);
 
 
+$getEventsforGather = new gatheringsController($db);
+$events = $getEventsforGather->getgatheringsEvents($db);
+
+
+
+
 
 ?>
 
@@ -162,14 +168,44 @@ var_dump($fetchEvents);
                     <div class="panel-heading" contenteditable="false">Events<span class="pull-right"><a href="#">View More</a></span></div>
                     <div class="panel-body">
                         <div class="row">
+
+<!--                            foreach ($fetchUsers as $key){-->
+<!--                            $query = "SELECT username FROM users WHERE id =".$key['UserId'];-->
+<!--                            $pdostmt2 = $db->prepare($query);-->
+<!--                            $pdostmt2->execute(); // now we execute the statement-->
+<!--                            $gatherresultUsernameswithUserId= $pdostmt2->fetch(PDO::FETCH_ASSOC);-->
+<!--                            $pdostmt2->closeCursor(); //dont forget this, because it disconnects your connection to db cuz there can only be 1 at a atime-->
+<!--                            //var_dump($gatherresultUsernameswithUserId);-->
+<!--                            foreach ($gatherresultUsernameswithUserId as $keyusername){-->
+<!--                            echo $keyusername;-->
+<!--                            }//return ture because its succesfful-->
+<!--                            ?><br>-->
+<!--                            --><?php //} ?>
+<!---->
+<!--                                public function getgatheringsEvents($db){-->
+<!--                                $query = "SELECT * FROM gatheringevents";-->
+<!--                                $pdostmt2 = $db->prepare($query);-->
+<!--                                $pdostmt2->execute();-->
+<!---->
+<!--                                $events = $pdostmt2->fetchAll();-->
+<!--                                return $events;-->
+<!--                                }-->
+
+
+
+
                             <?php foreach($events as $event): ?>
                                 <div class="col-md-4">
                                     <div class="thumbnail">
                                         <img alt="300x200" src="http://lorempixel.com/300/150/technics">
                                         <div class="caption">
-                                            <h4 class="pull-right">$24.99</h4>
-                                            <h4><a href='<?php echo __httpRoot . "Event/Event.php?id=" . $event->getEventId(); ?>'><?php echo $event->getName(); ?></a></h4>
-                                            <p><?php echo $event->getDescription(); ?></p>
+                                            <h4 class="pull-right"></h4>
+<!--                                            <h4><a href='--><?php //echo __httpRoot . "Event/Event.php?id=" . $event->getEventId(); ?><!--'>--><?php //echo $event->getName(); ?><!--</a></h4>-->
+<!--                                            <p>--><?php //echo $event->getDescription(); ?><!--</p>-->
+                                            <?php echo $event->EventName;
+                                            echo $event->EventDescription;
+                                            echo "<br/> ";
+                                            echo '$'. $event->price;?>
                                         </div>
                                         <div class="ratings">
                                             <p class="pull-right">15 reviews</p>
