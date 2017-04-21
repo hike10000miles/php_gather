@@ -39,14 +39,15 @@ class BusinessDAO
 
     }
 
-    public function addBusiness($db, $businessName, $businessDescription, $businessCapacity)
+    public function addBusiness($db, $businessName, $businessDescription, $businessCapacity, $userID)
     {
-        $query5 = "INSERT INTO business (businessName, businessDescription, businessCapacity) VALUES (:businessName, :businessDescription, :businessCapacity)";
+        $query5 = "INSERT INTO business (businessName, businessDescription, businessCapacity, userid) VALUES (:businessName, :businessDescription, :businessCapacity, :userID)";
 
         $pdostmt5 = $db->prepare($query5);
         $pdostmt5->bindValue(':businessName',$businessName);
         $pdostmt5->bindValue(':businessDescription',$businessDescription);
         $pdostmt5->bindValue(':businessCapacity',$businessCapacity);
+        $pdostmt5->bindValue(':userID', $userID);
 
         $pdostmt5->execute();
     }

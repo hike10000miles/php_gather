@@ -19,7 +19,18 @@ if(isset($_GET['loggout'])) {
 	}
 }
 echo var_dump($_SESSION);
+if($_SESSION['LoggedIn']['UserRole'] == "business") {
+
+    if(isset($_SESSION['LoggedIn']['BusinessId'])) {
+        header("Location: " . __httpRoot."Business/Business.php");
+    } else {
+        header("Location: " . __httpRoot."Business/addBusiness.php");
+    }
+
+} elseif ($_SESSION['LoggedIn']['UserRole'] == "normal") {
+    header("Location: " . __httpRoot."Event/Events.php");
+} elseif ($_SESSION['LoggedIn']['UserRole'] == "admin") {
+    header("Location: " . __httpRoot."Category/Categories.php");
+}
+
 ?>
-<form action='UserProfile.php' method="GET">
-    <input type="submit" name="loggout" value="Log Out">
-</form>
