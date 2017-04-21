@@ -39,6 +39,7 @@ if(isset($_POST['delete'])){
 }
 
 ?>
+
 <!DOCTYPE>
 <html>
 <head>
@@ -49,12 +50,14 @@ if(isset($_POST['delete'])){
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Business | Gather</title>
 </head>
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
+
 <h2>Review List</h2>
     <button class="btn btn-default" id="back">Go Back To Business</button><br/><br/>
 <style>
@@ -178,6 +181,7 @@ if(isset($_POST['delete'])){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
+
 </div>
 </body>
 <script>
