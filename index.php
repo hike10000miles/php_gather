@@ -44,7 +44,7 @@
                         <ul class="nav navbar-nav">
 
                             <li>
-                                <a href="<?php echo __httpRoot.'userProfile/create.php'?>">
+                                <a href="<?php /*echo __httpRoot.'userProfile/create.php'*/?>">
                                     <strong>SIGN UP</strong></a>
 							</li>
 							
