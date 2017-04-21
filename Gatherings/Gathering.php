@@ -14,22 +14,26 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['gatherid'])) {
     header('Location: create.php');
 }
 
-
-
 $db = Connect::dbConnect();
 
+$_SESSION['LoggedIn']['UserId'];
+
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+}
+
 $eventController = new EventConnect($db);
-$thisuserDetails = new gatheringsController($db);
+$gathercontroller = new gatheringsController($db);
 
-$usersDetails = $thisuserDetails->selectUserDetails($db, $_SESSION['user_id']);
+$usersDetails = $gathercontroller->selectUserDetails($db, $_SESSION['LoggedIn']['UserId']);
 
-$row = $gatheringDetails->selectGathering($db, $_SESSION['gatherid']);
+$row = $gathercontroller->selectGathering($db,$id);
 
-$fetchUsers = $gatheringDetails->get_GatheringusersModified($db, $_SESSION['gatherid']);
+$fetchUsers = $gathercontroller->get_GatheringusersModified($db, $id);
 
-$fetchEvents = $eventsInGathering->get_GatheringusersModified($db, $_SESSION['gatherid']);
+$fetchEvents = $gathercontroller->get_GatheringusersModified($db, $id);
 
-$events = $getEventsforGather->getgatheringsEvents($db);
+$events = $gathercontroller->getgatheringsEvents($db);
 
 ?>
 
