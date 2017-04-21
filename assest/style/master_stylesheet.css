@@ -185,6 +185,11 @@ footer{
 .font_bold {
 	font-weight: bold;
 }
+
+.fixheight{
+	min-height: 280px;
+}
+
 @media only screen and (min-width: 768px){
 
 	#first{

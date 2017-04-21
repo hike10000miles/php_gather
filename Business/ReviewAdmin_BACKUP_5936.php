@@ -59,6 +59,8 @@ if(isset($_POST['delete'])){
     <?php include(__root."views/components/globalhead.php"); ?>
 <<<<<<< HEAD
 =======
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 
 >>>>>>> kevin
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

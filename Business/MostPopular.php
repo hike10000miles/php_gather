@@ -34,7 +34,7 @@ include __root . 'controllers/MostPopularController.php';
 <?php
 $db= Connect::dbConnect();
 
-$a=new Admin($db);
+$a=new Ratings($db);
 
 $row=$a->getmostpopular();
 
