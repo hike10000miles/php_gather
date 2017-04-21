@@ -1,0 +1,66 @@
+FEATURE 1: GATHERING:
+
+Folder:Gatherings
+
+create.php
+gatheringPage.php
+startpoint.php
+
+Folder: Controllers
+
+gatheringsController.php
+
+
+
+
+
+
+
+
+
+FEATURE 2: USER PROFILE
+
+Folder: userProfile
+
+directory: images
+create.php
+deleteProfile.php
+updateProfile.php
+user_profile_page.php
+
+Folder: Controllers
+userProfile.php
+
+Folder: Assest/Style
+profileStylesheet.css
+
+
+Folder: Assest/scripts
+user_profile_deletebutton.js
+
+
+
+
+
+FEATURE 3: ANNOUNCEMENTS
+
+Folder: Controllers
+announcementControllers.php
+
+Folder: Assest/Style
+announcement-stylesheet.css
+
+Folder: Assest/scripts
+gather_announcements.js
+validaton.js
+
+Folder: Gatherings
+announcements.php
+gatheringPage.php - inside this will be anouncements
+
+
+
+
+
+
+

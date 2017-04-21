@@ -85,14 +85,16 @@ if (isset($_POST['create_gathering_submit'])){
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
+    <link rel="stylesheet" href='<?php echo __httpRoot . "assest/"; ?>style/gathercreateStylsheet.css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Business | Gather</title>
 </head>
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-
+<br><br><br>
     <h2 class="page-header">Hello <?php echo $usersDetails['username']?>, please fill out the form below in order to begin creating your Gathering.</h2>
+    <br><br><br><br><br><br>
     <div class="row" id="error_row">
         <?php if (!empty($error_message)) { ?>
             <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
@@ -108,27 +110,28 @@ if (isset($_POST['create_gathering_submit'])){
 <!--        </div>-->
         <div class="row col-lg-12 col md-12  col-sm-12 col-xs-12" id="formrow1.5">
             <label class="address_label">Gathering Name: </label>
-            <input type="text" id="gatheringName" name="gatheringName" placeholder="ex: Staley Cup Champs 2017" value="<?php echo htmlspecialchars($gatheringName); ?>">
-        </div><!--formrow1-->
+           <br> <input type="text" class='tb' id="gatheringName" name="gatheringName" placeholder="ex: Staley Cup Champs 2017" value="<?php echo htmlspecialchars($gatheringName); ?>">
+        </div><!--formrow1--><br><br><br>
         <div class="row col-lg-12 col md-12  col-sm-12 col-xs-12" id="formrow2">
             <label class="education_level_label">Your Gathering's Description: </label>
-            <input type="text" id = "gatheringDescription" name="gatheringDescription" placeholder="Must be between 20 and 150 characters"<?php echo htmlspecialchars($gatheringDescription); ?>">
-        </div>
+            <br><input type="text" class="tb" id = "gatheringDescription" name="gatheringDescription" placeholder="Must be between 20 and 150 characters"<?php echo htmlspecialchars($gatheringDescription); ?>">
+        </div><br><br><br>
         <div class="row col-lg-12 col md-12  col-sm-12 col-xs-12" id="formrow2.5">
             <label for="LocationId">Select Your Locaton:</label>
-                <select name="locationid">
+                <br><select class='tb' name="locationid">
                     <?php
                     foreach ($locationResult as $key){
                         ?><option value="<?php echo $key['Id']; ?>" name="locationId"><?php echo $key['StreetName']; ?></option>
                     <?php } ?>
                 </select>
-        </div><!--formrow2-->
+        </div><!--formrow2--><br><br><br><br><br><br><br>
         <div class="row" id="formbutton">
             <input type="hidden" name="userid-groupcreator" value="<?php echo $_SESSION['user_id'] ?>">
             <input type="hidden" name="creationDate" value="<?php echo date("Y-m-d") ?>">
             <input type="submit" class="btn btn-success btn-lg" name="create_gathering_submit" id="create_gathering_submit"  value="Create Gathering"><br>
         </div>
     </form>
+    <br><br><br><br><br><br><br>
     <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

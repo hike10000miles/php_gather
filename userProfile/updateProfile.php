@@ -19,7 +19,7 @@ $usersDetails = $thisuserDetails->selectUserDetails($db, $_SESSION['user_id']);
 
 $profileDetails = new userProfile($db);
 $row = $profileDetails->selectUserProfile($db, $_SESSION['profileid']);
-var_dump($row);
+//var_dump($row);
 
 if(isset($_POST['edit'])){
     $id = $_POST['id'];
@@ -143,6 +143,7 @@ if(isset($_POST['updateProfileButton'])) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <link rel="stylesheet" href='<?php echo __httpRoot . "assest/"; ?>style/profileStylsheet.css'>
     <script src='<?php echo __httpRoot . "assest/"; ?>scripts/user_profile_deletebutton.js'></script>
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -151,7 +152,7 @@ if(isset($_POST['updateProfileButton'])) {
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-
+<br><br>
     <h3>Update Profile</h3>
     <form action="updateProfile.php" method="post" enctype="multipart/form-data">
         <input type="hidden" name="profileid"  value="<?php echo $id; ?>"/>
@@ -161,32 +162,36 @@ if(isset($_POST['updateProfileButton'])) {
             <label class="user_dob_label">DOB: </label>
             <input type="date" id="user_dob" name="user_dob" value="<?php echo $results['user_dob']; ?>">
         </div>
+        <br><br>
         <div class="row col-lg-12 col md-12  col-sm-12 col-xs-12" id="formrow1.5">
             <label class="address_label">Address: </label>
-            <input type="text" id="address" name="address" placeholder="ex: 883 Drysdale Drive, Mississauga ON, L5V 1X5" value="<?php echo $results['address']; ?>">
+            <input type="text" class="tb" id="address" name="address" placeholder="ex: 883 Drysdale Drive, Mississauga ON, L5V 1X5" value="<?php echo $results['address']; ?>">
         </div><!--formrow1-->
+        <br><br>
         <div class="row col-lg-12 col md-12  col-sm-12 col-xs-12" id="formrow2">
             <label class="education_level_label">Highest Education: </label>
-            <input type="text" id = "education_level" name="education_level" placeholder="ex. Postgraduate Diploma in Web Development" value="<?php echo $results['education_level']; ?>">
+            <input type="text" class="tb" id = "education_level" name="education_level" placeholder="ex. Postgraduate Diploma in Web Development" value="<?php echo $results['education_level']; ?>">
         </div>
+        <br><br>
         <div class="row col-lg-12 col md-12  col-sm-12 col-xs-12" id="formrow2.5">
             <label class="current_jobtitle_label">Current Job Title: </label>
-            <input type="text" id = "current_jobtitle" name="current_jobtitle" placeholder="ex. Strategy Assistant at Starcom Mediavest" value="<?php echo $results['current_jobtitle']; ?>">
+            <input type="text" class="tb" id = "current_jobtitle" name="current_jobtitle" placeholder="ex. Strategy Assistant at Starcom Mediavest" value="<?php echo $results['current_jobtitle']; ?>">
         </div><!--formrow2-->
+        <br><br>
         <div class="row" id="formrow4">
             <label class="user_description_label">Please write a brief description about yourself:</label><br>
-            <input type="text" class="user_description" id="user_description" name="user_description" rows="2" cols="50" placeholder="Must be between 300 and 1000 characters" value="<?php echo $results['user_description']; ?>"
-            <!--        <textarea input type="text" class="user_description" id="user_description" name="user_description" rows="2" cols="50" placeholder="Must be between 300 and 1000 characters" value="--><?php //echo $results['user_description']; ?><!--"></textarea>-->
+            <input type="text" class="tbbig" class="user_description" id="user_description" name="user_description" rows="2" cols="50" placeholder="Must be between 300 and 1000 characters" value="<?php echo $results['user_description']; ?>"
         </div><!--formrow4-->
+        <br><br>
         <div class="row" id="formrow5">
             <label class="profile_image_label">Please upload a picture of yourself to be used as a profile picture. Picture must be 300px X 300px.</label><br>
             <input type="file" enctype="multipart/form-data" name="profile_image" id="profile_image" value="<?php echo $results['profile_image']; ?>"/>
             <img src="<?php echo $results['profile_image']; ?>" name="new_image" id="new_imae" value="<?php echo $results['profile_image']; ?>"/>
         </div><!--formrow5-->
-        <?php
-        ?>
-        <input type="submit" value="Update Your Profile" name="updateProfileButton"/>
+       <br><br>
+        <input type="submit" class="btn-success" value="Update Your Profile" name="updateProfileButton"/>
     </form>
+    <br><br>
 
     <script>
         function readURL(input) {

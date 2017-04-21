@@ -51,10 +51,12 @@ $id = $row['id'];
                 <h2 class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="headerheader">Hello <?php echo '' . $usersDetails['username']; ?> , take a look at your profile below. If you don't like it, simply click on edit and make some changes!</h2>
             </header>
         </div><!--page header div-->
-    </div><!--div for row of header-->
+    </div><!--div for row of header--><br>
     <main class="userProfile">
+        <span>
         <div class="row" id="buttonRow">
-            <div class="col-lg-12 col md-12  col-sm-12 col-xs-12" id="buttonColumn">
+            <div class="col-lg-5 col md-5  col-sm-12 col-xs-12" id="buttonColumn">
+
                 <form action="updateProfile.php" class="editform" method="post">
                     <input type="hidden" value="<?php echo $row['id'];?>" name="id">
                     <input type ='submit' class='btn btn-success btn-lg'  id='edit' name="edit" value="Edit Profile">
@@ -68,26 +70,32 @@ $id = $row['id'];
                     </form>
                     <input type ='submit' class='btn btn-success btn-lg'  id='deletenope' name='deletenope' value="No thanks!">
                 </div>
+                      </span>
             </div><!--div for pic column-->
+            <div class="col-lg-7 col-sm-12 col-md-12 col-xs-7" id="lorempixem">
+                <img title="profile image" class="img-responsive" src="http://lorempixel.com/850/300/sports">
+            </div>
         </div><!--div for button row-->
         <?php } ?>
+        <br>
         <br>
         <div class="row" id="rowOne">
             <div class="col-lg-6 col md-6  col-sm-12 col-xs-12" id="pictureColumn">
                 <?php echo "<img src='".$row['profile_image']."' />"; ?>
             </div><!--div for pic column-->
-            <div class="col-lg-6 col md-6  col-sm-12 col-xs-12" id="userdetailsColumn">
-                <p class="userNameProfile" id="label">Username: <?php echo '' . $usersDetails['username']; ?></p>
-                <p class="nameProfile" id="label">Full Name:<br>  <?php echo '' . $usersDetails['firstname'] . '' . $usersDetails['middlename'] . '' . $usersDetails['lastname']; ?></p>
-                <p class="usersEmail" id="label">Email:<br>  <?php echo '' . $usersDetails['email']; ?></p>
-                <p class="usersProfiledob" id="label">Date of Birth:<br>  <?php echo '' . $row['user_dob']; ?></p>
-                <p class="usersAddress" id="label">Address:<br>  <?php echo '' . $row['address']; ?></p>
-                <p class="usersEducationLevel" id="label">Highest Educational Achievement:<br>  <?php echo '' . $row['education_level']; ?></p>
-                <p class="usersJobTitle" id="label">Current Job Title:<br>  <?php echo '' . $row['current_jobtitle']; ?></p>
+            <p class="col-lg-6 col md-6  col-sm-12 col-xs-12" id="userdetailsColumn">
+                <p class="userNameProfile" id="label">Username: <span class="text"><?php echo '' . $usersDetails['username']; ?></span></p>
+            <p class="nameProfile" id="label">Full Name:<br>  <span class="text"><?php echo '' . $usersDetails['firstname'] . ' ' . $usersDetails['middlename'] . ' ' . $usersDetails['lastname']; ?></span></p>
+                <p class="usersEmail" id="label">Email:<br>  <span class="text"><?php echo '' . $usersDetails['email']; ?></span></p>
+                <p class="usersProfiledob" id="label">Date of Birth:<br>  <span class="text"><?php echo '' . $row['user_dob']; ?></span></p>
+                <p class="usersAddress" id="label">Address:<br>  <span class="text"><?php echo '' . $row['address']; ?></span></p>
+                <p class="usersEducationLevel" id="label">Highest Educational Achievement:<br>  <span class="text"><?php echo '' . $row['education_level']; ?></span></p>
+                <p class="usersJobTitle" id="label">Current Job Title:<br> <span class='text'><span class="text"> <?php echo '' . $row['current_jobtitle']; ?></span></p>
             </div><!--div for userDetailsColumn-->
-        </div><!--div for row 1-->
+        <!--div for row 1-->
 
         <br>
+            <br>
         <div class="jumbotron">
         <div class="row" id="rowTwo">
             <div class="description" id="description">
@@ -95,7 +103,7 @@ $id = $row['id'];
             </div><!--div for description-->
         </div><!--div for row 2-->
                     <div class="row">
-                        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12" id="description">
 
                         <?php echo $row['user_description'];?></p>
                     </div>
