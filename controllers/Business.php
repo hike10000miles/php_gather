@@ -25,44 +25,30 @@ class BusinessDAO
         return $events;
     }
 
- /*   public function updatePromotion($db, $title, $discount,$eventid, $datestart, $expiry, $id){
-        $query3 = "UPDATE discounts SET title = :title, discount = :discount, eventid = :eventid,
-                   datestart = :datestart, expiry = :expiry WHERE id = :id";
+    public function updatePromotion($db, $businessName, $businessDescription, $businessCapacity, $id){
+        $query3 = "UPDATE business SET businessName = :businessName, businessDescription = :businessDescription, businessCapacity = :businessCapacity,
+                   WHERE id = :id";
         $pdostmt3 = $db->prepare($query3);
 
-        $pdostmt3->bindValue(':title',$title);
-        $pdostmt3->bindValue(':discount',$discount);
-        $pdostmt3->bindValue(':eventid',$eventid);
-        $pdostmt3->bindValue(':datestart',$datestart);
-        $pdostmt3->bindValue(':expiry',$expiry);
+        $pdostmt3->bindValue(':businessName',$businessName);
+        $pdostmt3->bindValue(':businessDescription',$businessDescription);
+        $pdostmt3->bindValue(':businessCapacity',$businessCapacity);
         $pdostmt3->bindValue(':id',$id);
 
         $pdostmt3->execute();
 
     }
 
-    public function deletePromotion($db, $id){
-        $query4 = "DELETE FROM discounts WHERE id = :id";
-
-        $pdostmt4 = $db->prepare($query4);
-        $pdostmt4->bindValue(':id',$id);
-
-        $pdostmt4->execute();
-
-    }
-
-    public function addPromotion($db, $eventid, $title, $discount, $datestart, $expiry)
+    public function addBusiness($db, $businessName, $businessDescription, $businessCapacity)
     {
-        $query5 = "INSERT INTO discounts (eventid, title, discount, datestart, expiry) VALUES (:eventid, :title, :discount, :datestart, :expiry)";
+        $query5 = "INSERT INTO business (businessName, businessDescription, businessCapacity) VALUES (:businessName, :businessDescription, :businessCapacity)";
 
         $pdostmt5 = $db->prepare($query5);
-        $pdostmt5->bindValue(':eventid', $eventid);
-        $pdostmt5->bindValue(':title', $title);
-        $pdostmt5->bindValue(':discount', $discount);
-        $pdostmt5->bindValue(':datestart', $datestart);
-        $pdostmt5->bindValue(':expiry', $expiry);
+        $pdostmt5->bindValue(':businessName',$businessName);
+        $pdostmt5->bindValue(':businessDescription',$businessDescription);
+        $pdostmt5->bindValue(':businessCapacity',$businessCapacity);
 
         $pdostmt5->execute();
-    }*/
+    }
 
 }

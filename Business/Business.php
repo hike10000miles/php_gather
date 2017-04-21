@@ -131,7 +131,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
             </div>
         </div>
 
-        <!-----------------------------------------BUSINESS MAIN------------------------------------>
+        <!-----------------------------------------BUSINESS MAIN (KEVIN)------------------------------------>
         <div class="col-sm-9" contenteditable="false" >
             <div class="panel panel-default">
                 <div class="panel-heading"><?php echo $bd['businessName']; ?> Description</div>
@@ -141,7 +141,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
                 <div class="panel-heading" contenteditable="false">Events</div>
                 <div class="panel-body">
                     <div class="row">
-                        <!-----------------------------------------EVENTS------------------------------------>
+                        <!-----------------------------------------EVENTS (CHEN)------------------------------------>
                         <?php foreach($events as $event): ?>
                             <div class="col-sm-4 fixheight">
                                 <div class="thumbnail">
@@ -158,7 +158,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
                              </div>
                          </div>
                     </div>
-            <!-----------------------------------------4. REVIEWS------------------------------------>
+            <!-----------------------------------------4. REVIEWS (SIJI)------------------------------------>
             <div class="panel panel-default">
 
                 <div class="panel-heading">Review<span class="pull-right"><?php if($_SESSION['role'] == 'business'): ?><a href="<?php echo __httpRoot . "Business/ReviewAdmin.php?id=" .$_SESSION['businessid']; ?>">Manage Reviews</a><?php else: ?><a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['businessid']; ?>">Add Review</a></span><?php endif; ?></div>
@@ -191,7 +191,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['businessid']);
                                     <?php endif;
                                         endforeach;?>
                         </div>
-                    <!----4.2 Rating -------->
+                    <!----4.2 Rating (SIJI) -------->
                     <?php if($_SESSION['role'] == 'normal'): ?>
                     <form action="" name="ratings" id="ratings">
                         <script>
