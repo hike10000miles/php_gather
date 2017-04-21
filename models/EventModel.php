@@ -31,7 +31,7 @@ class EventModel
             $this->_userId = $queryResult['UsersId'];
         }
         if(isset($queryResult['id'])) {
-            $this->_eventId = $queryResult[0]; 
+            $this->_eventId = $queryResult['id']; 
         }
         if(isset($queryResult["EventId"])) {
             $this->_eventId = $queryResult["EventId"]; 

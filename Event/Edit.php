@@ -14,24 +14,28 @@ $message = null;
 
 session_start();
 
-$_SESSION['id']= 3;
-$_SESSION['UserId'] = 4;
-$_SESSION['role'] = 'business';
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
-if($_SESSION['role'] == 'business') {
+if($_SESSION['LoggedIn']['UserRole'] == 'business') {
 
-$businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+    $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
 
     if(isset($_GET["id"])) {
         try {
             $event = $eventConnect->getEvent($_GET["id"]);
+            if(!($event->getBusinessId() == $_SESSION['LoggedIn']['BusinessId'])){
+                $event = new Exception("You do not have access to this event!");
+            }
         } catch(Exception $e) {
             $message = $e->getMessage();
         }
     }
 
     if(isset($_POST["subbtn"])) {
-        if(isset($_SESSION['UserId']) && isset($_POST['EventName']) 
+        if(isset($_POST['EventId']) && isset($_POST['EventName']) 
             && isset($_POST['EndDateTime']) && isset($_POST['StartDateTime']) 
             && isset($_POST['BusinessId']) && isset($_POST['EventDescription'])) {
             $result = null;
@@ -42,10 +46,10 @@ $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
             }
             if($event != null) {
                 $eventConnect = new EventConnect($db);
-                $result = $eventConnect->createEvent($event);
+                $result = $eventConnect->editEvent($event);
             } 
             if($result != null && $result) {
-                header("Location: http://localhost/views/Business.php/");
+                header("Location: " . __httpRoot . "Business/Business.php");
                 exit;
             } else if(is_a($result, "Exception")) {
                 $message = $result->getMessage();
@@ -77,12 +81,12 @@ $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
     <title>Edit Event | Gather</title>
 </head>
 <body>
+<?php include(__root."views/components/userheader.php"); ?>
 <?php if(isset($message)): ?>
     <div class="alert alert-warning">
         <?php echo $message; ?>
     </div>
 <?php endif?>
-<?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
 
     <?php if($_SESSION['role'] == 'business'):?>
@@ -150,8 +154,10 @@ $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
                 <div class="panel-body"><?php echo $bd['businessDescription']; ?></div>
             </div>
                 <?php if(is_a($event, "EventModel")): ?>
-                <form action="create.php" method="POST">
-                    <input type="text" value='<?php echo $_SESSION['id']; ?>' name="BusinessId" hidden/>
+
+                <form action="edit.php" method="POST">
+                    <input type="text" value='<?php echo $event->getEventId(); ?>' name="EventId" hidden/>
+                    <input type="text" name="BusinessId" value='<?php echo $event->getBusinessId(); ?>' hidden>
                     <div class="form-group">
                         <label for="EventName">Event Name:</label>
                         <input type="text" name="EventName" class="form-control" value='<?php echo $event->getName();?>' />

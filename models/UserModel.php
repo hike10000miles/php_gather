@@ -11,6 +11,7 @@ class UserModel
     private $_role;
     private $_location;
     private $_email;
+    private $_id;
 
     public function __construct($queryResult)
     {
@@ -43,6 +44,16 @@ class UserModel
         } catch(Exception $e) {
             return $e;
         }     
+    }
+
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    public function setId($value)
+    {
+        $this->_id = $value;
     }
 
     public function getEmail()

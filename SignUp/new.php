@@ -36,7 +36,7 @@ if(isset($_POST['submit'])) {
             $login = new LoginController($_db);
             $result = $login->signup($user);
             if($result && !is_a($result, "Exception")) {
-                header("Location: " . __httpRoot . "User\UserProfile.php?id=" . $user['UserId']);
+                header("Location: " . __httpRoot . "User\UserProfile.php?id=" . $user->getId());
                 exit;
             } 
         } 
@@ -53,7 +53,7 @@ if(isset($_POST['submit'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Gather</title>
+    <title>Signup | Gather</title>
     <!-- Bootstrap -->
     <link href='<?php echo __httpRoot . "assest/bootstrap/css/bootstrap.min.css"; ?>' rel="stylesheet">
 	<link href='<?php echo __httpRoot . "assest/style/master_stylesheet.css"; ?>' rel="stylesheet">

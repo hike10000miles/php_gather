@@ -12,7 +12,10 @@ $list = new DiscountDAO();
 
 session_start();
 
-$_SESSION['businessid']= 3;
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
 if(isset($_GET['add'])){
 
@@ -26,7 +29,7 @@ if(isset($_GET['add'])){
     header("Location: Discounts.php");
 }
 
-$events = $list->getEventName($db,$_SESSION['businessid']);
+$events = $list->getEventName($db,$_SESSION['LoggedIn']['BusinessId']);
 ?>
 
 <!DOCTYPE>

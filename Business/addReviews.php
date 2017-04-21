@@ -17,6 +17,11 @@ $a= new Admin($db);
 
 session_start();
 
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
+
 $business = $_SESSION['businessid'];
 
 ?>
