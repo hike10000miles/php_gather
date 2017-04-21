@@ -20,7 +20,7 @@ if(!isset($_SESSION['LoggedIn']['UserId'])) {
     header("Location: " . __httpRoot);
     exit;
 }
-
+$_SESSION['LoggedIn']['BusinessId'] = $_GET['id'];
 /*$reviews = $reviewController->*/
 $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['LoggedIn']['BusinessId']);
 $events = $eventController->getEventList($_SESSION['LoggedIn']['BusinessId']);
