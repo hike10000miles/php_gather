@@ -1,6 +1,6 @@
 <?php
 /**
- *This is the database class, it is a singleton.
+ *This is the database class, it is a singleton. by chen
  */
 class Connect
 {

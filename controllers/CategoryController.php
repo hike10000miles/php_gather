@@ -1,4 +1,5 @@
 <?php
+//by Chen
     if(!defined("__root")) {
         require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
     }
@@ -105,6 +106,21 @@
             } catch(Exception $e) {
                 return $e;
             }
+        }
+
+        public function getCategoriesWithTotal()
+        {
+            $allCategories = array();
+            $sqlQuery = "SELECT COUNT(eventcategory.EventId) AS Total, category.* FROM eventcategory RIGHT JOIN category ON eventcategory.CategoryId = category.Id GROUP BY category.Id ORDER BY category.Id ASC";
+            $pdostmt = $this->_db->prepare($sqlQuery);
+            $pdostmt -> execute();
+            $results = $pdostmt -> fetchAll();
+            foreach($results as $result)
+            {
+                $category = new CategoryModel($result);
+                array_push($allCategories, $category);
+            }
+            return $allCategories;
         }
     }
 ?>

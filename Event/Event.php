@@ -1,4 +1,5 @@
 <?php
+//By Chen
  if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -18,13 +19,13 @@ $user = null;
 
 session_start();
 
-//$_SESSION['id']= 3;
-$_SESSION['role'] = "business";
-//$_SESSION['role'] = "normal";
-$_SESSION['UserId'] = "3";
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
-if($_SESSION['role'] == 'business') {
-    $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+if($_SESSION['LoggedIn']['UserRole'] == 'business') {
+    $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['LoggedIn']['BusinessId']);
 } 
 
 if(isset($_GET["id"])) {
@@ -35,10 +36,10 @@ if(isset($_GET["id"])) {
         $message = $e->getMessage();
     }
     // !!useful!!
-    //if(!($event->getBusinessId() == $_SESSION['id']) && $_SESSION['role'] == 'business') {
-    //    $event = new Exception("This event is not yours.");
-    //}
-    if($_SESSION['role'] == 'normal' && is_a($event, "EventModel")) {
+    if(!($event->getBusinessId() == $_SESSION['LoggedIn']['BusinessId']) && $_SESSION['LoggedIn']['UserRole'] == 'business') {
+        $event = new Exception("This event is not yours.");
+    }
+    if($_SESSION['LoggedIn']['UserRole'] == 'normal' && is_a($event, "EventModel")) {
         $_SESSION['id'] = $event->getBusinessId();
         $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
     }
@@ -62,9 +63,10 @@ if(isset($_GET["id"])) {
     <title> <?php echo $businessdetails[0]['businessName'];?> Event | Gather</title>
 </head>
 <body>
-<hr class="">
+<?php include(__root."views/components/userheader.php"); ?>
+
 <div class="container">
-    <?php include(__root."views/components/header.php"); ?>
+
     <?php foreach ($businessdetails as $bd) : ?>
     <div class="row">
         <div class="col-md-3">
@@ -80,7 +82,7 @@ if(isset($_GET["id"])) {
                     </span>
                     <span>15 reviews</span><br/><br/>
                 </div>
-                <?php if($_SESSION['role'] == 'normal'):?>
+                <?php if($_SESSION['LoggedIn']['UserRole'] == 'normal'):?>
                 <div>
                     <button type="button" class="btn btn-danger">Leave A Review</button>
                     <button type="button" class="btn btn-info" style="margin-top:1em;">Send me a message</button>
@@ -142,16 +144,23 @@ if(isset($_GET["id"])) {
                     <p>Start at: <?php echo $event->getStartDateTime("detail"); ?></p>
                     <p>End at: <?php echo $event->getEndDateTime("detail"); ?></p>
                     <p>Price: <?php echo $event->getPrice(); ?></p>
+                    <?php if($event->getStartDateTime("detail") < date("Y-m-d H:i:s")):?>
+                        <p class="alert alert-danger">Past Event</p>
+                    <?php else: ?>
+                        <a type="" class="btn btn-default">Add to my Gathering</a>
+                    <?php endif; ?>
                 </div>
                 <?php if(!is_a($eventCategories, "Exception")) :?>
                 <div class="panel-footer event-categories">
+                    <p class="categoryTitle">
                     <?php foreach($eventCategories as $eventCategory) :?>
-                    <p class="categoryTitle"><?php echo $eventCategory->getTitle(); ?></p>
+                    <span class="label label-default"><?php echo $eventCategory->getTitle(); ?></span>
                     <?php endforeach ?>
+                    </p>
                 </div>
                 <?php endif?>
             </div>
-            <?php if($_SESSION['role'] == 'business'):?>
+            <?php if($_SESSION['LoggedIn']['UserRole'] == 'business'):?>
             <form action='Edit.php' method='get'>
                 <input type='hidden' name='id' value='<?php echo $event->getEventId(); ?>'>
                 <input type='submit' value='Edit' class="btn btn-default">

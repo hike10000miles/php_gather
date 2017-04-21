@@ -1,10 +1,16 @@
 <?php
 
+if(!defined("__root")) {
+    require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
+}
 
-require_once "../connect.php";
-require_once "../bookingController.php";
+include __root . 'DbConnect/connect.php';
+include __root . 'controllers/bookingController.php';
 
 $db = Connect::dbConnect();
+
+session_start();
+
 $mybooking = new Booking($db);
 
 if(isset($_POST['delete']))
@@ -15,3 +21,5 @@ if(isset($_POST['delete']))
         header("Location: bookingAdmin.php");
     }
 }
+
+?>

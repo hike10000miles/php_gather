@@ -49,29 +49,30 @@ $mail->smtpConnect(
 );
 
 //Username to use for SMTP authentication - use full email address for gmail
-$mail->Username = "pritpalkaur03@gmail.com";
+
+$mail->Username = "eventgathering1@gmail.com";
 
 //Password to use for SMTP authentication
-$mail->Password = "Sidhu@3392";
+$mail->Password = "gather123";
 
 //Set who the message is to be sent from
-$mail->setFrom('pritpalkaur03@gmail.com', 'Pritpal Kaur');
+$mail->setFrom('eventgathering1@gmail.com', 'Gathering');
 
 //Set an alternative reply-to address
 $mail->addReplyTo('replyto@example.com', 'First Last');
 
 //Set who the message is to be sent to
-$mail->addAddress('canadanationalpark@gmail.com', 'Duc');
+$mail->addAddress('eventgathering1@gmail.com', 'Gathering');
 
 //Set the subject line
-$mail->Subject = 'PHPMailer GMail SMTP test';
+$mail->Subject = 'Confirmation Email';
 
 //Read an HTML message body from an external file, convert referenced images to embedded,
 //convert HTML into a basic plain-text alternative body
 $mail->msgHTML("<h2>this the test message</h2>");
 
 //Replace the plain text body with one created manually
-$mail->AltBody = 'This is a plain-text message body';
+$mail->AltBody = 'Thank You for booking the event with Us. Your event has been booked.';
 
 //Attach an image file
 //$mail->addAttachment('images/phpmailer_mini.png');

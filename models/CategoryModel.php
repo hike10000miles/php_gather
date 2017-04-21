@@ -1,10 +1,12 @@
 <?php
+//by chen
     class CategoryModel 
     {
         private $_categoryId;
         private $_categoryTitle;
         private $_categoryDescription;
         private $_eventId;
+        private $_total;
 
         public function __construct($queryResult)
         {   
@@ -14,6 +16,9 @@
                 }
                 if(isset($queryResult["EventId"])) {
                     $this->_eventId = $queryResult["EventId"];
+                }
+                if(isset($queryResult["Total"])) {
+                    $this->_total = $queryResult["Total"];
                 }
                 $this->setTitle($queryResult['CategoryTitle']);
                 $this->setDescription($queryResult["CategoryDescription"]);
@@ -74,6 +79,11 @@
             } else {
                 throw new Exception('Category must have ID.');
             }
+        }
+
+        public function getTotal()
+        {
+            return $this->_total;
         }
 
     }

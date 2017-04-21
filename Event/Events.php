@@ -1,4 +1,5 @@
 <?php
+//by chen
  if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -6,6 +7,7 @@ include __root . 'DbConnect/connect.php';
 include __root . 'controllers/Business.php';
 include __root . 'controllers/EventController.php';
 include __root . 'controllers/CategoryController.php';
+
 
 $db = Connect::dbConnect();
 $eventConnect = new EventConnect($db);
@@ -15,7 +17,14 @@ $events = null;
 $categories = null;
 $category = null;
 
-//session_start();
+session_start();
+
+
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
+
 if(isset($_GET['category'])) {
     try {
         $category = $categoryConnect->getCategory($_GET['category']);
@@ -47,14 +56,15 @@ $categories = $categoryConnect->getCategories();
     <title> All Event | Gather</title>
 </head>
 <body>
+
+<?php include(__root."views/components/userheader.php"); ?>
 <?php if(is_a($category, "Exception")): ?>
     <div class="alert alert-warning">
         <?php echo $category->getMessage(); ?>
     </div>
 <?php endif?>
-<hr class="">
 <div class="container">
-    <?php include(__root."views/components/header.php"); ?>
+
     <?php if(is_a($category, "CategoryModel")): ?>
         <h1>List of <?php echo $category->getTitle(); ?> Events</h1>
     <?php else:?>
@@ -93,11 +103,6 @@ $categories = $categoryConnect->getCategories();
                             <span class="glyphicon glyphicon-star"></span>
                         </p>
                     </div>
-                     <?php //if(isset($le['discount'])): ?>
-                        <div class="panel-footer text-center">
-                            Apply <?php //echo $le['discount'];?>% off Today!
-                        </div>
-                    <?php //endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>

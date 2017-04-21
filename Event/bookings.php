@@ -1,20 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="liststyle.css">
-
-</head>
 <?php
+if(!defined("__root")) {
+    require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
+}
 
-require_once "../header.php";
-
-require_once "connect.php";
-require_once "bookingController.php";
+include __root . 'DbConnect/connect.php';
+include __root . 'controllers/bookingController.php';
 
 $db = Connect::dbConnect();
 
 $mybooking = new Booking($db);
 $list = $mybooking->listEvents();
+
+?>
+
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <?php include(__root."views/components/globalhead.php"); ?>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Business | Gather</title>
+</head>
+<body>
+<?php include(__root."views/components/header.php"); ?>
+<div class="container">
+
+    <?php
 
 echo "<h2 id='list'>Events Listing</h2>";
 echo "<table id='rounded-corner'>
@@ -32,7 +48,7 @@ foreach ($list as $l) {
     echo "
     <tr>
     <td>
-        <a href='bookings.php?id=" . $l->id . "'>" . $l->name . "</a>
+        <a href='bookings.php?id=" . $l->id . "'>" . $l->EventName . "</a>
     </td>
     <td>
         <form action=\"bookEvents.php\" method=\"post\">
@@ -53,10 +69,16 @@ if(isset($_GET['id'])){
 if(isset($details))
 {
     echo "<h2>Event Details</h2>";
-    echo "<b>Event Name: </b>" . $details->name . "<br/>";
-    echo "<b>Description: </b>" . $details->description . "<br/>";
+    echo "<b>Event Name: </b>" . $details->EventName . "<br/>";
+    echo "<b>Description: </b>" . $details->EventDescription . "<br/>";
     // echo "<b>Description: </b>" . $details->capacity . "<br/>";
 }
 
-require_once "../footer.php";
-?>
+    include(__root."views/components/footer.php"); ?>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
+</div>
+</body>
+</html>

@@ -1,4 +1,5 @@
 <?php
+//by Chen
     if(!defined("__root")) {
         require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
     }
@@ -75,7 +76,7 @@
         }
         public function getEvent($id) 
         {
-            $sqlQuery = "SELECT e.*, l.*, b.businessName BusinessName FROM events e JOIN business b ON b.id = e.businessId JOIN locations l ON l.id = b.locationid WHERE e.id = :id;";
+            $sqlQuery = "SELECT e.*, b.businessName BusinessName FROM events e JOIN business b ON b.id = e.businessId WHERE e.id = :id;";
             $pdostmt = $this->_db->prepare($sqlQuery);
             $pdostmt->bindValue(":id", $id, PDO::PARAM_STR);
             $pdostmt -> execute();

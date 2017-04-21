@@ -1,4 +1,5 @@
 <?php
+//by chen
  if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -58,14 +59,14 @@ if(isset($_POST["id"])) {
     <title> <?php echo $businessdetails[0]['businessName'];?> Event | Gather</title>
 </head>
 <body>
+<?php include(__root."views/components/userheader.php"); ?>
 <?php if(isset($message)): ?>
     <div class="alert alert-warning">
         <?php echo $message; ?>
     </div>
 <?php endif?>
-<hr class="">
+
 <div class="container">
-    <?php include(__root."views/components/header.php"); ?>
     <?php foreach ($businessdetails as $bd) : ?>
     <div class="row">
         <div class="col-md-3">
