@@ -105,7 +105,7 @@ if(isset($_POST['id']))
 <table width="300" style="border-collapse: collapse; font: 12px Tahoma;" border="7" bordercolor="#DCDCDC" cellspacing="5" cellpadding="5" ">
 
     <tbody>
-    <h2 style="font-style: italic">Have a look at our most adorable images from our successful events here.</h2>
+    <h3 style="font-style: italic">Have a look at our most adorable images from our successful events here.</h3>
     <div class="container" id="duc" style="height: 400px; margin-top: 15px">
         <div class="row" style="height: 400px;">
         <?php
