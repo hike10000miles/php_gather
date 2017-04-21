@@ -2,30 +2,24 @@
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
+
 include __root . 'DbConnect/connect.php';
-include __root . 'controllers/PaymentsController.php';
+include __root . 'controllers/blogController.php';
 
-
-
-require_once('./StripePaymentconfig.php');
-//require_once "PaymentsController.php";
-
-$db=Connect::dbConnect();
-
-$a=new Admin($db);
-
+$db = Connect::dbConnect();
 session_start();
-
-$_SESSION['eventid']=$_GET['id'];
-
-
-
-$paycontrol = $a->getPaymentbyEvent($_SESSION['eventid']);
-
-$_SESSION['price'] = $paycontrol->price;
+$myblog = new Blog($db);
 
 ?>
-
+<?php
+if(isset($_POST['delete'])) {
+    $id = $_POST['id'];
+    $delete = $myblog->deletePost($id);
+    if ($delete == 1) {
+        header("Location: blogAdmin.php");
+    }
+}
+?>
 <!DOCTYPE>
 <html>
 <head>
@@ -44,39 +38,7 @@ $_SESSION['price'] = $paycontrol->price;
 <div class="container">
 
 
-<?php
-
-echo "<h3>"."You are ready to pay $".$_SESSION['price']."</h3>"."<br>";
-
-echo "<h3>"."Click here to go "."</h3>";
-
-
-
-?>
-
-
-
-
-
-
-
-<form action="StripePaymentcharge.php" method="post">
-
-
-
-
-
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="<?php echo $stripe['publishable_key']; ?>"
-            data-description="Access for a year"
-            data-amount="<?php echo (100* $_SESSION['price']) ; ?>"
-            data-locale="auto"></script>
-</form>
-
-
-    <?php
-
-    include(__root."views/components/footer.php"); ?>
+ <?php   include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

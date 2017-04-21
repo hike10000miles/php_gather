@@ -2,28 +2,13 @@
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
+
 include __root . 'DbConnect/connect.php';
-include __root . 'controllers/PaymentsController.php';
+include __root . 'controllers/blogController.php';
 
-
-
-require_once('./StripePaymentconfig.php');
-//require_once "PaymentsController.php";
-
-$db=Connect::dbConnect();
-
-$a=new Admin($db);
+$db = Connect::dbConnect();
 
 session_start();
-
-$_SESSION['eventid']=$_GET['id'];
-
-
-
-$paycontrol = $a->getPaymentbyEvent($_SESSION['eventid']);
-
-$_SESSION['price'] = $paycontrol->price;
-
 ?>
 
 <!DOCTYPE>
@@ -40,41 +25,27 @@ $_SESSION['price'] = $paycontrol->price;
     <title>Business | Gather</title>
 </head>
 <body>
-<?php include(__root."views/components/userheader.php"); ?>
+<?php include(__root."views/components/header.php"); ?>
 <div class="container">
 
-
-<?php
-
-echo "<h3>"."You are ready to pay $".$_SESSION['price']."</h3>"."<br>";
-
-echo "<h3>"."Click here to go "."</h3>";
-
-
-
-?>
-
-
-
-
-
-
-
-<form action="StripePaymentcharge.php" method="post">
-
-
-
-
-
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="<?php echo $stripe['publishable_key']; ?>"
-            data-description="Access for a year"
-            data-amount="<?php echo (100* $_SESSION['price']) ; ?>"
-            data-locale="auto"></script>
-</form>
-
-
     <?php
+
+if(isset($_POST['comment'])){
+    $id=$_POST['id'];
+    $myblog = new Blog($db);
+    $com = $myblog->getComment($id);
+
+//    if($com == 1) {
+//        header("Location: blog.php");
+//        echo $com->username;
+//    }
+}
+
+
+
+if(isset($com)){
+    echo $com->username . " Posted " . $com->comment ."<br/>";
+}
 
     include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
