@@ -19,7 +19,7 @@ $usersDetails = $thisuserDetails->selectUserDetails($db, $_SESSION['user_id']);
 
 $profileDetails = new userProfile($db);
 $row = $profileDetails->selectUserProfile($db, $_SESSION['profileid']);
-var_dump($row);
+//var_dump($row);
 
 $id = $row['id'];
 
@@ -37,6 +37,7 @@ $id = $row['id'];
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <script src='<?php echo __httpRoot . "assest/"; ?>scripts/user_profile_deletebutton.js'></script>
     <?php include(__root."views/components/globalhead.php"); ?>
+    <link rel="stylesheet" href='<?php echo __httpRoot . "assest/"; ?>style/profileStylsheet.css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Business | Gather</title>
 </head>
@@ -76,22 +77,31 @@ $id = $row['id'];
                 <?php echo "<img src='".$row['profile_image']."' />"; ?>
             </div><!--div for pic column-->
             <div class="col-lg-6 col md-6  col-sm-12 col-xs-12" id="userdetailsColumn">
-                <p class="userNameProfile">Username: <?php echo '' . $usersDetails['username']; ?></p>
-                <p class="nameProfile">Full Name:<br>  <?php echo '' . $usersDetails['firstname'] . '' . $usersDetails['middlename'] . '' . $usersDetails['lastname']; ?></p>
-                <p class="usersEmail">Email:<br>  <?php echo '' . $usersDetails['email']; ?></p>
-                <p class="usersProfiledob">Date of Birth:<br>  <?php echo '' . $row['user_dob']; ?></p>
-                <p class="usersAddress">Address:<br>  <?php echo '' . $row['address']; ?></p>
-                <p class="usersEducationLevel">Highest Educational Achievement:<br>  <?php echo '' . $row['education_level']; ?></p>
-                <p class="usersJobTitle">Current Job Title:<br>  <?php echo '' . $row['current_jobtitle']; ?></p>
+                <p class="userNameProfile" id="label">Username: <?php echo '' . $usersDetails['username']; ?></p>
+                <p class="nameProfile" id="label">Full Name:<br>  <?php echo '' . $usersDetails['firstname'] . '' . $usersDetails['middlename'] . '' . $usersDetails['lastname']; ?></p>
+                <p class="usersEmail" id="label">Email:<br>  <?php echo '' . $usersDetails['email']; ?></p>
+                <p class="usersProfiledob" id="label">Date of Birth:<br>  <?php echo '' . $row['user_dob']; ?></p>
+                <p class="usersAddress" id="label">Address:<br>  <?php echo '' . $row['address']; ?></p>
+                <p class="usersEducationLevel" id="label">Highest Educational Achievement:<br>  <?php echo '' . $row['education_level']; ?></p>
+                <p class="usersJobTitle" id="label">Current Job Title:<br>  <?php echo '' . $row['current_jobtitle']; ?></p>
             </div><!--div for userDetailsColumn-->
         </div><!--div for row 1-->
 
         <br>
+        <div class="jumbotron">
         <div class="row" id="rowTwo">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="description">
-                <p class="usersDecription"><?php echo $usersDetails['username']?>'s Story:<br> <?php echo $row['user_description'];/*$usersProfileDetails['user_description']; */?></p>
+            <div class="description" id="description">
+                <p class="userDescription"><?php echo $usersDetails['username']?>'s Story:<br></p>
             </div><!--div for description-->
         </div><!--div for row 2-->
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+
+                        <?php echo $row['user_description'];?></p>
+                    </div>
+                </div>
+        </div>
+
         <br>
 
     </main>
