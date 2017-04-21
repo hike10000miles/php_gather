@@ -31,7 +31,7 @@
                             <ul>
                                 <li><a href="#">Offer Discounts</a></li>
                                 <li><a href="<?php echo __httpRoot . "Blog/blogAdmin.php" ?>">Blog Admin</a></li>
-                                <li><a href="#">Manage Payments</a></li>
+                                <li><a href="<?php echo __httpRoot . "Event/StripePaymentAdmin.php" ?>">Manage Payments</a></li>
                             </ul>
                         </li>
                         <?php endif; ?>

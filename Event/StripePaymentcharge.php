@@ -49,9 +49,10 @@ $token  = $_POST['stripeToken'];
 $event_id=$_SESSION['eventid'];
 $user_email=$_POST['stripeEmail'];
 $payment_amount=$_SESSION['price'];
-$user="siji";
+$user= $_SESSION['LoggedIn']['Firstname'] . ' ' . $_SESSION['LoggedIn']['Lastname'];
+$gathering_id=$_SESSION['gatherid'];
 
-$row2=$a->insertdata($user_email,$payment_amount,$event_id);
+$row2=$a->insertdata($user_email,$payment_amount,$event_id,$gathering_id);
 //php mailing
 date_default_timezone_set('Etc/UTC');
 

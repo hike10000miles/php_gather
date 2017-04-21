@@ -16,7 +16,7 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['gatherid'])) {
     echo "Sorry, there was a problem with your gathering, you will now be redirected to sign up again";
     header('Location: create.php');
 }
-
+var_dump($_SESSION['LoggedIn']);
 
 $_SESSION['role'] = "normal";
 $_SESSION['gatherid'] = 4;

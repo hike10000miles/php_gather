@@ -20,9 +20,10 @@ $_SESSION['eventid']=$_GET['id'];
 
 
 
-$paycontrol = $a->getPaymentbyEvent($_SESSION['eventid']);
+$row4= $a->geteventbyid($_SESSION['eventid']);
+//var_dump($paycontrol);
 
-$_SESSION['price'] = $paycontrol->price;
+$_SESSION['price'] = $row4->price;
 
 ?>
 
