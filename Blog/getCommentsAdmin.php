@@ -1,4 +1,5 @@
 <?php
+session_start();
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -8,14 +9,17 @@ include __root . 'controllers/blogController.php';
 
 $db = Connect::dbConnect();
 
-session_start();
 if(isset($_POST['comment'])) {
     $id = $_POST['id'];
     $myblog = new Blog($db);
     $com = $myblog->getComment($id);
 }
-if(isset($com)){
-    echo $com->username . " Posted " . $com->comment ."<br/>";
+if($com == true){
+    foreach ($com as $item) {
+        echo $item->username . " Posted " . $item->comment ."<br/>";
+    }
+} else {
+    echo 'No comments found';
 }
 ?>
 
