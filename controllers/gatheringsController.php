@@ -17,14 +17,13 @@ class gatheringsController
     }
 
 
-    function createGathering($db, $gatheringName, $gatheringDescription, $creationDate, $locationid, $userid){
+    function createGathering($db, $gatheringName, $gatheringDescription, $locationid, $userid){
 
-            $query = "INSERT INTO gatherings(gatheringName, gatheringDescription, creationDate, locationid, userid) 
-        VALUES (:gatheringName, :gatheringDescription, :creationDate, :locationid, :userid)";
+            $query = "INSERT INTO gatherings(gatheringName, gatheringDescription, locationid, userid) 
+        VALUES (:gatheringName, :gatheringDescription, :locationid, :userid)";
             $pdostmt2 = $db->prepare($query);
             $pdostmt2->bindValue(':gatheringName', $gatheringName);
             $pdostmt2->bindValue(':gatheringDescription', $gatheringDescription);
-            $pdostmt2->bindValue(':creationDate', $creationDate);
             $pdostmt2->bindValue(':locationid', $locationid);
             $pdostmt2->bindValue(':userid', $userid);
             $row = $pdostmt2->execute();
@@ -64,12 +63,12 @@ class gatheringsController
 
     public function get_location_id($db)
     {
-        $query = "SELECT * FROM locations;";
+        $query = "SELECT StreetName, id FROM locations;";
         $pdostmt2 = $db->prepare($query);
         $pdostmt2->execute(); // now we execute the statement
         $locationResult= $pdostmt2->fetchAll(PDO::FETCH_ASSOC);
         $pdostmt2->closeCursor(); //dont forget this, because it disconnects your connection to db cuz there can only be 1 at a atime
-        // var_dump($locationResult);
+
         return $locationResult; //return ture because its succesfful
     }
 

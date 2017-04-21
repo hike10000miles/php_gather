@@ -8,12 +8,10 @@ include __root . 'controllers/gatheringsController.php';
 include __root . 'controllers/EventController.php';
 
 
-
 if (!isset($_SESSION['user_id']) && !isset($_SESSION['gatherid'])) {
     echo "Sorry, there was a problem with your gathering, you will now be redirected to sign up again";
     header('Location: create.php');
 }
-
 
 $db = Connect::dbConnect();
 
@@ -55,15 +53,9 @@ $events = $gathercontroller->getgatheringsEvents($db);
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-
-
-
-
-<!--    --><?php //foreach($row as $gr): ?>
         <div class="row">
             <div class="col-md-3">
                 <h1 class=""><?php echo $row['gatheringName']; ?></h1>
-
             </div>
             <div class="col-md-9">
                 <img title="profile image" class="img-responsive" src="http://lorempixel.com/850/250/sports">
@@ -71,7 +63,7 @@ $events = $gathercontroller->getgatheringsEvents($db);
         </div>
         <div class="row" style="margin-top:1em;">
             <div class="col-sm-3">
-                <!--left col-->
+                <!--------------------------------left col------------------------------->
                 <ul class="list-group">
                     <li class="list-group-item text-muted" contenteditable="false">Gathering's Info</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong class="">Date Created</strong></span> <?php echo $row['creationDate']?></li>
@@ -81,29 +73,25 @@ $events = $gathercontroller->getgatheringsEvents($db);
                     <li class="list-group-item text-muted">Created By: <i class="fa fa-address-book-o fa-1x"></i></li>
                     <li class="list-group-item text-left"><strong class=""><?php echo $row['userid']; ?></strong></li>
                 </ul>
-
                 <div class="panel panel-default">
-                    <div class="panel-heading">Gathering's Members<i class="fa fa-link fa-1x"></i>
-
-                    </div>
+                    <div class="panel-heading">Gathering's Members<i class="fa fa-link fa-1x"></i></div>
                     <div class="panel-body"><a href="#" class="">
                             <?php
                             foreach ($fetchUsers as $key){
-                                $query = "SELECT username FROM users WHERE id =".$key['UserId'];
-                                $pdostmt2 = $db->prepare($query);
-                                $pdostmt2->execute();
-                                $gatherresultUsernameswithUserId= $pdostmt2->fetch(PDO::FETCH_ASSOC);
-                                $pdostmt2->closeCursor();
-                                foreach ($gatherresultUsernameswithUserId as $keyusername){
-                                    echo $keyusername;
-                                }
-                                ?><br>
+                                       $query = "SELECT username FROM users WHERE id =".$key['UserId'];
+                                       $pdostmt2 = $db->prepare($query);
+                                       $pdostmt2->execute();
+                                       $gatherresultUsernameswithUserId= $pdostmt2->fetch(PDO::FETCH_ASSOC);
+                                       $pdostmt2->closeCursor();
+                                       foreach ($gatherresultUsernameswithUserId as $keyusername){
+                                       echo $keyusername;
+                                       }
+                                       ?><br>
                             <?php } ?>
                         </a>
 
                     </div>
                 </div>
-
                 <div class="panel panel-default">
                     <div class="panel-heading">Social Media</div>
                     <div class="panel-body">
@@ -115,8 +103,7 @@ $events = $gathercontroller->getgatheringsEvents($db);
                     </div>
                 </div>
             </div>
-
-            <!--BUSINESS MAIN-->
+            <!-----------GATHER MAIN------------------------->
             <div class="col-sm-9" contenteditable="false" >
                 <div class="panel panel-default">
                     <div class="panel-heading"><?php echo $row['gatheringName']; ?> Gathering Description</div>
@@ -137,8 +124,8 @@ $events = $gathercontroller->getgatheringsEvents($db);
                                             echo "<br/> ";
                                             echo '$'. $event->price;
                                             echo "<br/>";?>
-                                                <a href="<?php echo __httpRoot . "Event/bookEvents.php?id=".$event->id ?>" class="btn btn-danger" role="button">Book</a><br /><br/>
-                                                <a href="<?php echo __httpRoot . "Event/StripePaymentForm.php?id=".$event->id ?>" class="btn btn-info" role="button">Pay</a>
+                                            <span><a href="<?php echo __httpRoot . "Event/bookEvents.php?id=".$event->id ?>" class="btn btn-danger" role="button">Book</a></span>
+                                                 <span><a href="<?php echo __httpRoot . "Event/StripePaymentForm.php?id=".$event->id ?>" class="btn btn-info" role="button">Pay</a></span>
                                         </div>
                                         <div class="ratings">
                                             <p class="pull-right">15 reviews</p>

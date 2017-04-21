@@ -9,28 +9,29 @@ include __root . 'controllers/gatheringsController.php';
 
 $db = Connect::dbConnect();
 
-$list = new DiscountDAO();
-$eventController = new EventConnect($db);
+$gatherController = new gatheringsController();
+
 
 if(!isset($_SESSION['LoggedIn']['UserId'])) {
     header("Location: " . __httpRoot);
     exit;
 }
 
+$_SESSION['LoggedIn']['UserId'];
+
 if(isset($_POST['add'])){
 
-    $eventid = $_POST['eventid'];
-    $title = $_POST['title'];
-    $discount = $_POST['discount'];
-    $startdate = $_POST['startdate'];
-    $expiry = $_POST['expiry'];
+    $gatheringName = $_POST['gatheringName'];
+    $description = $_POST['gatheringDescription'];
+    $locationid = $_POST['locationid'];
 
-    $list->addPromotion($db,$eventid, $title, $discount, $startdate, $expiry);
-    header("Location: Discounts.php");
+    $gatherController->createGathering($db, $gatheringName, $description, $locationid, $_SESSION['LoggedIn']['UserId']);
+    header("Location: GatherList.php");
 }
 
-$event = $eventController->getEventList($_SESSION['LoggedIn']['BusinessId']);
-$events = $list->getEventName($db,$_SESSION['LoggedIn']['BusinessId']);
+$location = $gatherController->get_location_id($db);
+
+
 ?>
 
 <!DOCTYPE>
@@ -50,19 +51,18 @@ $events = $list->getEventName($db,$_SESSION['LoggedIn']['BusinessId']);
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
     <h3>Add Promotion For Event</h3>
-<form action="addDiscount.php" method="post">
-    <label> Event Name: </label><select name="eventid">
+<form action="addGathering.php" method="post">
+
+    <label>Gathering Name: </label><input type="text" name="gatheringName" /><br/><br />
+    <label>Description: </label><input type="text" name="gatheringDescription" /><br/><br />
+    <label>Location: </label><select name="locationid">
         <?php
-        foreach($event as $events){
-            echo "<option value=".$events->getEventId().">".$events->getName()."</option>";
+        foreach($location as $loc){
+            echo "<option value=".$loc['id'].">".$loc['StreetName']."</option>";
         }
         ?>
     </select><br/><br/>
-    <label>Title: </label><input type="text" name="title" /><br/><br />
-    <label>Discount(%): </label><input type="text" name="discount" /><br/><br />
-    <label>DateStart: </label><input type="date" name="startdate" /><br/><br />
-    <label>Expiry: </label><input type="date" name="expiry" /><br/><br />
-    <input type="submit" value="Add Promotion" name="add" />
+    <input type="submit" value="Create Gathering" name="add" />
 </form>
     <button id="back">Go Back To List</button>
     <br/><br/>
@@ -76,7 +76,7 @@ $events = $list->getEventName($db,$_SESSION['LoggedIn']['BusinessId']);
 <script>
     var btn = document.getElementById('back');
     btn.addEventListener('click', function() {
-        document.location.href = 'Admin_PromotionIndex.php';
+        document.location.href = 'GatherList.php';
     });
 </script>
 </body>
