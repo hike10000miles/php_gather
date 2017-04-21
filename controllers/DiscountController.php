@@ -4,8 +4,18 @@
 class DiscountDAO
 
 {
-    public function getBusinessName($db){
-        $query = "SELECT DISTINCT name, id FROM business";
+    public function getBusinessName($db, $businessid){
+        $query = "SELECT DISTINCT businessName, id FROM business WHERE businessid = :businessid";
+        $pdostmt = $db->prepare($query);
+        $pdostmt->bindValue(':businessid',$businessid);
+        $pdostmt->execute();
+
+        $business = $pdostmt->fetchAll();
+        return $business;
+    }
+
+    public function getEventDropdown($db){
+        $query = "SELECT DISTINCT EventName, id FROM events";
         $pdostmt = $db->prepare($query);
         $pdostmt->execute();
 
@@ -13,27 +23,40 @@ class DiscountDAO
         return $business;
     }
 
-    public function getEventName($db){
-        $query = "SELECT DISTINCT name, id FROM events";
+    public function getAllDiscount($db){
+        $query = "SELECT e.id,e.EventName,e.EventDescription,d.discount FROM events e LEFT JOIN discounts d ON e.id = d.eventid";
         $pdostmt = $db->prepare($query);
+        $pdostmt->execute();
+
+        $events = $pdostmt->fetchAll();
+        return $events;
+    }
+
+
+    public function getEventName($db, $businessid){
+        $query = "SELECT DISTINCT EventName, id FROM events WHERE id = :businessid";
+        $pdostmt = $db->prepare($query);
+        $pdostmt->bindValue(':businessid',$businessid);
         $pdostmt->execute();
 
         $business = $pdostmt->fetchAll();
         return $business;
     }
 
-    public function getDiscountList($db){
-    $query = "SELECT d.*,name, description FROM discounts d JOIN events e ON d.eventid = e.id ";
+    public function getDiscountListbyBusiness($db,$businessid){
+    $query = "SELECT d.*,EventName, EventDescription FROM discounts d JOIN events e ON d.eventid = e.id WHERE businessid = :businessid";
     $pdostmt = $db->prepare($query);
+    $pdostmt->bindValue(':businessid',$businessid);
     $pdostmt->execute();
 
     $discounts = $pdostmt->fetchAll();
     return $discounts;
     }
 
-    public function getEventList($db){
-        $query = "SELECT e.id,e.name,e.description,d.discount FROM events e LEFT JOIN discounts d ON e.id = d.eventid";
+    public function getEventList($db, $businessid){
+        $query = "SELECT e.id,e.EventName,e.EventDescription,d.discount FROM events e LEFT JOIN discounts d ON e.id = d.eventid WHERE businessid = :businessid";
         $pdostmt = $db->prepare($query);
+        $pdostmt->bindValue(':businessid',$businessid);
         $pdostmt->execute();
 
         $events = $pdostmt->fetchAll();

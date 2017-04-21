@@ -4,12 +4,6 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <a class="navbar-brand" id="logo" href="#"><img src="../assest/images/gather_logo.png" class="nav_logo"></a>
-                <form class="navbar-form navbar-left" role="search">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search">
-                    </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-megadropdown-tabs">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -23,8 +17,13 @@
             <div class="navbar-collapse style= collapse in" id="bs-megadropdown-tabs">
 
                 <ul class="nav navbar-nav">
-                    <li><a href="#"><i class="fa fa-globe"></i>GATHERINGS</a></li>
-                    <li><a href="#"><i class="fa fa-university"></i>EVENTS</a></li>
+                    <li><a href="#"><i class="fa fa-group"></i>GATHERINGS</a></li>
+                    <li><a href="<?php echo __httpRoot."Event/Events.php"?>"><i class="fa fa-calendar"></i>EVENTS</a></li>
+                    <?php if(isset($_SESSION['role'])) : if($_SESSION['role'] == 'business'): ?>
+                    <li><a href="<?php echo __httpRoot."Business/Business.php"?>"><i class="fa fa-bank"></i>MANAGE BUSINESS</a></li>
+                  <?php endif; ?>
+                    <?php endif; ?>
+
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">

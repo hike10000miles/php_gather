@@ -179,8 +179,16 @@ footer{
 	font-weight: normal;
 	text-transform: none;
 }
+#admin-categories-list div.panel {
+	padding: 0;
+}
+.font_bold {
+	font-weight: bold;
+}
 
-
+.fixheight{
+	min-height: 280px;
+}
 
 @media only screen and (min-width: 768px){
 
