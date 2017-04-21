@@ -13,6 +13,7 @@ $businessview = new BusinessDAO();
 $eventController = new EventConnect($db);
 $reviewController = new Admin($db);
 $rating = new Ratings($db);
+$error = null;
 
 session_start();
 
@@ -22,12 +23,22 @@ if(!isset($_SESSION['LoggedIn']['UserId'])) {
 }
 
 /*$reviews = $reviewController->*/
-$businessdetails = $businessview->getBusinessInfo($db,$_SESSION['LoggedIn']['BusinessId']);
-$events = $eventController->getEventList($_SESSION['LoggedIn']['BusinessId']);
-
-if (isset($_SESSION['LoggedIn']['BusinessId'])) {
-    $businessId = $_SESSION['LoggedIn']['BusinessId'];
-    $reviews = $reviewController->displayreviewsbybusinessid($businessId);
+if(isset($_SESSION['LoggedIn']['BusinessId'])) {
+    try{
+        $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['LoggedIn']['BusinessId']);
+        $events = $eventController->getEventList($_SESSION['LoggedIn']['BusinessId']);
+        $reviews = $reviewController->displayreviewsbybusinessid($_SESSION['LoggedIn']['BusinessId']);
+    } catch (Exception $e) {
+        $error = $e;
+    }
+} elseif (isset($_SESSION['LoggedIn']['UserId']) && isset($_GET['id'])) {
+    try {
+        $businessdetails = $businessview->getBusinessInfo($db,$_GET['id']);
+        $events = $eventController->getEventList($_GET['id']);
+        $reviews = $reviewController->displayreviewsbybusinessid($_GET['id']);
+    } catch (Exception $e) {
+        $error = $e;
+    }
 }
 
 if(isset($_POST['like'])) {
@@ -57,7 +68,11 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-
+    <?php if(is_a($error, "Exception")):?>
+        <div class="alert alert-danger">
+            <?php echo $error->getMessage(); ?>
+        </div>
+    <?php endif;?>
     <?php foreach($businessdetails as $bd): ?>
     <div class="row">
         <div class="col-md-3">
@@ -145,7 +160,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
                                 <div class="thumbnail">
                                     <img alt="300x200" src="http://lorempixel.com/300/150/technics">
                                     <div class="caption">
-                                        <h4 class="pull-right">$24.99</h4>
+                                        <h4 class="pull-right">$<?php echo $event->getPrice();?></h4>
                                         <h4><a href='<?php echo __httpRoot . "Event/Event.php?id=" . $event->getEventId(); ?>'><?php echo $event->getName(); ?></a></h4>
                                         <p><?php echo $event->getDescription(); ?></p>
                                     </div>

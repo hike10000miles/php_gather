@@ -74,6 +74,17 @@
             $result = $pdostmt->execute();
             return $result;
         }
+
+        public function delinkEventAndCategory($eventId)
+        {
+            $query = "DELETE FROM eventcategory
+                      WHERE EventId = :id;";
+            $pdostmt = $this->_db->prepare($query);
+            $pdostmt-> bindValue(':id', $eventId);
+            $result = $pdostmt-> execute();
+            return $result;
+        }
+
         public function getEvent($id) 
         {
             $sqlQuery = "SELECT e.*, b.businessName BusinessName FROM events e JOIN business b ON b.id = e.businessId WHERE e.id = :id;";

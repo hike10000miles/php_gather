@@ -190,6 +190,23 @@ footer{
 	min-height: 320px;
 }
 
+span.click-add, span.click-remove {
+	font-size: 1.1rem;
+}
+#event-category-panel {
+	padding: 15px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+}
+#all-event-category {
+	height: 100px;
+}
+#event-category {
+	height: 100px;
+}
+.nondisplay {
+	display: none;
+}
 @media only screen and (min-width: 768px){
 
 	#first{
@@ -254,6 +271,3 @@ footer{
 		font-size: 12px;
 	}
 }
-
-
-
