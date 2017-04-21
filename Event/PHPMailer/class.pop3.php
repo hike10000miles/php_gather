@@ -16,7 +16,6 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  */
-
 /**
  * PHPMailer POP-Before-SMTP Authentication Class.
  * Specifically for PHPMailer to use for RFC1939 POP-before-SMTP authentication.
@@ -35,21 +34,18 @@ class POP3
      * @access public
      */
     public $Version = '5.2.9';
-
     /**
      * Default POP3 port number.
      * @type integer
      * @access public
      */
     public $POP3_PORT = 110;
-
     /**
      * Default timeout in seconds.
      * @type integer
      * @access public
      */
     public $POP3_TIMEOUT = 30;
-
     /**
      * POP3 Carriage Return + Line Feed.
      * @type string
@@ -57,7 +53,6 @@ class POP3
      * @deprecated Use the constant instead
      */
     public $CRLF = "\r\n";
-
     /**
      * Debug display level.
      * Options: 0 = no, 1+ = yes
@@ -65,68 +60,58 @@ class POP3
      * @access public
      */
     public $do_debug = 0;
-
     /**
      * POP3 mail server hostname.
      * @type string
      * @access public
      */
     public $host;
-
     /**
      * POP3 port number.
      * @type integer
      * @access public
      */
     public $port;
-
     /**
      * POP3 Timeout Value in seconds.
      * @type integer
      * @access public
      */
     public $tval;
-
     /**
      * POP3 username
      * @type string
      * @access public
      */
     public $username;
-
     /**
      * POP3 password.
      * @type string
      * @access public
      */
     public $password;
-
     /**
      * Resource handle for the POP3 connection socket.
      * @type resource
      * @access private
      */
     private $pop_conn;
-
     /**
      * Are we connected?
      * @type boolean
      * @access private
      */
     private $connected = false;
-
     /**
      * Error container.
      * @type array
      * @access private
      */
     private $errors = array();
-
     /**
      * Line break constant
      */
     const CRLF = "\r\n";
-
     /**
      * Simple static wrapper for all-in-one POP before SMTP
      * @param $host
@@ -148,7 +133,6 @@ class POP3
         $pop = new POP3;
         return $pop->authorise($host, $port, $tval, $username, $password, $debug_level);
     }
-
     /**
      * Authenticate with a POP3 server.
      * A connect, login, disconnect sequence
@@ -195,7 +179,6 @@ class POP3
         $this->disconnect();
         return false;
     }
-
     /**
      * Connect to a POP3 server.
      * @access public
@@ -210,15 +193,12 @@ class POP3
         if ($this->connected) {
             return true;
         }
-
         //On Windows this will raise a PHP Warning error if the hostname doesn't exist.
         //Rather than suppress it with @fsockopen, capture it cleanly instead
         set_error_handler(array($this, 'catchWarning'));
-
         if (false === $port) {
             $port = $this->POP3_PORT;
         }
-
         //  connect to the POP3 server
         $this->pop_conn = fsockopen(
             $host, //  POP3 Host
@@ -229,7 +209,6 @@ class POP3
         ); //  Timeout (seconds)
         //  Restore the error handler
         restore_error_handler();
-
         //  Did we connect?
         if (false === $this->pop_conn) {
             //  It would appear not...
@@ -240,10 +219,8 @@ class POP3
             ));
             return false;
         }
-
         //  Increase the stream time-out
         stream_set_timeout($this->pop_conn, $tval, 0);
-
         //  Get the POP3 server response
         $pop3_response = $this->getResponse();
         //  Check for the +OK
@@ -254,7 +231,6 @@ class POP3
         }
         return false;
     }
-
     /**
      * Log in to the POP3 server.
      * Does not support APOP (RFC 2828, 4949).
@@ -274,7 +250,6 @@ class POP3
         if (empty($password)) {
             $password = $this->password;
         }
-
         // Send the Username
         $this->sendString("USER $username" . self::CRLF);
         $pop3_response = $this->getResponse();
@@ -288,7 +263,6 @@ class POP3
         }
         return false;
     }
-
     /**
      * Disconnect from the POP3 server.
      * @access public
@@ -304,7 +278,6 @@ class POP3
             //Do nothing
         };
     }
-
     /**
      * Get a response from the POP3 server.
      * $size is the maximum number of bytes to retrieve
@@ -320,7 +293,6 @@ class POP3
         }
         return $response;
     }
-
     /**
      * Send raw data to the POP3 server.
      * @param string $string
@@ -337,7 +309,6 @@ class POP3
         }
         return 0;
     }
-
     /**
      * Checks the POP3 server response.
      * Looks for for +OK or -ERR.
@@ -358,7 +329,6 @@ class POP3
             return true;
         }
     }
-
     /**
      * Add an error to the internal error store.
      * Also display debug output if it's enabled.
@@ -375,7 +345,6 @@ class POP3
             echo '</pre>';
         }
     }
-
     /**
      * POP3 connection error handler.
      * @param integer $errno
