@@ -187,7 +187,7 @@ footer{
 }
 
 .fixheight{
-	min-height: 280px;
+	min-height: 320px;
 }
 
 @media only screen and (min-width: 768px){

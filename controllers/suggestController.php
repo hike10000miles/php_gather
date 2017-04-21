@@ -18,6 +18,17 @@ class Suggest
         return $list;
     }
 
+    public function listSuggestionsbyBusiness($bid)
+    {
+        $query = "SELECT * FROM suggestions WHERE businessid = :bid";
+        $pdostmt = $this->db->prepare($query);
+
+        $pdostmt->bindValue(':bid',$bid);
+        $pdostmt->execute();
+        $businesslist = $pdostmt->fetchAll(PDO::FETCH_OBJ);
+        return $businesslist;
+    }
+
     public function getDetails($id)
     {
         $query2 = "SELECT * FROM suggestions WHERE id = :id";
