@@ -17,8 +17,8 @@ $rating = new Ratings($db);
 session_start();
 
 $_SESSION['businessid']= 3;
-$_SESSION['role'] = "business";
-//$_SESSION['role'] = "normal";
+//$_SESSION['role'] = "business";
+$_SESSION['role'] = "normal";
 
 /*$reviews = $reviewController->*/
 $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['businessid']);
