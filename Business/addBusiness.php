@@ -32,33 +32,26 @@ if(isset($_POST['submit'])){
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
+<!DOCTYPE>
+<html>
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Gather</title>
-    <!-- Bootstrap -->
-    <link href='<?php echo __httpRoot . "assest/bootstrap/css/bootstrap.min.css"; ?>' rel="stylesheet">
-	<link href='<?php echo __httpRoot . "assest/style/master_stylesheet.css"; ?>' rel="stylesheet">
-  </head>
-  <body>
-	<div class="container" id="wrapper">
-        <header>
-            <div class="row" id="header">
-                <div class="col-xs-3 col-xs-offset-1">
-                </div>
-                <div class="col-xs-2 col-xs-offset-1">
-                    <a href='<?php echo __httpRoot; ?>'>
-                        <img src='<?php echo __httpRoot . "assest/images/gather_logo.png"; ?>' id="logo">
-                    </a>
-                </div>
-            </div>
-        </header>
-        <h2>Create Business Profile</
-        h2>
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <?php include(__root."views/components/globalhead.php"); ?>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Business | Gather</title>
+</head>
+<body>
+<?php include(__root."views/components/userheader.php"); ?>
+    <div class="container">
+        <h2>Create Business Profile</h2>
         <form action="addBusiness.php" method="POST">
             <div class="form-group">
                 <label for="username">Business Name:</label>
@@ -74,12 +67,13 @@ if(isset($_POST['submit'])){
             </div>
             <input type="submit" name="submit" value="Create Profile" class="btn btn-default">
         </form>
-                <br />
-                <?php include(__root."views/components/footer.php"); ?>
+    </div>
+    <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
-    </div>
-  </body>
+
+</div>
+</body>
 </html>
