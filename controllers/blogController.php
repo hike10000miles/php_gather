@@ -52,19 +52,42 @@ class Blog
         return $delete;
     }
 
-    public function updateDetails($id,$date, $title, $content, $image)
+    public function updateDetails($id, $date, $title, $content, $image)
     {
-        $query5 = "UPDATE suggestions SET date= :date, title= :title, content= :content,
+        if ($image ==  "")
+        {
+            $query5 = "UPDATE blog SET date = :date, title = :title, content = :content WHERE id = :id";
+            $pdostmt5 = $this->db->prepare($query5);
+        }
+        else{
+            $query5 = "UPDATE blog SET date= :date, title= :title, content= :content,
                     image= :image
                     WHERE id= :id";
-        $pdostmt5= $this->db->prepare($query5);
-        $pdostmt5->bindValue(':id',$id, PDO::PARAM_INT);
-        $pdostmt5->bindValue(':date',$date,PDO::PARAM_STR);
-        $pdostmt5->bindValue(':title',$title,PDO::PARAM_STR);
-        $pdostmt5->bindValue(':content',$content,PDO::PARAM_STR);
-        $pdostmt5->bindValue(':image',$image,PDO::PARAM_STR);
+            $pdostmt5 = $this->db->prepare($query5);
+            $pdostmt5->bindValue(':image', $image, PDO::PARAM_STR);
+        }
+//        $query5 = "UPDATE blog SET date = :date, title = :title, content = :content,
+//                    image= :image
+//                    WHERE id= :id";
+        $pdostmt5->bindValue(':id',intval($id), PDO::PARAM_INT);
+        $pdostmt5->bindValue(':date', $date, PDO::PARAM_STR);
+        $pdostmt5->bindValue(':title', $title, PDO::PARAM_STR);
+        $pdostmt5->bindValue(':content', $content, PDO::PARAM_STR);
+
         $update = $pdostmt5->execute();
         return $update;
+        /*
+         * $query2 = "INSERT INTO blog
+                  (date, title, content, image)
+                  VALUES(:date, :title, :content, :image)";
+        $pdostmt2 = $this->db->prepare($query2);
+        $pdostmt2->bindValue(':date', $date, PDO::PARAM_STR);
+        $pdostmt2->bindValue(':title', $title, PDO::PARAM_STR);
+        $pdostmt2->bindValue(':content', $content, PDO::PARAM_STR);
+        $pdostmt2->bindValue(':image', $imgData, PDO::PARAM_STR);
+        $add = $pdostmt2->execute();
+        return $add;
+         * */
     }
 
     public function postMsg($user, $comment, $blog_id)

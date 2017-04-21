@@ -84,4 +84,19 @@ class Admin
         return $row6;
     }
 
+    public function getPaymentbyEvent($eid){
+        $query4 = "SELECT price FROM payments p LEFT JOIN events e ON event_id = e.id WHERE e.id = :eid";
+
+        $pdostmt6 = $this->db->prepare($query4);
+        $pdostmt6->bindValue(':eid',$eid);
+
+        $pdostmt6->execute();
+        $row = $pdostmt6->fetch(PDO::FETCH_OBJ);
+
+        return $row;
+
+    }
+
+
+
 }

@@ -1,22 +1,45 @@
 <?php
-//fake credit card number- 4242 4242 4242 4242
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
+
 include __root . 'DbConnect/connect.php';
-include __root . 'controllers/PaymentsController.php';
+include __root . 'controllers/blogController.php';
 
 
-//require_once "database.php";
-//require_once "PaymentsController.php";
+$db = Connect::dbConnect();
+
+session_start();
+?>
+<?php
+$myblog = new Blog($db);
+
+$msg = $userErr= $msgErr = "";
 
 
-$db= Connect::dbConnect();
+if(isset($_POST['reply'])){
+    $id=$_POST['id'];//get the id from form
+    $myblog = new Blog($db);
+    $reply = $myblog->blogDetails($id);
+}
 
-$a=new Admin($db);
+if(isset($_POST['submit'])){
+
+    $user = $_POST['f_User'];
+    $msg = $_POST['f_Msg'];
+    $blog_id = $_POST['sugID'];
+
+
+
+
+    $addMsg = $myblog->postMsg($user, $msg, $blog_id);
+    if ($addMsg == 1) {
+        header("Location: blog.php");
+    }
+}
+
 
 ?>
-
 <!DOCTYPE>
 <html>
 <head>
@@ -35,54 +58,32 @@ $a=new Admin($db);
 <div class="container">
 
 
-<table id="table">
-    <thead>
-    <tr>
 
-        <th>Event Name</th>
+<h3>Reply Message</h3>
+<form action="comment.php" method="post">
 
 
-    </tr>
-    </thead>
-    <tbody>
+    <input type="hidden" value="<?php if(isset($reply)) { echo $reply->id; } ?>" name="sugID">
 
-    <?php
+    <!--    <label for="in_Msg">
+            <input type="text" id="formMsg" name="f_Msg" value=""/>
+            <span id="msg"></span>
+            <div class="label-text">Message</div>
+        </label><br/>-->
 
-    $row=$a->getevents();
+    User Name: <input type="text" name="f_User">
+    <span id="msg"><?php echo $userErr ?></span>
 
+    Comment: <textarea id="mytextarea" name="f_Msg"></textarea>
+    <span id="msg"><?php echo $msgErr; ?></span>
 
-    if (isset($row)){
-        foreach($row as $r) {
-            //echo "<tr>";
-
-            echo "<td>$r->EventName</td>";
-
-            echo "<td>$r->price</td>";
-
-
-            echo "<td style='display: inline-flex;'>";
-            echo "<form method='post' action='StripePaymentForm.php '>
-<input type='hidden' name='price' value='$r->price'/>
-                                    <input type='hidden' name='id' value='$r->id'/>
-                                    <input  type='submit' name='view_images' value='goto pay'/>
-                              </form>";
-
-            echo "</td>";
-            echo "</tr>";
-
-        }
-
-    }
+    <p>
+        <button id="button" value="Submit" name="submit">Post Message</button>
+    </p>
+</form>
 
 
-    ?>
-
-    </tbody>
-</table>
-
-    <?php
-
-    include(__root."views/components/footer.php"); ?>
+    <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

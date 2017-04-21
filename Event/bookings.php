@@ -2,27 +2,14 @@
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
+
 include __root . 'DbConnect/connect.php';
-include __root . 'controllers/PaymentsController.php';
+include __root . 'controllers/bookingController.php';
 
+$db = Connect::dbConnect();
 
-
-require_once('./StripePaymentconfig.php');
-//require_once "PaymentsController.php";
-
-$db=Connect::dbConnect();
-
-$a=new Admin($db);
-
-session_start();
-
-$_SESSION['eventid']=$_GET['id'];
-
-
-
-$paycontrol = $a->getPaymentbyEvent($_SESSION['eventid']);
-
-$_SESSION['price'] = $paycontrol->price;
+$mybooking = new Booking($db);
+$list = $mybooking->listEvents();
 
 ?>
 
@@ -40,41 +27,52 @@ $_SESSION['price'] = $paycontrol->price;
     <title>Business | Gather</title>
 </head>
 <body>
-<?php include(__root."views/components/userheader.php"); ?>
+<?php include(__root."views/components/header.php"); ?>
 <div class="container">
 
-
-<?php
-
-echo "<h3>"."You are ready to pay $".$_SESSION['price']."</h3>"."<br>";
-
-echo "<h3>"."Click here to go "."</h3>";
-
-
-
-?>
-
-
-
-
-
-
-
-<form action="StripePaymentcharge.php" method="post">
-
-
-
-
-
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="<?php echo $stripe['publishable_key']; ?>"
-            data-description="Access for a year"
-            data-amount="<?php echo (100* $_SESSION['price']) ; ?>"
-            data-locale="auto"></script>
-</form>
-
-
     <?php
+
+echo "<h2 id='list'>Events Listing</h2>";
+echo "<table id='rounded-corner'>
+        <thead>
+            <tr>
+                <th scope='col' class='rounded-company'>Title</th>
+                <th scope='col' class='rounded-company'>Action</th>
+            </tr>
+        </thead>
+        <tbody>";
+
+
+
+foreach ($list as $l) {
+    echo "
+    <tr>
+    <td>
+        <a href='bookings.php?id=" . $l->id . "'>" . $l->EventName . "</a>
+    </td>
+    <td>
+        <form action=\"bookEvents.php\" method=\"post\">
+        <input type=\"hidden\" value='" . $l->id . "' name=\"id\">
+        <input id='btn1' class='button' type=\"submit\" name=\"book\" value=\"Book\"/>
+        </form>
+    </td>
+    </tr>
+    ";
+}
+echo "</tbody></table>";
+
+if(isset($_GET['id'])){
+    $id = $_GET['id'];
+    $details = $mybooking->eventDetails($id);
+}
+
+if(isset($details))
+{
+    echo "<h2>Event Details</h2>";
+    echo "<b>Event Name: </b>" . $details->EventName . "<br/>";
+    echo "<b>Description: </b>" . $details->EventDescription . "<br/>";
+    // echo "<b>Description: </b>" . $details->capacity . "<br/>";
+}
 
     include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

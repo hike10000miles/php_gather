@@ -4,11 +4,12 @@ if(!defined("__root")) {
 }
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/gatheringsController.php';
-//include __root . 'controllers/EventController.php';
+include __root . 'controllers/EventController.php';
+
 
 
 //$businessview = new BusinessDAO();
-//$eventController = new EventConnect($db);
+
 
 session_start();
 if (!isset($_SESSION['user_id']) && !isset($_SESSION['gatherid'])) {
@@ -16,12 +17,13 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['gatherid'])) {
     header('Location: create.php');
 }
 
+
 $_SESSION['role'] = "normal";
 $_SESSION['gatherid'] = 4;
 
 $db = Connect::dbConnect();
 
-
+$eventController = new EventConnect($db);
 $thisuserDetails = new gatheringsController($db);
 $usersDetails = $thisuserDetails->selectUserDetails($db, $_SESSION['user_id']);
 
@@ -44,9 +46,6 @@ var_dump($fetchEvents);
 
 $getEventsforGather = new gatheringsController($db);
 $events = $getEventsforGather->getgatheringsEvents($db);
-
-
-
 
 
 ?>
@@ -207,8 +206,8 @@ $events = $getEventsforGather->getgatheringsEvents($db);
                                             echo "<br/> ";
                                             echo '$'. $event->price;
                                             echo "<br/>";?>
-                                            <input type="button" class="btn-success" value="Pay">
-                                            <input type="button" class="btn-success" value="Book">
+                                                <a href="<?php echo __httpRoot . "Event/bookEvents.php?id=".$event->id ?>" class="btn btn-danger" role="button">Book</a><br /><br/>
+                                                <a href="<?php echo __httpRoot . "Event/StripePaymentForm.php?id=".$event->id ?>" class="btn btn-info" role="button">Pay</a>
                                         </div>
                                         <div class="ratings">
                                             <p class="pull-right">15 reviews</p>
