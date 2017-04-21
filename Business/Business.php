@@ -73,19 +73,13 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
                 </div>
                 <?php if($_SESSION['LoggedIn']['UserRole'] == 'normal'): ?>
                     <div>
-                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['businessid']; ?>" class="btn btn-danger" role="button">Leave A Review</a><br /><br/>
-                        <a href="<?php echo __httpRoot . "Business/suggestionForm.php?id=" .$_SESSION['businessid']; ?>" class="btn btn-info" role="button">Make Suggestion</a>
+                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-danger" role="button">Leave A Review</a><br /><br/>
+                        <a href="<?php echo __httpRoot . "Business/suggestionForm.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info" role="button">Make Suggestion</a>
                     </div>
                 <?php else: ?>
-                    <div>
-                        <form action="#" method="get">
-                            <input type="hidden" value="<?php echo $_SESSION['LoggedIn']['BusinessId'];?>" name=businessid>
-                            <input type="submit" class="btn btn-info" value="Update Profile" name="update">
-                        </form>
-                            <form action="Discounts.php" method="POST">
-                                <input type="hidden" value="<?php echo $_SESSION['LoggedIn']['BusinessId'];?>" name=businessid>
-                                <input type="submit" class="btn btn-info" value="Manage Discounts" name="discount">
-                            </form>
+                     <div>
+                        <a href="<?php echo __httpRoot . "Business/updateBusiness.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Update User Profile</a></span><br /><br />
+                        <a href="<?php echo __httpRoot . "Business/ManageDiscounts.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Manage Discount</a></span>
                     </div>
                 <?php endif; ?>
         </div>

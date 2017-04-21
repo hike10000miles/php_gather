@@ -14,6 +14,16 @@ class BusinessDAO
         return $businessinfo;
     }
 
+    public function getBusinessProfile($db,$id){
+        $query = "SELECT * FROM business WHERE id  = :id";
+        $pdostmt = $db->prepare($query);
+        $pdostmt->bindValue(':id',$id);
+        $pdostmt->execute();
+
+        $businessprofile = $pdostmt->fetch();
+        return $businessprofile;
+    }
+
     public function getEventList($db,$id){
         $query = "SELECT e.id,e.EventName,e.EventDescription,d.discount FROM events e LEFT JOIN discounts d ON e.id = d.eventid WHERE businessid = :id";
 
@@ -25,8 +35,8 @@ class BusinessDAO
         return $events;
     }
 
-    public function updatePromotion($db, $businessName, $businessDescription, $businessCapacity, $id){
-        $query3 = "UPDATE business SET businessName = :businessName, businessDescription = :businessDescription, businessCapacity = :businessCapacity,
+    public function updateBusiness($db, $businessName, $businessDescription, $businessCapacity, $id){
+        $query3 = "UPDATE business SET businessName = :businessName, businessDescription = :businessDescription, businessCapacity = :businessCapacity
                    WHERE id = :id";
         $pdostmt3 = $db->prepare($query3);
 
