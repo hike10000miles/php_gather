@@ -12,7 +12,6 @@ $db = Connect::dbConnect();
 $gatherController = new gatheringsController();
 
 
-
 if(!isset($_SESSION['LoggedIn']['UserId'])) {
     header("Location: " . __httpRoot);
     exit;
@@ -42,7 +41,7 @@ $gatherlist = $gatherController->getGathersbyUser($db,$_SESSION['LoggedIn']['Use
     <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
 <h1>List of Your Gatherings</h1>
-
+    <a class="btn btn-info" href =<?php echo __httpRoot . "Gatherings/AddGathering.php" ?> role="button">Create A New Gathering</a><br /><br />
     <div class="table-responsive">
     <table class="table">
         <tr>

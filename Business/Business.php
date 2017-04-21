@@ -70,7 +70,7 @@ $totalreview = $reviewController->getCountReviews($businessId);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Business | Gather</title>
 </head>
-<body>
+<>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
     <?php if(is_a($error, "Exception")):?>
@@ -395,9 +395,10 @@ $totalreview = $reviewController->getCountReviews($businessId);
                 </div>
             </div>
         </div>
-    </div>
+
     <?php endforeach; ?>
     <?php include(__root."views/components/footer.php"); ?>
+</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
