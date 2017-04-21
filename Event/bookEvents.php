@@ -1,43 +1,42 @@
 <?php
+session_start();
+
+if(!isset($_POST['submit']) && !isset($_POST['id'])) {
+    header("Location: bookings.php");
+}
+
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/bookingController.php';
-
-//require_once "validation.php";
+require_once "validation.php";
 
 $db = Connect::dbConnect();
 $mybooking = new Booking($db);
 
-session_start();
-
 $mybooking = new Booking($db);
-
-if(isset($_GET['id'])) {
-    $_SESSION['eventid'] = $_GET['id'];
-}
-
-var_dump($_SESSION['eventid']);
 
 $date = $time = $people = $user = $phone = $email = "";
 $dateErr = $timeErr = $peopleErr = $userErr = $phoneErr = $emailErr = $DateErr= "";
 
 if(isset($_POST['submit'])){
+
     $date = $_POST['f_Date'];
     $time = $_POST['f_Time'];
     $people = $_POST['f_People'];
     $user = $_POST['f_Name'];
     $phone = $_POST['f_Phone'];
     $email = $_POST['f_Email'];
-    $id = $_SESSION['eventid'];
+    $id = $_POST['eventId'];
 
     $existDate = $mybooking->checkBookingDate($date);
     //var_dump($existDate);
     if($existDate != null){
         $DateErr = "The Date is booked";
     }
+
     //$DateErr="er";
     if(!Validation::isEmpty($user)){
         $userErr = "Enter the User Name";
@@ -76,7 +75,9 @@ if(isset($_POST['submit'])){
     }
 
     if($userErr == "" && $phoneErr == "" && $emailErr == "" && $timeErr == "" && $peopleErr == "" && $DateErr =="") {
+
         $add = $mybooking->eventBook($date, $time, $people, $user, $phone, $email, $id);
+
         if ($add == 1) {
             //SMTP needs accurate times, and the PHP time zone MUST be set
             //This should be done in your php.ini, but this is how to do it if you don't have access to that
@@ -126,14 +127,33 @@ if(isset($_POST['submit'])){
             } else {
                 echo "Message sent!";
             }
-            header("Location: gatheringsPage.php");
+            header("Location: bookings.php");
         }
     }
 }
 ?>
+
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <?php include(__root."views/components/globalhead.php"); ?>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Business | Gather</title>
+</head>
+<body>
+<?php include(__root."views/components/userheader.php"); ?>
+
 <form action="bookEvents.php" method="post">
     <legend>Online Booking</legend>
-    <input type="hidden" value="<?php echo $id; ?>" name="id"/>
+    <input type="hidden" value="<?php if(isset($_POST['id'])) { echo $_POST['id']; } ?>" name="eventId"/>
 
     <!--USER NAME-->
     <label for="in_Fname">
@@ -181,10 +201,13 @@ if(isset($_POST['submit'])){
 </form>
     <?php include(__root."views/components/footer.php"); ?>
     <script>
-        $(function(){
+        $(document).ready(function() {
             $("#datepicker").datepicker({
                 dateFormat: "yy-mm-dd"
             });
+        });
+        $(function(){
+
         });
     </script>
 </body>

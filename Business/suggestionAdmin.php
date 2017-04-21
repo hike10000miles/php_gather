@@ -1,4 +1,5 @@
 <?php
+session_start();
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -7,10 +8,10 @@ include __root . 'DbConnect/connect.php';
 include __root . 'controllers/suggestController.php';
 
 $db = Connect::dbConnect();
-session_start();
 $bid = $_SESSION['LoggedIn']['BusinessId'];
+
 $mysuggest = new Suggest($db);
-$list = $mysuggest->listSuggestionsbyBusiness($bid);
+$list = $mysuggest->listSuggestions();
 
 ?>
 

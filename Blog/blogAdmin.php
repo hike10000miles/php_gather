@@ -29,6 +29,15 @@ $list = $myblog->listBlog();
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Business | Gather</title>
+    <style>
+        .custom-inline {
+            display: inline-block !important;
+        }
+        .manage-posts {
+            text-align: right;
+            padding: 4px 0px 16px 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -51,19 +60,21 @@ echo"
                     </div>
                 </div>
             </div>
-    
-            <form action=\"updatePostAdmin.php\" method=\"post\">
-                <input type=\"hidden\" value='" . $l->id . "' name=\"id\">
-                <input id='btn2' class='button' type=\"submit\" name=\"update\" value=\"Update\">
-            </form>
-            <form action=\"deletePostAdmin.php\" method=\"post\">
-                <input type=\"hidden\" value='" . $l->id . "' name=\"id\">
-                <input id='btn2' class='button' type=\"submit\" name=\"delete\" value=\"Delete\" onClick=\"javascript: return confirm('Do you really want to delete this?');\" />
-            </form>
-            <form action=\"getCommentsAdmin.php\" method=\"post\">
-                <input type=\"hidden\" value='" . $l->id . "' name=\"id\">
-                <input id='btn2' class='button' type=\"submit\" name=\"comment\" value=\"Comments\">
-            </form>
+            
+            <div class='manage-posts'>
+                <form action=\"updatePostAdmin.php\" method=\"post\" class='custom-inline'>
+                    <input type=\"hidden\" value='" . $l->id . "' name=\"id\">
+                    <input id='btn2' class='button btn btn-default' type=\"submit\" name=\"update\" value=\"Update\">
+                </form>
+                <form action=\"deletePostAdmin.php\" method=\"post\" class='custom-inline'>
+                    <input type=\"hidden\" value='" . $l->id . "' name=\"id\">
+                    <input id='btn2' class='button btn btn-default' type=\"submit\" name=\"delete\" value=\"Delete\" onClick=\"javascript: return confirm('Do you really want to delete this?');\" />
+                </form>
+                <form action=\"getCommentsAdmin.php\" method=\"post\" class='custom-inline'>
+                    <input type=\"hidden\" value='" . $l->id . "' name=\"id\">
+                    <input id='btn2' class='button btn btn-default' type=\"submit\" name=\"comment\" value=\"Comments\">
+                </form>
+            </div>
             ";
     }
 
@@ -83,13 +94,10 @@ echo"
 <br/>
 <br/>
 <form action="createPostAdmin.php" method="post">
-    <input type="submit" name="add" value="Create Blog Post">
+    <input type="submit" name="add" value="Create Blog Post" class="btn btn-success" title="Click to create a new blog post" />
 </form>
+<br />
     <?php include(__root."views/components/footer.php"); ?>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
     </div>
 </body>
 </html>

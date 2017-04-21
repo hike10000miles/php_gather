@@ -1,4 +1,5 @@
 <?php
+session_start();
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -8,7 +9,6 @@ include __root . 'controllers/suggestController.php';
 
 require_once "validation.php";
 
-session_start();
 $db = Connect::dbConnect();
 $mysuggest = new Suggest($db);
 
@@ -19,6 +19,10 @@ if(isset($_SESSION['businessid'])){
 
 $fname = $lname = $email = $title = $suggest = "";
 $fnameErr = $lnameErr = $emailErr = $titleErr = $suggestErr = "";
+
+if(!isset($_POST['create']) && isset($_POST['submit'])){
+    header("Location: suggestion.php");
+}
 if(isset($_POST['submit']))
 {
     $fname=$_POST['f_Fname'];
@@ -27,7 +31,7 @@ if(isset($_POST['submit']))
     $date = $_POST['f_Date'];
     $title = $_POST['f_Title'];
     $suggest = $_POST['f_Sug'];
-    $sugg_id = $_SESSION['businessid'];
+    $sugg_id = $_POST['sugID'];
 
     if(!Validation::isEmpty($fname)){
         $fnameErr = "Enter the First Name";
@@ -60,7 +64,7 @@ if(isset($_POST['submit']))
     if($fnameErr == "" && $lnameErr == "" && $emailErr == "" && $titleErr == "" && $suggestErr == "") {
         $add = $mysuggest->addSuggest($fname, $lname, $email, $date, $title, $suggest, $sugg_id);
         if ($add == 1) {
-            header("Location: Business.php");
+            header("Location: suggestion.php");
         }
     }
 }
@@ -89,7 +93,7 @@ if(isset($_POST['submit']))
     <form action="suggestionForm.php" method="post">
 
         <legend>Suggestion Form</legend>
-        <input type="hidden" value="<?php if(isset($reply)) { echo $reply->id; } ?>" name="sugID">
+        <input type="hidden" value="<?php if(isset($_POST['create'])) {echo $_POST['id']; } ?>" name="sugID">
 
         <!--FIRST NAME-->
         <label for="in_Fname">

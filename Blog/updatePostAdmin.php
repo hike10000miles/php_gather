@@ -104,7 +104,7 @@ if(isset($_POST['updateSuggest'])) {
     <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
     Select file: <input type="file" name="upfile" id="upfile" value="">
 
-    <?php if(isset($update)) { echo "<img src='../uploads/" . $update->image ."' width='250px' height='250px'/>"; } else { echo "uploads/".$image; } ?>
+    <?php if(isset($update)) { echo "<img src='uploads/" . $update->image ."' width='250px' height='250px'/>"; } else { echo "uploads/".$image; } ?>
     <!--<input type="submit" value="upload" name="upload" >-->
 
     <!-- SUBMIT -->

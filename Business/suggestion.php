@@ -1,4 +1,5 @@
 <?php
+session_start();
  if(!defined("__root")) {
      require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
  }
@@ -15,20 +16,11 @@ $list = $mysuggest->listSuggestions();
 $mysuggest = new Suggest($db);
 $listBusiness = $mysuggest->listBusiness();
 
-echo "<h2>List of Business</h2>";
-foreach($listBusiness as $lb){
-    echo "
-        $lb->name <br/>
-        <form action=\"suggestionForm.php\" method=\"post\">
-        <input type=\"hidden\" value='" . $lb->id . "' name=\"id\">
-        <input id='btn1' class='button' type=\"submit\" name=\"create\" value=\"Post Suggestion\" />
-        </form>
-        ";
-}
-
 if(isset($_SESSION['businessid'])) {
     $id = $_SESSION['businessid'];
     $list = $mysuggest->listSuggestions();
+    $msg = $mysuggest->getMsg($id);
+}
 ?>
 
 <!DOCTYPE>
@@ -37,9 +29,9 @@ if(isset($_SESSION['businessid'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <?php include(__root."views/components/globalhead.php"); ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <title>Business | Gather</title>
@@ -49,25 +41,33 @@ if(isset($_SESSION['businessid'])) {
 <div class="container">
 
     <?php
-    $msg = $mysuggest->getMsg($id);
-}
+    echo "<h2>List of Business</h2>";
+    foreach($listBusiness as $lb){
+        echo "
+        $lb->businessName <br/>
+        <form action=\"suggestionForm.php\" method=\"post\">
+        <input type=\"hidden\" value='" . $lb->id . "' name=\"id\">
+        <input id='btn1' class='button' type=\"submit\" name=\"create\" value=\"Post Suggestion\" />
+        </form>
+        ";
+    }
 
-echo "<h2 id='list'>List of Your Suggestions</h2>";
-echo "<table id='rounded-corner'>
-        <thead>
+    echo "<h2 id='list'>List of Your Suggestions</h2>";
+    echo "<table id='rounded-corner'>
+            <thead>
             <tr>
                 <th scope='col' class='rounded-company'>Title</th>
                 <th scope='col' class='rounded-company'>Message From Admin</th>
                 <th scope='col' class='rounded-company'>Action</th>
             </tr>
         </thead>
-        <tbody>";
-foreach ($list as $l)
-{
-    echo "<tr>
-              <td><a href='suggestion.php?id=" . $l->id . "'>" . $l->title . "</a>
-              </td>
-              <td>";if($l->Reply == null)
+            <tbody>";
+            foreach ($list as $l)
+            {
+                echo "<tr>
+                      <td><a href='suggestion.php?id=" . $l->id . "'>" . $l->title . "</a>
+                      </td>
+                      <td>";if($l->Reply == null)
               {
                   echo "No message";
               }
@@ -112,10 +112,6 @@ if(isset($details))
     <input type="submit" name="add" value="Create Suggestion">
 </form>
     <?php include(__root."views/components/footer.php"); ?>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
 </div>
 </body>
 </html>
