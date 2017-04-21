@@ -37,11 +37,18 @@
 	<div class="container" id="wrapper">
         <header>
             <div class="row" id="header">
-                <div class="col-xs-3 col-xs-offset-1"><p id="head"><a href="#">CREATE A GATHERING</a></p></div>
+                <div class="col-xs-3 col-xs-offset-1"><p id="head"><a href="<?php echo __httpRoot.'userProfile/create.php'?>">CREATE A PROFILE</a></p></div>
                 <div class="col-xs-2 col-xs-offset-1"><a href="#"><img src="assest/images/gather_logo.png" id="logo"></a></div>
                 <div id="login">
                     <nav class="navbar" role="navigation">
                         <ul class="nav navbar-nav">
+
+                            <li>
+                                <a href="<?php echo __httpRoot.'userProfile/create.php'?>">
+                                    <strong>SIGN UP</strong></a>
+							</li>
+							
+
                             <li class="dropdown">
                                 <a href='<?php echo __httpRoot . "SignUp/new.php"?>' class="" data-toggle="">
                                     <strong>SIGN UP</strong>
