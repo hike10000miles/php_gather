@@ -10,9 +10,12 @@ $categoryConnect = new CategoryConnect($db);
 $categories = $categoryConnect->getCategories();
 session_start();
 
-$_SESSION['role'] = "admin";
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
-if($_SESSION['role'] == 'admin') {
+if($_SESSION['LoggedIn']['UserRole'] == 'admin') {
     if(isset($_POST["subbtn"])) {
         if(isset($_POST['CategoryTitle']) && isset($_POST['CategoryDescription'])) {
             $result = null;
@@ -56,19 +59,19 @@ if($_SESSION['role'] == 'admin') {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Create Category | Gather</title>
+    <title> Create Category | Gather</title>
 </head>
+<body>
+<?php include(__root."views/components/userheader.php"); ?>
 <body>
 <?php if(isset($message)): ?>
     <div class="alert alert-warning">
         <?php echo $message; ?>
     </div>
 <?php endif?>
-<hr class="">
 <div class="container">
-    <?php include(__root."views/components/header.php"); ?>
     <h2>New Category</h2>
-    <?php if($_SESSION['role'] == 'admin'):?>
+    <?php if($_SESSION['LoggedIn']['UserRole'] == 'admin'):?>
     <h3>List of existing category titles</h3>
     <div class='row bg-info'>
         <?php foreach($categories as $category):?>

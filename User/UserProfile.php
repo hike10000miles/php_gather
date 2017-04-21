@@ -8,8 +8,8 @@ include __root . 'controllers/LoginController.php';
 
 $_db = Connect::dbConnect();
 $login = new LoginController($_db);
-    
 session_start();
+$login->loginBySession($_SESSION['LoggedIn']['UserId']);
 
 if(isset($_GET['loggout'])) {
 	if($_GET['loggout'] == 'Log Out') {

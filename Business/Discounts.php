@@ -12,12 +12,17 @@ $discountcontroller = new DiscountDAO();
 
 session_start();
 
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
+
 if(isset($_POST['discount'])) {
-    $_SESSION['businessid'] = $_POST['businessid'];
+    $_SESSION['LoggedIn']['BusinessId'] = $_POST['businessid'];
 }
 
 
-$listdiscounts = $discountcontroller->getDiscountListbyBusiness($db,$_SESSION['businessid']);
+$listdiscounts = $discountcontroller->getDiscountListbyBusiness($db,$_SESSION['LoggedIn']['BusinessId']);
 
 
 if(isset($_GET['id'])){

@@ -11,6 +11,7 @@ $db = Connect::dbConnect();
 //$eventController = new EventConnect($db);
 
 session_start();
+
 $_SESSION['user_id']= 66;
 
 $thisuserDetails = new gatheringsController($db);

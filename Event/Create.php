@@ -14,19 +14,20 @@ $message = null;
 
 session_start();
 
-$_SESSION['id']= 3;
-$_SESSION['UserId'] = 4;
-$_SESSION['role'] = "normal";
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
-if($_SESSION['role'] == 'business') {
+if($_SESSION['LoggedIn']['UserRole'] == 'business') {
     try{
-        $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+        $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['LoggedIn']['BusinessId']);
     } catch(Exception $e) {
         $message = $e->getMessage();
     }
 
     if(isset($_POST["subbtn"])) {
-        if(isset($_SESSION['UserId']) && isset($_POST['EventName']) 
+        if(isset($_SESSION['LoggedIn']['UserId']) && isset($_POST['EventName']) 
             && isset($_POST['EndDateTime']) && isset($_POST['StartDateTime']) 
             && isset($_POST['BusinessId']) && isset($_POST['EventDescription'])
             && isset($_POST['price'])) {
@@ -41,7 +42,7 @@ if($_SESSION['role'] == 'business') {
                     $result = $eventConnect->createEvent($event);
                 } 
                 if($result != null && $result && !is_a($result, "Exception")) {
-                    header("Location: http://localhost/Business/Business.php/");
+                    header("Location: " . __httpRoot . "Business/Business.php");
                     exit;
                 } else if(is_a($result, "Exception")) {
                     $message = $result->getMessage();
@@ -150,7 +151,7 @@ if($_SESSION['role'] == 'business') {
             </div>
 
                 <form action="create.php" method="POST">
-                    <input type="text" value='<?php echo $_SESSION['id']; ?>' name="BusinessId" hidden/>
+                    <input type="text" value='<?php echo $_SESSION['LoggedIn']['BusinessId']; ?>' name="BusinessId" hidden/>
                     <div class="form-group">
                         <label for="EventName">Event Name:</label>
                         <input type="text" name="EventName" class="form-control"/>

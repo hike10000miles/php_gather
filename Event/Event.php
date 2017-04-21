@@ -18,13 +18,13 @@ $user = null;
 
 session_start();
 
-//$_SESSION['id']= 3;
-//$_SESSION['role'] = "business";
-$_SESSION['role'] = "normal";
-$_SESSION['UserId'] = "3";
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
 
-if($_SESSION['role'] == 'business') {
-    $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
+if($_SESSION['LoggedIn']['UserRole'] == 'business') {
+    $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['LoggedIn']['BusinessId']);
 } 
 
 if(isset($_GET["id"])) {
@@ -35,10 +35,10 @@ if(isset($_GET["id"])) {
         $message = $e->getMessage();
     }
     // !!useful!!
-    //if(!($event->getBusinessId() == $_SESSION['id']) && $_SESSION['role'] == 'business') {
-    //    $event = new Exception("This event is not yours.");
-    //}
-    if($_SESSION['role'] == 'normal' && is_a($event, "EventModel")) {
+    if(!($event->getBusinessId() == $_SESSION['LoggedIn']['BusinessId']) && $_SESSION['LoggedIn']['UserRole'] == 'business') {
+        $event = new Exception("This event is not yours.");
+    }
+    if($_SESSION['LoggedIn']['UserRole'] == 'normal' && is_a($event, "EventModel")) {
         $_SESSION['id'] = $event->getBusinessId();
         $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
     }
@@ -81,7 +81,7 @@ if(isset($_GET["id"])) {
                     </span>
                     <span>15 reviews</span><br/><br/>
                 </div>
-                <?php if($_SESSION['role'] == 'normal'):?>
+                <?php if($_SESSION['LoggedIn']['UserRole'] == 'normal'):?>
                 <div>
                     <button type="button" class="btn btn-danger">Leave A Review</button>
                     <button type="button" class="btn btn-info" style="margin-top:1em;">Send me a message</button>
@@ -159,7 +159,7 @@ if(isset($_GET["id"])) {
                 </div>
                 <?php endif?>
             </div>
-            <?php if($_SESSION['role'] == 'business'):?>
+            <?php if($_SESSION['LoggedIn']['UserRole'] == 'business'):?>
             <form action='Edit.php' method='get'>
                 <input type='hidden' name='id' value='<?php echo $event->getEventId(); ?>'>
                 <input type='submit' value='Edit' class="btn btn-default">

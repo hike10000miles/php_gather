@@ -19,9 +19,8 @@
                 <ul class="nav navbar-nav">
                     <li><a href="#"><i class="fa fa-group"></i>GATHERINGS</a></li>
                     <li><a href="<?php echo __httpRoot."Event/Events.php"?>"><i class="fa fa-calendar"></i>EVENTS</a></li>
-                    <?php if(isset($_SESSION['role'])) : if($_SESSION['role'] == 'business'): ?>
+                    <?php if(isset($_SESSION['LoggedIn']) && ($_SESSION['LoggedIn']['UserRole'] == 'business')): ?>
                     <li><a href="<?php echo __httpRoot."Business/Business.php"?>"><i class="fa fa-bank"></i>MANAGE BUSINESS</a></li>
-                  <?php endif; ?>
                     <?php endif; ?>
 
                 </ul>
@@ -30,7 +29,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-user"></span> 
-                            <strong>Kevin</strong>
+                            <strong><?php echo $_SESSION['LoggedIn']['Username']?></strong>
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul style="background-color:white;" class="dropdown-menu">
@@ -43,10 +42,11 @@
                                             </p>
                                         </div>
                                         <div class="col-lg-8">
-                                            <p class="text-left"><strong>Kevin Sanabria</strong></p>
-                                            <p class="text-left small">notmadeup@email.com</p>
+                                            <p class="text-left"><strong><?php echo $_SESSION['LoggedIn']['Firstname']." ".$_SESSION['LoggedIn']['Firstname'];?></strong></p>
+                                            <p class="text-left small"><?php echo $_SESSION['LoggedIn']['Email'];?></p>
                                             <p class="text-left">
-                                                <a href="#" class="btn btn-primary btn-block btn-sm">Update Details</a>
+                                                <a href="#" class="btn btn-primary btn-block btn-sm">Update Login Details</a>
+                                                <a href="#" class="btn btn-primary btn-block btn-sm">Update Profile Details</a>
                                             </p>
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <p>
-                                                <a href="#" class="btn btn-danger btn-block">Sign Out</a>
+                                                <a href='<?php echo __httpRoot . "SignUp\loggout.php";?>' class="btn btn-danger btn-block">Sign Out</a>
                                             </p>
                                         </div>
                                     </div>

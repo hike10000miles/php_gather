@@ -9,12 +9,7 @@ include __root . 'controllers/suggestController.php';
 
 $db = Connect::dbConnect();
 $mysuggest = new Suggest($db);
-
-?>
-<?php
-
-
-
+session_start();
 
 $msg = $msgErr = "";
 

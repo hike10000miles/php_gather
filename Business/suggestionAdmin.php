@@ -10,7 +10,7 @@ $db = Connect::dbConnect();
 
 session_start();
 
-$bid = $_SESSION['businessid'];
+$bid = $_SESSION['LoggedIn']['BusinessId'];
 
 
 $mysuggest = new Suggest($db);
