@@ -12,7 +12,6 @@
                 </button>
 
             </div>
-
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="navbar-collapse style= collapse in" id="bs-megadropdown-tabs">
 

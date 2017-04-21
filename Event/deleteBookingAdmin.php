@@ -1,4 +1,5 @@
 <?php
+
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -10,7 +11,6 @@ $db = Connect::dbConnect();
 
 session_start();
 
-$db = Connect::dbConnect();
 $mybooking = new Booking($db);
 
 if(isset($_POST['delete']))

@@ -14,7 +14,9 @@ if (!isset($_SESSION['user_id']) && !isset($_SESSION['gatherid'])) {
     header('Location: create.php');
 }
 
+
 $db = Connect::dbConnect();
+
 
 $_SESSION['LoggedIn']['UserId'];
 

@@ -9,11 +9,11 @@ include __root . 'controllers/PaymentsController.php';
 
 //require_once "PaymentsController.php";
 //require_once "database.php";
-
+session_start();
 $db= Connect::dbConnect();
 $a=new Admin($db);
 
-$row3=$a->getpayments();
+$row3=$a->getpayments($_SESSION['LoggedIn']['BusinessId']);
 
 
 if(isset($_POST['delete'])){
@@ -63,6 +63,7 @@ if(isset($_POST['delete'])){
 
         <th>Payment status</th>
         <th> User Email</th>
+        <th>Gathering</th>
         <th> Actions</th>
     </tr>
     </thead>
@@ -80,6 +81,7 @@ if(isset($_POST['delete'])){
             echo "<td>$r->payment_amount</td>";
             echo "<td>$r->payment_status</td>";
             echo "<td>$r->user_email</td>";
+            echo "<td>$r->gathering_id</td>";
 
 
 

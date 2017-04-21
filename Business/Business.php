@@ -1,4 +1,5 @@
 <?php
+session_start();
  if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -13,8 +14,6 @@ $businessview = new BusinessDAO();
 $eventController = new EventConnect($db);
 $reviewController = new Admin($db);
 $rating = new Ratings($db);
-
-session_start();
 
 if(!isset($_SESSION['LoggedIn']['UserId'])) {
     header("Location: " . __httpRoot);
