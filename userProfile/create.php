@@ -71,7 +71,7 @@ if(isset($_POST['create_profile_submit'])) {
         move_uploaded_file($_FILES["profile_image"]["tmp_name"], "images/" . $_FILES["profile_image"]["name"]);
 
 
-        $profile_image = (__httpRoot.'assest/images/' . $_FILES["profile_image"]["name"]);
+        $profile_image = (__httpRoot.'images/' . $_FILES["profile_image"]["name"]);
 
 
 

@@ -89,7 +89,7 @@ $id = $row['id'];
         <br>
         <div class="row" id="rowTwo">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="description">
-                <p class="usersDecription"><?php echo $usersDetails['username']?>'s Story:<br> <?php echo $row['user_description'];/*$usersProfileDetails['user_description']; */?></p>
+                <p class="userDescription"><?php echo $usersDetails['username']?>'s Story:<br> <?php echo $row['user_description'];?></p>
             </div><!--div for description-->
         </div><!--div for row 2-->
         <br>
