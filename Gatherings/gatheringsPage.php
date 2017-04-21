@@ -206,7 +206,7 @@ $events = $getEventsforGather->getgatheringsEvents($db);
                                             echo "<br/> ";
                                             echo '$'. $event->price;
                                             echo "<br/>";?>
-                                                <a href="<?php echo __httpRoot . "Event/paymentform.php?id=".$event->id ?>" class="btn btn-danger" role="button">Book</a><br /><br/>
+                                                <a href="<?php echo __httpRoot . "Event/bookEvents.php?id=".$event->id ?>" class="btn btn-danger" role="button">Book</a><br /><br/>
                                                 <a href="<?php echo __httpRoot . "Event/StripePaymentForm.php?id=".$event->id ?>" class="btn btn-info" role="button">Pay</a>
                                         </div>
                                         <div class="ratings">

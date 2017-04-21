@@ -77,7 +77,15 @@ class Booking
         return $details;
     }
 
-
+    public function checkBookingDate($date)
+    {
+        $query9 = "SELECT * FROM bookings WHERE date = :date";
+        $pdostmt9 = $this->db->prepare($query9);
+        $pdostmt9->bindValue(':date',$date, PDO::PARAM_STR);
+        $pdostmt9->execute();
+        $details = $pdostmt9->fetch(PDO::FETCH_OBJ);
+        return $details;
+    }
 
 
 
