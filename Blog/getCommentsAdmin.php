@@ -9,6 +9,14 @@ include __root . 'controllers/blogController.php';
 $db = Connect::dbConnect();
 
 session_start();
+if(isset($_POST['comment'])) {
+    $id = $_POST['id'];
+    $myblog = new Blog($db);
+    $com = $myblog->getComment($id);
+}
+if(isset($com)){
+    echo $com->username . " Posted " . $com->comment ."<br/>";
+}
 ?>
 
 <!DOCTYPE>
@@ -27,27 +35,7 @@ session_start();
 <body>
 <?php include(__root."views/components/header.php"); ?>
 <div class="container">
-
-    <?php
-
-if(isset($_POST['comment'])){
-    $id=$_POST['id'];
-    $myblog = new Blog($db);
-    $com = $myblog->getComment($id);
-
-//    if($com == 1) {
-//        header("Location: blog.php");
-//        echo $com->username;
-//    }
-}
-
-
-
-if(isset($com)){
-    echo $com->username . " Posted " . $com->comment ."<br/>";
-}
-
-    include(__root."views/components/footer.php"); ?>
+    <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

@@ -4,11 +4,16 @@
 class gatheringsController
 {
 
-    private $_db;
 
-    public function __construct($dbConnection)
-    {
-        $this->_db = $dbConnection;
+   function getGathersbyUser($db,$uid){
+       $query1 = "SELECT g.*, gu.GatheringId FROM gatherings g JOIN gatherings_users gu ON g.id = gu.GatheringId JOIN users u on gu.UserId = u.id WHERE u.id = :uid";
+       $pdostmt = $db->prepare($query1);
+       $pdostmt->bindValue(':uid',$uid);
+
+       $pdostmt->execute();
+       $row = $pdostmt->fetchall();
+
+       return $row;
     }
 
 

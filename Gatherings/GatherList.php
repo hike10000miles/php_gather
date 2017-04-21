@@ -1,29 +1,30 @@
 <?php
-
+session_start();
 if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/gatheringsController.php';
-//include __root . 'controllers/EventController.php';
 
-
-//$businessview = new BusinessDAO();
-//$eventController = new EventConnect($db);
-
-session_start();
-if (!isset($_SESSION['user_id']) && !isset($_SESSION['gatherid'])) {
-    echo "Sorry, there was a problem with your gathering, you will now be redirected to sign up again";
-    header('Location: create.php');
-}
 
 $db = Connect::dbConnect();
 
-$thisuserDetails = new gatheringsController($db);
-$usersDetails = $thisuserDetails->selectUserDetails($db, $_SESSION['user_id']);
+$gatherController = new gatheringsController();
+
+
+
+if(!isset($_SESSION['LoggedIn']['UserId'])) {
+    header("Location: " . __httpRoot);
+    exit;
+}
+
+$_SESSION['LoggedIn']['UserId'];
+
+$gatherlist = $gatherController->getGathersbyUser($db,$_SESSION['LoggedIn']['UserId']);
+
+
 
 ?>
-
 <!DOCTYPE>
 <html>
 <head>
@@ -35,24 +36,36 @@ $usersDetails = $thisuserDetails->selectUserDetails($db, $_SESSION['user_id']);
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Business | Gather</title>
+    <title>Business Discounts | Gather</title>
 </head>
 <body>
-<?php include(__root."views/components/userheader.php"); ?>
+    <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-    <div class="page-header" id="addUserstoGather">
-        <h2><?php echo $usersDetails['username']?>, before heading to your Gathering, please add 10 of your friends below:</h2>
+<h1>List of Your Gatherings</h1>
+
+    <div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>Gather Name</th>
+            <th>Description</th>
+            <th>Creation Date</th>
+            <th></th>
+        </tr>
+        <?php foreach($gatherlist as $listgat): ?>
+        <tr>
+            <td><a href="<?php echo __httpRoot . "Gatherings/Gathering.php?id=" . $listgat['id']; ?>"><?php echo $listgat['gatheringName']; ?></a></td>
+            <td><?php echo $listgat['gatheringDescription']; ?></td>
+            <td><?php echo $listgat['creationDate']; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
     </div>
-
-
-
-
-
     <?php include(__root."views/components/footer.php"); ?>
+</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
-</div>
+
 </body>
 </html>

@@ -15,14 +15,13 @@ $error_text=$fname=$review=$email_error=""; ?>
 <?php
 $a= new Admin($db);
 
-session_start();
 
 if(!isset($_SESSION['LoggedIn']['UserId'])) {
     header("Location: " . __httpRoot);
     exit;
 }
+$business = $_GET['id'];
 
-$business = $_SESSION['businessid'];
 
 ?>
 
@@ -53,20 +52,6 @@ $business = $_SESSION['businessid'];
 <fieldset name="review">
 
             <div>
-                <label for="fname">Your Name:</label>
-                <input type="text" id="fname" name="fname" placeholder="Type your full name"/><span id="name_text"><?php echo $error_text;?></span>
-
-            </div>
-
-
-
-            <div>
-                <label for="email">Email:</label>
-                <input type="text" id="email" name="email" placeholder="abc@gmail.com"/><span id="email_text"><?php echo $email_error;?></span>
-            </div>
-
-
-            <div>
                 <label for="review">Review:</label>
                 <textarea id="review" name="review" rows="4" cols="50"></textarea><span id="review_text"><?php echo $error_text; ?></span>
 
@@ -95,8 +80,8 @@ $business = $_SESSION['businessid'];
                 type:'POST',
                 data:
                     {
-                        'fname': $('#fname').val(),
-                        'email': $('#email').val(),
+                        'fname': '<?php echo $_SESSION['LoggedIn']['Username'];?>',
+                        'email': '<?php echo $_SESSION['LoggedIn']['Email'];?>',
                         'review':$('#review').val(),
                         'BID':'<?php echo $business; ?>'
                     },

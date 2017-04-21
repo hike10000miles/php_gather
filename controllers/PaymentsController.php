@@ -24,27 +24,28 @@ class Admin
         return $row;
     }
 
-    public function insertdata($user_email,$payment_amount,$event_id){
+    public function insertdata($user_email,$payment_amount,$event_id,$gathering_id){
 
         $query = "INSERT INTO payments 
-                  (user_email,payment_amount,event_id)
-                  VALUES (:user_email,:payment_amount,:event_id)";
+                  (user_email,payment_amount,event_id,gathering_id)
+                  VALUES (:user_email,:payment_amount,:event_id,:gathering_id)";
 
         $pdostmt = $this->db->prepare($query);
 
         $pdostmt->bindValue('user_email', $user_email, PDO::PARAM_INT);
         $pdostmt->bindValue('payment_amount', $payment_amount, PDO::PARAM_INT);
         $pdostmt->bindValue(':event_id', $event_id, PDO::PARAM_INT);
+        $pdostmt->bindValue(':gathering_id', $gathering_id, PDO::PARAM_INT);
         $row2 = $pdostmt->execute();
 
         return $row2;
     }
 
-    public function getpayments()
+    public function getpayments($businessid)
     {
-        $query = "SELECT * FROM  payments";
+        $query = "SELECT * FROM  payments JOIN events ON payments.event_id=events.id WHERE events.BusinessId = :businessid";
         $pdostmt = $this->db->prepare($query);
-
+        $pdostmt->bindValue(':businessid', $businessid, PDO::PARAM_INT);
         $row3 = $pdostmt->execute();
         $row3 = $pdostmt->fetchAll(PDO::FETCH_OBJ);
         return $row3;

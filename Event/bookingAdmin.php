@@ -23,13 +23,17 @@ session_start();
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title> <?php echo $businessdetails[0]['businessName'];?> Event | Gather</title>
+    <title>Event | Gather</title>
+    <style>
+        .button {
+            margin-left: 16px;
+        }
+    </style>
 </head>
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
 <?php
-
 
 $mybooking = new Booking($db);
 $list = $mybooking->bookingList();
@@ -55,7 +59,7 @@ foreach ($list as $l)
                     
                         <td id='rowbtn'><form action=\"deleteBookingAdmin.php\" method=\"post\">
                             <input type=\"hidden\" value='" . $l->id . "' name=\"id\">
-                            <input id='btn1' class='button' type=\"submit\" name=\"delete\" value=\"Delete\" onClick=\"javascript: return confirm('Do you really want to delete this?');\"/>
+                            <input id='btn1' class='button btn btn-primary btn-sm' type=\"submit\" name=\"delete\" value=\"Delete\" onClick=\"javascript: return confirm('Do you really want to delete this?');\"/>
                             </form>
                             
                             </td>

@@ -12,19 +12,19 @@
                 </button>
 
             </div>
-
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="navbar-collapse style= collapse in" id="bs-megadropdown-tabs">
 
                 <ul class="nav navbar-nav">
-                    <li><a href="#"><i class="fa fa-group"></i>GATHERINGS</a></li>
-                    <li><a href="<?php echo __httpRoot."Event/Events.php"?>"><i class="fa fa-calendar"></i>EVENTS</a></li>
-                    <?php if(isset($_SESSION['LoggedIn']) && ($_SESSION['LoggedIn']['UserRole'] == 'business')): ?>
-                    <li><a href="<?php echo __httpRoot."Business/Business.php"?>"><i class="fa fa-bank"></i>MANAGE BUSINESS</a></li>
+                    <?php if(isset($_SESSION['LoggedIn']) && ($_SESSION['LoggedIn']['UserRole'] ==  'normal')): ?>
+                        <li><a href="<?php echo __httpRoot."Gatherings/GatherList.php"?>"><i class="fa fa-group"></i>GATHERINGS</a></li>
                     <?php endif; ?>
-
+                        <li><a href="<?php echo __httpRoot."Event/Events.php"?>"><i class="fa fa-calendar"></i>EVENTS</a></li>
+                        <li><a href="<?php echo __httpRoot."Business/BusinessList.php"?>"><i class="fa fa-money"></i>BUSINESSES</a></li>
+                    <?php if(isset($_SESSION['LoggedIn']) && ($_SESSION['LoggedIn']['UserRole'] == 'business')): ?>
+                        <li><a href="<?php echo __httpRoot."Business/Business.php"?>"><i class="fa fa-bank"></i>MANAGE BUSINESS</a></li>
+                    <?php endif; ?>
                 </ul>
-
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">

@@ -1,4 +1,5 @@
 <?php
+session_start();
  if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
@@ -15,13 +16,10 @@ $reviewController = new Admin($db);
 $rating = new Ratings($db);
 $error = null;
 
-session_start();
-
 if(!isset($_SESSION['LoggedIn']['UserId'])) {
     header("Location: " . __httpRoot);
     exit;
 }
-
 /*$reviews = $reviewController->*/
 if(isset($_SESSION['LoggedIn']['BusinessId'])) {
     try{
@@ -39,14 +37,21 @@ if(isset($_SESSION['LoggedIn']['BusinessId'])) {
     } catch (Exception $e) {
         $error = $e;
     }
-}
 
 if(isset($_POST['like'])) {
     $row4 = $reviewController->getlikes($_POST['post_id']);
 }
 
-$ratings = $rating->getmostpopularbyId($_SESSION['LoggedIn']['BusinessId']);
-$totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['BusinessId']);
+if(isset($_GET['id'])){
+    $businessId = $_GET['id'];
+} else {
+    $businessId = $_SESSION['LoggedIn']['BusinessId'];
+}
+$businessdetails = $businessview->getBusinessInfo($db,$businessId);
+$events = $eventController->getEventList($businessId);
+$reviews = $reviewController->displayreviewsbybusinessid($businessId);
+$ratings = $rating->getmostpopularbyId($businessId);
+$totalreview = $reviewController->getCountReviews($businessId);
 
 ?>
 <!DOCTYPE>
@@ -86,15 +91,16 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
                     </span>
                     <span><?php foreach($totalreview as $tr): echo $tr['totalreview']; endforeach; ?> Reviews</span><br/><br/>
                 </div>
-                <?php if($_SESSION['LoggedIn']['UserRole'] == 'normal'): ?>
+                <?php if(($_SESSION['LoggedIn']['UserRole'] == 'normal')): ?>
                     <div>
-                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-danger" role="button">Leave A Review</a><br /><br/>
-                        <a href="<?php echo __httpRoot . "Business/suggestionForm.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info" role="button">Make Suggestion</a>
+                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$businessId; ?>" class="btn btn-danger" role="button">Leave A Review</a><br /><br/>
+                        <a href="<?php echo __httpRoot . "Business/suggestionForm.php?id=" .$businessId; ?>" class="btn btn-info" role="button">Make Suggestion</a>
                     </div>
-                <?php else: ?>
+                <?php endif; ?>
+                <?php if(($_SESSION['LoggedIn']['UserRole']== 'business')&&(!isset($_GET['id']))) :?>
                      <div>
-                        <a href="<?php echo __httpRoot . "Business/updateBusiness.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Update User Profile</a></span><br /><br />
-                        <a href="<?php echo __httpRoot . "Business/Discounts.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>" class="btn btn-info">Manage Discount</a></span>
+                        <a href="<?php echo __httpRoot . "Business/updateBusiness.php?id=" .$businessId; ?>" class="btn btn-info">Update User Profile</a></span><br /><br />
+                        <a href="<?php echo __httpRoot . "Business/Discounts.php?id=" .$businessId; ?>" class="btn btn-info">Manage Discount</a></span>
                     </div>
                 <?php endif; ?>
         </div>
@@ -147,9 +153,9 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading" contenteditable="false">Events<span class="pull-right">
-                <?php if($_SESSION['LoggedIn']['UserRole'] == 'business'): ?>
+                <?php if(($_SESSION['LoggedIn']['UserRole']== 'business')&&(!isset($_GET['id']))): ?>
                     <a href='<?php echo __httpRoot . "Event\Create.php";?>' >Add Event</a>
-                    <a href="<?php echo __httpRoot . "Business/SuggestionAdmin.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">Manage Suggestions</a></span>
+                    <a href="<?php echo __httpRoot . "Business/SuggestionAdmin.php?id=" .$businessId; ?>">Manage Suggestions</a></span>
                 <?php endif; ?>
                 </div>
                 <div class="panel-body">
@@ -176,12 +182,13 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
 
                 <div class="panel-heading">
                     Review<span class="pull-right">
-                    <?php if($_SESSION['LoggedIn']['UserRole'] == 'business'): ?>
-                        <a href="<?php echo __httpRoot . "Business/ReviewAdmin.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">
+                    <?php if(($_SESSION['LoggedIn']['UserRole']== 'business')&&(!isset($_GET['id']))): ?>
+                        <a href="<?php echo __httpRoot . "Business/ReviewAdmin.php?id=" .$businessId; ?>">
                         Manage Reviews
                         </a>
-                    <?php else: ?>
-                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$_SESSION['LoggedIn']['BusinessId']; ?>">
+                    <?php endif; ?>
+                    <?php if(($_SESSION['LoggedIn']['UserRole']== 'normal')): ?>
+                        <a href="<?php echo __httpRoot . "Business/addReviews.php?id=" .$businessId; ?>">
                         Add Review
                         </a></span>
                     <?php endif; ?>
@@ -216,7 +223,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
                                         endforeach;?>
                         </div>
                     <!----4.2 Rating -------->
-                    <?php if($_SESSION['LoggedIn']['UserRole'] == 'normal'): ?>
+                    <?php if(($_SESSION['LoggedIn']['UserRole']== 'normal')): ?>
                     <form action="" name="ratings" id="ratings">
                         <script>
                             $(document).ready(function(){
@@ -352,7 +359,7 @@ $totalreview = $reviewController->getCountReviews($_SESSION['LoggedIn']['Busines
                                                 type:'POST',
                                                 cache:false,
                                                 url:'rating_response.php',
-                                                data:{'clicked_val':clicked_val, 'BId' :  <?php echo $_SESSION['businessid']; ?>},
+                                                data:{'clicked_val':clicked_val, 'BId' :  <?php echo $businessId; ?>},
                                                 success:function (response) {
 //alert(response);
                                                     $('#response').html("Your rating will be " + response);

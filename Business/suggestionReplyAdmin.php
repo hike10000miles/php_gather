@@ -68,29 +68,21 @@ if(isset($_POST['submit'])){
         });
     </script>
 </head>
+
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
+    <h3>Reply Message</h3>
+    <form action="suggestionReplyAdmin.php" method="post">
+        <input type="hidden" value="<?php if(isset($reply)) { echo $reply->id; } ?>" name="sugID">
 
+        <textarea id="mytextarea" name="f_Msg"></textarea>
+        <span id="msg"><?php echo $msgErr; ?></span>
 
-<h3>Reply Message</h3>
-<form action="suggestionReplyAdmin.php" method="post">
-
-    <input type="hidden" value="<?php if(isset($reply)) { echo $reply->id; } ?>" name="sugID">
-
-<!--    <label for="in_Msg">
-        <input type="text" id="formMsg" name="f_Msg" value=""/>
-        <span id="msg"></span>
-        <div class="label-text">Message</div>
-    </label><br/>-->
-
-    <textarea id="mytextarea" name="f_Msg"></textarea>
-    <span id="msg"><?php echo $msgErr; ?></span>
-
-    <p>
-        <button id="button" value="Submit" name="submit">Post Message</button>
-    </p>
-</form>
+        <p>
+            <button id="button" value="Submit" name="submit">Post Message</button>
+        </p>
+    </form>
 
     <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
