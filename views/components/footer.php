@@ -29,7 +29,7 @@
 
                         <li><a href="#">Business Tools</a>
                             <ul>
-                                <li><a href="#">Offer Discounts</a></li>
+                                <li><a href="<?php echo __httpRoot . "Event/bookingAdmin.php" ?>">List Of Bookings</a></li>
                                 <li><a href="<?php echo __httpRoot . "Blog/blogAdmin.php" ?>">Blog Admin</a></li>
                                 <li><a href="<?php echo __httpRoot . "Event/StripePaymentAdmin.php" ?>">Manage Payments</a></li>
                                 <li><a href="<?php echo __httpRoot . "Event/ImageGalleryAdmin.php" ?>">Image Gallery Admin</a></li>
