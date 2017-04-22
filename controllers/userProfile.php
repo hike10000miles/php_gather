@@ -36,7 +36,7 @@ class userProfile
         $query = "SELECT * FROM user_profile;";
         $pdostmt2 = $db->prepare($query);
         $pdostmt2->execute(); // now we execute the statement
-        $result= $pdostmt2->fetchAll(PDO::FETCH_ASSOC);
+        $result = $pdostmt2->fetchAll(PDO::FETCH_ASSOC);
         $pdostmt2->closeCursor(); //dont forget this, because it disconnects your connection to db cuz there can only be 1 at a atime
         return $result; //return ture because its succesfful
     }
@@ -49,7 +49,8 @@ class userProfile
         $query = "SELECT * FROM user_profile WHERE id = :profileid";
         $pdostmt2 = $db->prepare($query);
         $pdostmt2->bindValue(":profileid", $profileid);
-        /*$result = */$pdostmt2->execute();
+        /*$result = */
+        $pdostmt2->execute();
         $userFetch = $pdostmt2->fetch(PDO::FETCH_ASSOC);
         $pdostmt2->closeCursor();
         return $userFetch;
@@ -76,7 +77,8 @@ class userProfile
     }
 
 //put update here
-    public function delete_userprofile($db, $id){
+    public function delete_userprofile($db, $id)
+    {
 
         $query = "DELETE FROM user_profile WHERE id = :id";
         $pdostmt2 = $db->prepare($query);
@@ -123,10 +125,11 @@ class userProfile
         $pdostmt2->bindValue(":phash", $password_hash);
         $pdostmt2->bindValue(":fname", $firstname);
         $pdostmt2->bindValue(":mname", $middlename);
-        $pdostmt2->bindValue(":lname", $lastname );
+        $pdostmt2->bindValue(":lname", $lastname);
         $pdostmt2->bindValue(":locid", $location_id);
         $pdostmt2->bindValue(":roleid", $role_id);
-        /*$result = */$pdostmt2->execute();
+        /*$result = */
+        $pdostmt2->execute();
         $pdostmt2->closeCursor();
         //return $result;
     }
@@ -139,13 +142,14 @@ class userProfile
         $query = "SELECT * FROM users WHERE id = :userid";
         $pdostmt2 = $db->prepare($query);
         $pdostmt2->bindValue(":userid", $id);
-        /*$result = */$pdostmt2->execute();
+        /*$result = */
+        $pdostmt2->execute();
         $userFetch = $pdostmt2->fetch(PDO::FETCH_ASSOC);
         $pdostmt2->closeCursor();
         return $userFetch;
     }
 
-    public function getUser($db, $username,  $id)
+    public function getUser($db, $username, $id)
     {
         /*insertUser($pdoconnection, $username, $email, $password_hash, $password_salt,
             $firstname, $middlename, $lastname, $location_id, $role_id);*/
@@ -154,16 +158,12 @@ class userProfile
         $pdostmt2 = $db->prepare($query);
         $pdostmt2->bindValue(":userid", $id);
         $pdostmt2->bindValue(":username", $username);
-        /*$result = */$pdostmt2->execute();
+        /*$result = */
+        $pdostmt2->execute();
         $userFetch = $pdostmt2->fetch(PDO::FETCH_ASSOC);
         $pdostmt2->closeCursor();
         return $userFetch;
     }
-
-
-
-
-
 
 
 }

@@ -29,7 +29,7 @@ if($_SESSION['LoggedIn']['UserRole'] == "business") {
     }
 
 } elseif ($_SESSION['LoggedIn']['UserRole'] == "normal") {
-    header("Location: " . __httpRoot."Event/Events.php");
+    header("Location: " . __httpRoot."userProfile/create.php");
 } elseif ($_SESSION['LoggedIn']['UserRole'] == "admin") {
     header("Location: " . __httpRoot."Category/Categories.php");
 }

@@ -5,6 +5,7 @@ if(!defined("__root")) {
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/gatheringsController.php';
 include __root . 'controllers/EventController.php';
+include __root . 'controllers/announcementsController.php';
 
 
 
@@ -22,6 +23,8 @@ $_SESSION['role'] = "normal";
 $_SESSION['gatherid'] = 4;
 
 $db = Connect::dbConnect();
+$thisuserDetails = new gatheringsController($db);
+$usersDetails = $thisuserDetails->selectUserDetails($db, $_SESSION['user_id']);
 
 $eventController = new EventConnect($db);
 $thisuserDetails = new gatheringsController($db);
@@ -29,7 +32,7 @@ $usersDetails = $thisuserDetails->selectUserDetails($db, $_SESSION['user_id']);
 
 $gatheringDetails = new gatheringsController($db);
 $row = $gatheringDetails->selectGathering($db, $_SESSION['gatherid']);
-var_dump($row);
+//var_dump($row);
 
 //$gatheringDetails = new gatheringsController($db);
 //$fetchUsers = $gatheringDetails->get_Gatheringusers($db, $_SESSION['gatherid']);
@@ -37,16 +40,88 @@ var_dump($row);
 
 $gatheringDetails = new gatheringsController($db);
 $fetchUsers = $gatheringDetails->get_GatheringusersModified($db, $_SESSION['gatherid']);
-var_dump($fetchUsers);
+//var_dump($fetchUsers);
 
 $eventsInGathering = new gatheringsController($db);
 $fetchEvents = $eventsInGathering->get_GatheringusersModified($db, $_SESSION['gatherid']);
-var_dump($fetchEvents);
+//var_dump($fetchEvents);
 
 
 $getEventsforGather = new gatheringsController($db);
 $events = $getEventsforGather->getgatheringsEvents($db);
 
+$announcements_userId=$_SESSION['user_id'];
+$subjectLine='';
+$announcement='';
+
+
+
+if(isset($_POST['addAnnouncement'])) {
+//$id = $_POST[''];
+$announcements_userId = $_POST['userID'];
+$subjectLine = $_POST['subjectLine'];
+$announcement = $_POST['announcement'];
+$gatherid = $_SESSION['gatherid'];
+
+if ($announcements_userId == "") {
+    $error_message = 'Please enter your User Id';
+} else if ($announcements_userId != $_SESSION['user_id']){
+    $error_message = 'Incorrect user id. Please enter the correct User Id';
+} else if ($subjectLine == NULL) {
+    $error_message = 'Please enter a subject title for your announcement';
+
+} else if ($announcement == NULL) {
+    $error_message = 'Please write an announcement';
+} else {
+    $error_message = '';
+}
+
+
+if ($error_message != ''){
+    //echo $error_message;
+}
+else {
+
+//2.6 - Create an object called $add - this will use the add function from the announcements crud class so we can use it to add announcements
+    $announcements_crud = new announcementsController($db);
+    $row = $announcements_crud->addAnnouncement($db, $announcements_userId, $subjectLine, $announcement, date("Y-m-d h:i:s"), $gatherid);
+
+    if ($row == 1) {
+        header("Refresh:0");
+    }
+
+
+    $result = $announcements_crud->getAnnouncement($db);
+    if (isset($_POST['delete'])) {
+        if (!empty ($_POST['id'])) {
+            $announcements_crud->deleteAnnouncement($db, $_POST['id']);
+            //header("Refresh:0");
+        }
+    }
+        foreach ($result as $key) {
+            echo "<div class='eachPost'>";
+            echo "<span class='subjectandUser'>";
+            echo "<label class='userLabel'>Posted By:&nbsp;</label>";
+            echo($key['UsersId']);
+            echo "<label class='subjectLabel'>&nbsp;&nbsp;Subject:&nbsp;</label>";
+            echo($key['subject']);
+            echo "<span class='dateClass'>";
+            echo "<label class='dateLabel'>&nbsp;&nbsp;&nbsp;Date Posted:&nbsp;</label>";
+            echo ($key['Date']) . "</span></span><br>";
+            echo "<label class='announcementLabel'>Announcement: </label><br/>";
+            echo ($key['announcement']) . "<br/>";
+            echo "<form method='post' action='gatheringsPage.php'>";
+            echo "<input type='hidden' name='id' value='" . $key['Id'] . "' />";
+            if ($_SESSION['user_id'] == $announcements_userId) {
+                echo "<input type='submit' name='delete' class='deletebutton' value='Delete Announcement' onclick='return chk();'/>";
+            }
+            echo "</form>";
+            echo "</div>";
+        }
+
+    }
+
+}
 
 ?>
 
@@ -61,6 +136,7 @@ $events = $getEventsforGather->getgatheringsEvents($db);
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href='<?php echo __httpRoot . "assest/"; ?>style/announceentstylesheet.css'>
     <title>Business | Gather</title>
 </head>
 <body>
@@ -234,10 +310,92 @@ $events = $getEventsforGather->getgatheringsEvents($db);
             </div>
         </div>
 <!--    --><?php //endforeach; ?>
+    <!--ANNOUNCEMENT -->
+
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="panel panel-default col-lg-9 col-md-9 col-sm-9 col-xs-12 pull-right">
+                <div class="wholeAnnouncement">
+                    <h2 class="announcementsHeader">ANNOUNCEMENTS</h2>
+                    <p class="viewAnnouncementsButton">CLICK TO VIEW ANNOUNCEMENTS</p>
+                    <p class="viewAnnouncementsButtonhidden">CLICK TO CLOSE</p>
+                    <section class="AnnouncementResults">
+                        <div class="results" id="results">
+                            <?php
+
+                            //$id = filter_input(INPUT_POST, '');
+                            $announcements_userId = filter_input(INPUT_POST, 'userID');
+                            $subjectLine = filter_input(INPUT_POST, 'subjectLine');
+                            $announcement = filter_input(INPUT_POST, 'announcement');
+                            //$date = filter_input(INPUT_POST, 'postdate');
+
+                            $crud = new announcementsController($db);
+                            $result = $crud->getAnnouncement($db);
+
+                            if (isset($_POST['delete'])){
+                                if (!empty ($_POST['id'])) {
+                                    $crud->deleteAnnouncement($db, $_POST['id']);
+                                    //header("Refresh:0");
+                                }
+                            }
+                            foreach ($result as $key) {
+
+                                echo "<div class='eachPost'>";
+                                echo "<span class='subjectandUser'>";
+                                echo "<label class='userLabel'>Posted By:&nbsp</label>";
+                                echo ($key['UsersId']);
+                                echo  " <label class='subjectLabel'>&nbsp&nbspSubject:&nbsp</label>";
+                                echo ($key['subject']);
+                                echo "<span class='dateClass'>";
+                                echo  "<label class='dateLabel'>&nbsp&nbsp&nbspDate Posted:&nbsp</label> ";
+                                echo ($key['Date']) ."</span></span><br>";
+                                echo  "<label class='announcementLabel'>Announcement: </label><br> ";
+                                echo ($key['announcement']) ."<br>";
+
+                                //echo "<a href='?action=delete&id=".$key['Id']. "'>delete</a><br><br>";
+                                echo "<form method='post' action=''>";
+                                echo "<input type='hidden' name='id' value='".$key['Id']."' />";
+                                echo "<input type='submit' name='delete' class='deletebutton' value='Delete Announcement'/>";
+                                echo "</form>";
+                                echo "</div>";
+                            }
+                            ?>
+                        </div>
+                    </section>
+                    <section>
+                        <br>
+                        <p>Post your announcement <br>to this Gathering below:</p>
+                        <?php if (!empty($error_message)) { ?>
+                            <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
+                        <?php } ?>
+                        <form action="" method="post" name="mainForm"> <!--if problem with notification remove function from action -->
+                            <div id="formdata">
+                                <!--<label class="uid">User ID: </label>-->
+                                <input type="hidden" id="userID" name="userID" value="<?php echo htmlspecialchars($_SESSION['user_id']); ?>"><br>
+                                <label class="sl">Subject: </label>
+                                <input type="text" id = "subjectLine" name="subjectLine" value="<?php echo htmlspecialchars($subjectLine); ?>"><br><br>
+                                <label class="cyp">Compose Your Announcement: </label><br>
+                                <input type="text" class="announcement" id="announcement" name="announcement" value="<?php echo htmlspecialchars($announcement); ?>"><br>
+                            </div>
+                            <br>
+                            <div id="button">
+                                <input type="submit" name="addAnnouncement" id="addAnnouncement" class="addAnnouncementButton" value="Post Announcement">
+
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src='<?php echo __httpRoot . "assest/"; ?>scripts/announcementsfunctionality.js'></script>
+
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
 </div>

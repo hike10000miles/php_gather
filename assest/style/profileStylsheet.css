@@ -1,7 +1,64 @@
-.jumbotron{
+.jumbotron {
     background-color: #428bca;
+
 }
 
-#label, #userDescription{
+#label {
+    font-family: Trebuchet MS;
     font-weight: bold;
+    color: darkblue;
+}
+
+.userDescription {
+    font-family: Trebuchet MS;
+    font-weight: bold;
+    color: white;
+}
+
+#description{
+    font-family: Trebuchet MS;
+    font-weight: bold;
+    color: #000000;
+}
+
+.text{
+    font-family: Trebuchet MS;
+    color: #000000;
+    font-weight: normal;
+}
+
+.pictureColumn{
+    border: 1px solid black;
+}
+
+#buttonRow{
+    background-color: #428bca;
+    height: 25%;
+    border-bottom: 3px solid black;
+}
+
+#buttonColumn, #lorempixem {
+    padding-top: 1.75%;
+}
+
+.tb{
+    width: 50%;
+
+}
+
+.tbbig{
+    width: 60%;
+    height: 10%;
+}
+
+#delete, #deletenope {
+    background-color: red;
+    color: white;
+}
+
+.unameMain{
+    font-family: "Trebuchet MS";
+    font-weight: bold;
+    font-size: x-large;
+    color: white;
 }
