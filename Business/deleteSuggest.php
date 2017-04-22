@@ -11,7 +11,6 @@ $db = Connect::dbConnect();
 $mysuggest = new Suggest($db);
 ?>
 <?php
-
 if(isset($_POST['delete']))
 {
     $id = $_POST['id'];
@@ -37,9 +36,7 @@ if(isset($_POST['delete']))
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-
-
-<?php include(__root."views/components/footer.php"); ?>
+    <?php include(__root."views/components/footer.php"); ?>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

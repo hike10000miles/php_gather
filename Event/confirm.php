@@ -49,6 +49,7 @@ $mail->smtpConnect(
 );
 
 //Username to use for SMTP authentication - use full email address for gmail
+
 $mail->Username = "eventgathering1@gmail.com";
 
 //Password to use for SMTP authentication

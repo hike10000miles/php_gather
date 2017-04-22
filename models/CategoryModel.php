@@ -85,6 +85,10 @@
         {
             return $this->_total;
         }
-
+        
+        public function __toString()
+        {  
+            return $this->_categoryTitle;
+        }
     }
 ?>

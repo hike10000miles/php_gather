@@ -4,22 +4,28 @@
 class gatheringsController
 {
 
-    private $_db;
 
-    public function __construct($dbConnection)
-    {
-        $this->_db = $dbConnection;
+   function getGathersbyUser($db,$uid){
+       $query1 = "SELECT g.*, gu.GatheringId FROM gatherings g JOIN gatherings_users gu ON g.id = gu.GatheringId JOIN users u on gu.UserId = u.id WHERE u.id = :uid";
+       $pdostmt = $db->prepare($query1);
+       $pdostmt->bindValue(':uid',$uid);
+
+       $pdostmt->execute();
+       $row = $pdostmt->fetchall();
+
+       return $row;
     }
 
 
-    function createGathering($db, $gatheringName, $gatheringDescription, $creationDate, $locationid, $userid){
+    function createGathering($db, $gatheringName, $gatheringDescription, $locationid, $userid){
 
-            $query = "INSERT INTO gatherings(gatheringName, gatheringDescription, creationDate, locationid, userid) 
-        VALUES (:gatheringName, :gatheringDescription, :creationDate, :locationid, :userid)";
+            $query = "INSERT INTO  gatherings
+                                (gatheringName, gatheringDescription, locationid, userid) 
+                      VALUES 
+                                (:gatheringName, :gatheringDescription, :locationid, :userid)";
             $pdostmt2 = $db->prepare($query);
             $pdostmt2->bindValue(':gatheringName', $gatheringName);
             $pdostmt2->bindValue(':gatheringDescription', $gatheringDescription);
-            $pdostmt2->bindValue(':creationDate', $creationDate);
             $pdostmt2->bindValue(':locationid', $locationid);
             $pdostmt2->bindValue(':userid', $userid);
             $row = $pdostmt2->execute();
@@ -33,7 +39,7 @@ class gatheringsController
         /*insertUser($pdoconnection, $username, $email, $password_hash, $password_salt,
             $firstname, $middlename, $lastname, $location_id, $role_id);*/
 
-        $query = "SELECT * FROM users WHERE id = :userid";
+        $query = "SELECT username, email, firstname, lastname FROM users WHERE id = :userid";
         $pdostmt2 = $db->prepare($query);
         $pdostmt2->bindValue(":userid", $id);
         /*$result = */$pdostmt2->execute();
@@ -59,24 +65,16 @@ class gatheringsController
 
     public function get_location_id($db)
     {
-        $query = "SELECT * FROM locations;";
+        $query = "SELECT StreetName, id FROM locations;";
         $pdostmt2 = $db->prepare($query);
         $pdostmt2->execute(); // now we execute the statement
         $locationResult= $pdostmt2->fetchAll(PDO::FETCH_ASSOC);
         $pdostmt2->closeCursor(); //dont forget this, because it disconnects your connection to db cuz there can only be 1 at a atime
-        // var_dump($locationResult);
+
         return $locationResult; //return ture because its succesfful
     }
 
-    public function get_testGathering($db)
-    {
-        $query = "SELECT * FROM gatherings WHERE id = 1;";
-        $pdostmt2 = $db->prepare($query);
-        $pdostmt2->execute(); // now we execute the statement
-        $gatherresult= $pdostmt2->fetch(PDO::FETCH_ASSOC);
-        $pdostmt2->closeCursor(); //dont forget this, because it disconnects your connection to db cuz there can only be 1 at a atime
-        return $gatherresult; //return ture because its succesfful
-    }
+
 
     public function selectGathering($db, $gatheringid)
     {
@@ -92,38 +90,18 @@ class gatheringsController
         return $userFetch;
     }
 
-    public function get_Gatheringusers($db, $gatheringid)
+    public function getGatheringusers($db, $gatheringid)
     {
-        $query = "SELECT * FROM gatherings_users WHERE GatheringId=4;";
+        $query = "SELECT u.username, u.email, u.id userId, u.firstname, u.lastname, g.id gatheringId, g.gatheringName 
+                  FROM gatherings_users gu 
+                  JOIN users u ON gu.UserId = u.id 
+                  JOIN gatherings g ON gu.GatheringId = g.id WHERE g.id = :id";
         $pdostmt2 = $db->prepare($query);
-//        $pdostmt2->bindValue(":GatheringId", $gatheringid);
-        $pdostmt2->execute(); // now we execute the statement
+        $pdostmt2->bindValue(":id", $gatheringid);
+        $pdostmt2->execute();
         $gatherresult= $pdostmt2->fetchall(PDO::FETCH_ASSOC);
-        $pdostmt2->closeCursor(); //dont forget this, because it disconnects your connection to db cuz there can only be 1 at a atime
-        return $gatherresult; //return ture because its succesfful
+        return $gatherresult; 
     }
-
-    public function get_GatheringusersModified($db, $gatheringid)
-    {
-        $query = "SELECT * FROM gatherings_users WHERE GatheringId = :gatheringid";
-        $pdostmt2 = $db->prepare($query);
-        $pdostmt2->bindValue(":gatheringid", $gatheringid);
-        $pdostmt2->execute(); // now we execute the statement
-        $gatherresult= $pdostmt2->fetchall(PDO::FETCH_ASSOC);
-        $pdostmt2->closeCursor(); //dont forget this, because it disconnects your connection to db cuz there can only be 1 at a atime
-        return $gatherresult; //return ture because its succesfful
-    }
-
-//    public function get_testGatheringusers($db)
-//    {
-//        $query = "SELECT * FROM gatherings_users WHERE Gatheringid = 1;";
-//        $pdostmt2 = $db->prepare($query);
-//        $pdostmt2->execute(); // now we execute the statement
-//        $gatherresult= $pdostmt2->fetchall(PDO::FETCH_ASSOC);
-//        $pdostmt2->closeCursor(); //dont forget this, because it disconnects your connection to db cuz there can only be 1 at a atime
-//        return $gatherresult; //return ture because its succesfful
-//    }
-
 
     public function getBusinessInfo($db, $id){
         $query = "SELECT b.*, l.* FROM business b LEFT JOIN locations l ON b.locationid = l.id WHERE b.id  = :id";
@@ -142,6 +120,22 @@ class gatheringsController
         $gatherresult= $pdostmt2->fetch(PDO::FETCH_ASSOC);
         $pdostmt2->closeCursor(); //dont forget this, because it disconnects your connection to db cuz there can only be 1 at a atime
         return $gatherresult; //return ture because its succesfful
+    }
+
+    public function getEvents($db, $id)
+    {
+        $query = "SELECT e.id, e.EventName, e.EventDescription, e.BusinessId, e.StartDateTime, e.EndDateTime, e.price, g.gatheringName, b.businessName
+                  FROM gatherings_events ge 
+                  JOIN events e ON ge.EventId = e.id 
+                  JOIN gatherings g ON ge.GatheringId = g.id
+                  JOIN business b ON e.BusinessId = b.id
+                  WHERE g.id = :id";
+        $pdostmt = $db->prepare($query);
+        $pdostmt->bindValue(":id", $id);
+        $pdostmt->execute();
+        $result = $pdostmt->fetchall();
+        return $result;
+
     }
 
     public function getEventList($db,$id){

@@ -3,7 +3,7 @@
 class ListDAO
 {
     public function getItems($db){
-        $query = "SELECT t.*, u.username FROM to_do t LEFT JOIN users u ON t.user_id = u.id ";
+        $query = "SELECT t.*, u.username FROM to_do t LEFT JOIN users u ON t.user_id = u.id ORDER BY t.created";
         $pdostmt = $db->prepare($query);
         $pdostmt->execute();
 
@@ -32,6 +32,8 @@ class ListDAO
     }
 
     public function addItem($db, $listitem, $user){
+        $insertedId = "";
+
         $query2 = "INSERT INTO to_do (listitem, user_id, done) VALUES (:listitem, :user, 0)";
 
         $pdostmt2 = $db->prepare($query2);
@@ -39,8 +41,9 @@ class ListDAO
         $pdostmt2->bindValue(':user',$user);
 
         $pdostmt2->execute();
+        $insertedId = $db->lastInsertId();
         $pdostmt2->closeCursor();
-
+        return $insertedId;
     }
 
     public function deleteItem($db, $id){

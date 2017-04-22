@@ -12,6 +12,15 @@ $db = Connect::dbConnect();
 $eventConnect = new EventConnect($db);
 $categoryConnect = new CategoryConnect($db);
 $businessview = new BusinessDAO();
+$error = null;
+$categories_diff = null;
+
+try {
+    $categories = $categoryConnect->getCategories();
+} catch(Exception $e) {
+    $error = $e;
+}
+
 $event = null;
 $eventCategories = null;
 $businessdetails = null;
@@ -43,6 +52,7 @@ if(isset($_GET["id"])) {
         $_SESSION['id'] = $event->getBusinessId();
         $businessdetails = $businessview->getBusinessInfo($db,$_SESSION['id']);
     }
+    $categories_diff =  array_diff($categories, $eventCategories);
 } else {
     $event = new Exception("Event not found!");
 }
@@ -66,11 +76,15 @@ if(isset($_GET["id"])) {
 <?php include(__root."views/components/userheader.php"); ?>
 
 <div class="container">
-
+    <?php if(is_a($error, "Exception")):?>
+        <div class="alert alert-danger">
+            <?php echo $error->getMessage();?>
+        </div>
+    <?php endif;?>
     <?php foreach ($businessdetails as $bd) : ?>
     <div class="row">
         <div class="col-md-3">
-                <h1 class=""><?php echo $bd['businessName']; ?></h1>
+                <h1 class=""><a href='<?php echo __httpRoot . "Business/Business.php?id=" . $bd['id']; ?>'><?php echo $bd['businessName']; ?></a></h1>
                 <i style="color:green" class="fa fa-check-square"></i> Still In Business
                 <div class="ratings">
                     <span>
@@ -147,19 +161,48 @@ if(isset($_GET["id"])) {
                     <?php if($event->getStartDateTime("detail") < date("Y-m-d H:i:s")):?>
                         <p class="alert alert-danger">Past Event</p>
                     <?php else: ?>
-                        <a type="" class="btn btn-default">Add to my Gathering</a>
+                        <?php if($_SESSION['LoggedIn']['UserRole'] == 'normal'):?>
+                            <a href='addEventToGathering.php?id=<?php echo $event->getEventId()?>' class="btn btn-default">Add to my Gathering</a>
+                        <?php else: ?>
+                            <a class="btn btn-default" id="category_event_btn">Category This Event</a>
+                        <?php endif;?>
                     <?php endif; ?>
                 </div>
                 <?php if(!is_a($eventCategories, "Exception")) :?>
                 <div class="panel-footer event-categories">
-                    <p class="categoryTitle">
                     <?php foreach($eventCategories as $eventCategory) :?>
                     <span class="label label-default"><?php echo $eventCategory->getTitle(); ?></span>
                     <?php endforeach ?>
-                    </p>
                 </div>
                 <?php endif?>
             </div>
+
+            <div class="nondisplay" id="event-category-panel">
+                <div id="display-category-description"></div>
+                <div class="" id="all-event-category">
+                    <h4>All remaining categories</h4>
+                    <?php if(isset($categories)):?>
+                        <?php foreach($categories_diff as $category):?>
+                            <span class="label label-primary click-add cform" data-id='<?php echo $category->getId(); ?>' data-des='<?php echo $category->getDescription();?>'><?php echo $category->getTitle()?></span>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </div>
+
+                <div class="" id="event-category">
+                    <h4>This Event's categories</h4>
+                    <?php if(!is_a($eventCategories, "Exception")) :?>
+                        <?php foreach($eventCategories as $eventCategory) :?>
+                            <span class="label label-default click-remove cform" data-id='<?php echo $eventCategory->getId(); ?>' data-des='<?php echo $eventCategory->getDescription();?>'><?php echo $eventCategory->getTitle(); ?></span>
+                        <?php endforeach ?>
+                    <?php endif?>
+                </div>
+                <form action="addCategory.php" method="POST">
+                    <input type="text" name="EventId" value='<?php echo $event->getEventId();?>' hidden>
+                    <input type="text" name="Categories" id="form-category" hidden>
+                    <input type="submit" class="btn btn-default" value="submit"/>
+                </form>
+            </div>
+
             <?php if($_SESSION['LoggedIn']['UserRole'] == 'business'):?>
             <form action='Edit.php' method='get'>
                 <input type='hidden' name='id' value='<?php echo $event->getEventId(); ?>'>
@@ -183,6 +226,7 @@ if(isset($_GET["id"])) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
+    <script src=<?php echo __httpRoot."assest\js\Event.js"?>></script>
 </div>
 </body>
 </html>
