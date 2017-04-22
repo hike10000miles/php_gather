@@ -1,9 +1,5 @@
 <?php
-session_start();
- if(!defined("__root")) {
-    require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
-}
-include __root . 'DbConnect/connect.php';
+
 include __root . 'controllers/Business.php';
 include __root . 'controllers/EventController.php';
 include __root . 'controllers/ReviewsController.php';
