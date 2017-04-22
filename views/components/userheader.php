@@ -45,7 +45,7 @@
                                             <p class="text-left"><strong><?php echo $_SESSION['LoggedIn']['Firstname']." ".$_SESSION['LoggedIn']['Firstname'];?></strong></p>
                                             <p class="text-left small"><?php echo $_SESSION['LoggedIn']['Email'];?></p>
                                             <p class="text-left">
-                                                <a href="#" class="btn btn-primary btn-block btn-sm">Update Login Details</a>
+                                                <a href="<?php echo __httpRoot . "SignUp/edit.php"?>" class="btn btn-primary btn-block btn-sm">Update Login Details</a>
                                                 <a href="#" class="btn btn-primary btn-block btn-sm">Update Profile Details</a>
                                             </p>
                                         </div>
