@@ -1,5 +1,7 @@
 <?php
-
+if(!defined("__root")) {
+    require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
+}
 include __root . 'controllers/Business.php';
 include __root . 'controllers/EventController.php';
 include __root . 'controllers/ReviewsController.php';
