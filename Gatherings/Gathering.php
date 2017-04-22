@@ -8,33 +8,21 @@ include __root . 'controllers/gatheringsController.php';
 include __root . 'controllers/EventController.php';
 include __root . 'controllers/ChecklistController.php';
 
-
-if (!isset($_SESSION['user_id']) && !isset($_SESSION['gatherid'])) {
-    echo "Sorry, there was a problem with your gathering, you will now be redirected to sign up again";
-    header('Location: create.php');
-}
-
 $db = Connect::dbConnect();
-
-
-$_SESSION['LoggedIn']['UserId'];
 
 if(isset($_GET['id'])){
     $id = $_GET['id'];
 }
 
-$eventController = new EventConnect($db);
-$gathercontroller = new gatheringsController($db);
+$gathercontroller = new gatheringsController();
 
 $usersDetails = $gathercontroller->selectUserDetails($db, $_SESSION['LoggedIn']['UserId']);
 
-$row = $gathercontroller->selectGathering($db,$id);
+$gathering = $gathercontroller->selectGathering($db,$id);
 
-$fetchUsers = $gathercontroller->get_GatheringusersModified($db, $id);
+$gatheringUsers = $gathercontroller->getGatheringusers($db, $id);
 
-$fetchEvents = $gathercontroller->get_GatheringusersModified($db, $id);
-
-$events = $gathercontroller->getgatheringsEvents($db);
+$gatheringEvents = $gathercontroller->getEvents($db, $id);
 
 $dataAO = new ListDAO();
 $user = $_SESSION['LoggedIn']['UserId'];
@@ -54,26 +42,27 @@ if(isset($_POST['listitem'])){
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <?php include(__root."views/components/globalhead.php"); ?>
     <link rel="stylesheet" type="text/css" href="../assest/style/todo_style.css">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Business | Gather</title>
 </head>
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <h1 class=""><?php echo $row['gatheringName']; ?></h1>
-            </div>
-            <div class="col-md-9">
-                <img title="profile image" class="img-responsive" src="http://lorempixel.com/850/250/sports">
-            </div>
+<div>Owned by <?php echo $usersDetails['username']?></div>
+<div>
+    <h2>People in this gathering</h2>
+    <?php foreach($gatheringUsers as $user):?>
+        <div>
+            <p>Username: <?php echo $user['username']?></p>
+            <p>Email: <?php echo $user['email']?></p>
+            <p><?php echo $user['firstname']." ". $user['lastname']?></p>
         </div>
+    <?php endforeach; ?>
         <div class="row" style="margin-top:1em;">
             <div class="col-sm-3">
                 <!--------------------------------left col------------------------------->
@@ -204,9 +193,9 @@ if(isset($_POST['listitem'])){
         </div>
 
     <?php include(__root."views/components/footer.php"); ?>
-<--jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!--jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
- <--Include all compiled plugins (below), or include individual files as needed -->
+ <!--Include all compiled plugins (below), or include individual files as needed -->
     <script src='<?php /*echo __httpRoot . "assest/"; */?>bootstrap/js/bootstrap.min.js'></script>
    <script>
         // $(document).ready(function() {
@@ -232,5 +221,14 @@ if(isset($_POST['listitem'])){
         //  });
     </script>
 </div>
+
+<?php include(__root."views/components/footer.php"); ?>
+</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
+    <script src='<?php echo __httpRoot . 'assest\js\Business.js'?>'></script>
+
 </body>
+
 </html>

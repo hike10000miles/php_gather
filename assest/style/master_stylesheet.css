@@ -207,6 +207,12 @@ span.click-add, span.click-remove {
 .nondisplay {
 	display: none;
 }
+li {
+	list-style-type: none;
+}
+ul {
+	padding: 0;
+}
 @media only screen and (min-width: 768px){
 
 	#first{

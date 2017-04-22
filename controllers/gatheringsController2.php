@@ -144,7 +144,6 @@ class gatheringsController
         $pdostmt2 = $db->prepare($query);
         $pdostmt2->bindValue(':id',$id);
         $pdostmt2->execute();
-
         $events = $pdostmt2->fetchAll();
         return $events;
     }
@@ -153,11 +152,21 @@ class gatheringsController
       $query = "SELECT * FROM gatheringevents";
        $pdostmt2 = $db->prepare($query);
        $pdostmt2->execute();
-
        $events = $pdostmt2->fetchAll(PDO::FETCH_OBJ);
        return $events;
    }
 
+   public function addEventToGathering($db, $gatherId, $eventsId)
+   {
+       $query = "INSERT INTO gatherings_events
+                           (GatheringId, EventId)
+                    VALUES(:gatheringId, :eventId);";
+        $pdostmt = $db->prepare($query);
+        $pdostmt->bindValue(':gatheringId', $gatherId);
+        $pdostmt->bindValue(':eventId', $eventsId);
+        $result = $pdostmt->execute();
+        return $result;
+   }
 
 
 }
