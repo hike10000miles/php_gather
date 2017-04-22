@@ -162,7 +162,7 @@ if(isset($_GET["id"])) {
                         <p class="alert alert-danger">Past Event</p>
                     <?php else: ?>
                         <?php if($_SESSION['LoggedIn']['UserRole'] == 'normal'):?>
-                            <a class="btn btn-default">Add to my Gathering</a>
+                            <a href='addEventToGathering.php?id=<?php echo $event->getEventId()?>' class="btn btn-default">Add to my Gathering</a>
                         <?php else: ?>
                             <a class="btn btn-default" id="category_event_btn">Category This Event</a>
                         <?php endif;?>

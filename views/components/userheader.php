@@ -29,7 +29,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-user"></span> 
-                            <strong><?php echo $_SESSION['LoggedIn']['Username']?></strong>
+                            <strong><?php echo $_SESSION['LoggedIn']['Username'];?></strong>
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul style="background-color:white;" class="dropdown-menu">

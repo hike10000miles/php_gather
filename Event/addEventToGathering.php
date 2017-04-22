@@ -4,25 +4,29 @@ if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 include __root . 'DbConnect/connect.php';
-include __root . 'controllers/gatheringsController.php';
+include __root . 'controllers/gatheringsController2.php';
 include __root . 'controllers/EventController.php';
 
 $db = Connect::dbConnect();
 
-if(isset($_GET['id'])){
-    $id = $_GET['id'];
+$gathercontroller = new gatheringsController();
+$eventId = null;
+
+if(isset($_POST['add'])) {
+    if(isset($_POST['gatheringId']) && isset($_POST['eventId'])) {
+        $result = $gathercontroller->addEventToGathering($db, $_POST['gatheringId'], $_POST['eventId']);
+        if($result) {
+            header("Location: " . __httpRoot . "Event/Events.php");
+            exit;
+        }
+    }
 }
 
-$gathercontroller = new gatheringsController();
+if(isset($_GET['id'])){
+    $eventId = $_GET['id'];
+}
 
-$usersDetails = $gathercontroller->selectUserDetails($db, $_SESSION['LoggedIn']['UserId']);
-
-$gathering = $gathercontroller->selectGathering($db,$id);
-
-$gatheringUsers = $gathercontroller->getGatheringusers($db, $id);
-
-$gatheringEvents = $gathercontroller->getEvents($db, $id);
-
+$gatherings = $gathercontroller->getGathersbyUser($db,$_SESSION['LoggedIn']['UserId']);
 ?>
 
 <!DOCTYPE>
@@ -42,25 +46,17 @@ $gatheringEvents = $gathercontroller->getEvents($db, $id);
 
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-<div>Owned by <?php echo $usersDetails['username']?></div>
 <div>
-    <h2>People in this gathering</h2>
-    <?php foreach($gatheringUsers as $user):?>
+    <h2>My Gathering</h2>
+    <?php foreach($gatherings as $gathering):?>
         <div>
-            <p>Username: <?php echo $user['username']?></p>
-            <p>Email: <?php echo $user['email']?></p>
-            <p><?php echo $user['firstname']." ". $user['lastname']?></p>
-        </div>
-    <?php endforeach;?>
-</div>
-<div>
-    <h2>Events in this gathering</h2>
-    <?php foreach($gatheringEvents as $event):?>
-        <div>
-            <p>Event Name: <?php echo $event['EventName']?></p>
-            <p>Business Name: <?php echo $event['businessName']?></p>
-            <p>Start: <?php echo $event['StartDateTime']?></p>
-            <p>End: <?php echo $event['EndDateTime']?></p>
+            <p>Gathering Name: <?php echo $gathering['gatheringName']?></p>
+            <p>Gathering Description: <?php echo $gathering['gatheringDescription']?></p>
+            <form action="addEventToGathering.php" method="POST">
+                <input name="gatheringId" value='<?php echo $gathering['id']?>' hidden/>
+                <input name="eventId" value='<?php echo $_GET['id']?>' hidden/>
+                <input type="submit" name="add" value="Add" class="btn btn-default">
+            </form>
         </div>
     <?php endforeach?>
 </div>

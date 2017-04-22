@@ -4,7 +4,7 @@ if(!defined("__root")) {
     require( $_SERVER['DOCUMENT_ROOT']. "\php_gather\configer.php");
 }
 include __root . 'DbConnect/connect.php';
-include __root . 'controllers/gatheringsController.php';
+include __root . 'controllers/gatheringsController2.php';
 
 
 $db = Connect::dbConnect();

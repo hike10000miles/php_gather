@@ -105,14 +105,15 @@ class Blog
 
     public function getComment($id)
     {
-        $query7 = "SELECT * FROM comments
-                  JOIN blog
-                  ON comments.blog_id = blog.id
-                  WHERE blog.id = :id";
+        $query7 = "     SELECT comments.* 
+                          FROM comments
+                    INNER JOIN blog
+                            ON comments.blog_id = blog.id
+                         WHERE blog.id = :id";
         $pdostmt7 = $this->db->prepare($query7);
         $pdostmt7->bindValue(':id',$id, PDO::PARAM_INT);
         $pdostmt7->execute();
-        $detailss = $pdostmt7->fetch(PDO::FETCH_OBJ);
+        $detailss = $pdostmt7->fetchAll(PDO::FETCH_OBJ);
         return $detailss;
     }
 

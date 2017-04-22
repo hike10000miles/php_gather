@@ -32,7 +32,7 @@ if(isset($_SESSION['LoggedIn']['BusinessId'])) {
     }
 } elseif (isset($_SESSION['LoggedIn']['UserId']) && isset($_GET['id'])) {
     try {
-        $businessdetails = $businessview->getBusinessInfo($db,$_GET['id']);
+        $businessdetails = $businessview->getBusinessInfo($db, $_GET['id']);
         $events = $eventController->getEventList($_GET['id']);
         $reviews = $reviewController->displayreviewsbybusinessid($_GET['id']);
     } catch (Exception $e) {
@@ -61,10 +61,7 @@ $totalreview = $reviewController->getCountReviews($businessId);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <?php include(__root."views/components/globalhead.php"); ?>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
@@ -72,6 +69,8 @@ $totalreview = $reviewController->getCountReviews($businessId);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Business | Gather</title>
 </head>
+<body>
+
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
     <?php if(is_a($error, "Exception")):?>
@@ -193,6 +192,8 @@ $totalreview = $reviewController->getCountReviews($businessId);
     <script src='<?php echo __httpRoot . "assest/"; ?>bootstrap/js/bootstrap.min.js'></script>
     <script src='<?php echo __httpRoot . 'assest\js\Business.js'?>'></script>
 <?php include(__root."views/components/footer.php"); ?>
+
+</div>
 </body>
 
 </html>

@@ -5,7 +5,7 @@ if(!defined("__root")) {
 }
 include __root . 'DbConnect/connect.php';
 include __root . 'controllers/gatheringsController.php';
-include __root . 'controllers/EventController.php';
+include __root . 'controllers/EventController2.php';
 
 $db = Connect::dbConnect();
 
