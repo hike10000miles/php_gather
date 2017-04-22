@@ -14,6 +14,19 @@ if(isset($_GET['id'])){
     $id = $_GET['id'];
 }
 
+$eventController = new EventConnect($db);
+
+$gathercontroller = new gatheringsController($db);
+
+$usersDetails = $gathercontroller->selectUserDetails($db, $_SESSION['LoggedIn']['UserId']);
+$row = $gathercontroller->selectGathering($db,$id);
+
+
+
+
+
+$events = $gathercontroller->getgatheringsEvents($db);
+
 $gathercontroller = new gatheringsController();
 
 $usersDetails = $gathercontroller->selectUserDetails($db, $_SESSION['LoggedIn']['UserId']);
@@ -53,104 +66,87 @@ if(isset($_POST['listitem'])){
 <body>
 <?php include(__root."views/components/userheader.php"); ?>
 <div class="container">
-<div>Owned by <?php echo $usersDetails['username']?></div>
-<div>
-    <h2>People in this gathering</h2>
-    <?php foreach($gatheringUsers as $user):?>
-        <div>
-            <p>Username: <?php echo $user['username']?></p>
-            <p>Email: <?php echo $user['email']?></p>
-            <p><?php echo $user['firstname']." ". $user['lastname']?></p>
+    <div class="row">
+        <div class="col-md-3">
+            <h1 class=""><?php echo $row['gatheringName']; ?></h1>
         </div>
-    <?php endforeach; ?>
-        <div class="row" style="margin-top:1em;">
-            <div class="col-sm-3">
-                <!--------------------------------left col------------------------------->
-                <ul class="list-group">
-                    <li class="list-group-item text-muted" contenteditable="false">Gathering's Info</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Date Created</strong></span> <?php echo $row['creationDate']?></li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong class="">Status:</strong></span>Closed Group</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item text-muted">Created By: <i class="fa fa-address-book-o fa-1x"></i></li>
-                    <li class="list-group-item text-left"><strong class=""><?php echo $row['userid']; ?></strong></li>
-                </ul>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Gathering's Members<i class="fa fa-link fa-1x"></i></div>
-                    <div class="panel-body"><a href="#" class="">
-                            <?php
-                            foreach ($fetchUsers as $key){
-                                       $query = "SELECT username FROM users WHERE id =".$key['UserId'];
-                                       $pdostmt2 = $db->prepare($query);
-                                       $pdostmt2->execute();
-                                       $gatherresultUsernameswithUserId= $pdostmt2->fetch(PDO::FETCH_ASSOC);
-                                       $pdostmt2->closeCursor();
-                                       foreach ($gatherresultUsernameswithUserId as $keyusername){
-                                       echo $keyusername;
-                                       }
-                                       ?><br>
-                            <?php } ?>
-                        </a>
-
-                    </div>
+        <div class="col-md-9">
+            <img title="profile image" class="img-responsive" src="http://lorempixel.com/850/250/sports">
+        </div>
+    </div>
+    <div class="row" style="margin-top:1em;">
+        <div class="col-sm-3">
+            <!--------------------------------left col------------------------------->
+            <ul class="list-group">
+                <li class="list-group-item text-muted" contenteditable="false">Gathering's Info</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Date Created</strong></span> <?php echo $row['creationDate']?></li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong class="">Status:</strong></span>Closed Group</li>
+            </ul>
+            <ul class="list-group">
+                <li class="list-group-item text-muted">Created By: <i class="fa fa-address-book-o fa-1x"></i></li>
+                <li class="list-group-item text-left"><strong class=""><?php echo $row['userid']; ?></strong></li>
+            </ul>
+            <div class="panel panel-default">
+                <div class="panel-heading">Gathering's Members<i class="fa fa-link fa-1x"></i></div>
+                <div class="panel-body">
+                    <p>Kevin</p>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Social Media</div>
-                    <div class="panel-body">
-                        <i class="fa fa-facebook fa-2x"></i>
-                        <i class="fa fa-github fa-2x"></i>
-                        <i class="fa fa-twitter fa-2x"></i>
-                        <i class="fa fa-pinterest fa-2x"></i>
-                        <i class="fa fa-google-plus fa-2x"></i>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Social Media</div>
+                <div class="panel-body">
+                    <i class="fa fa-facebook fa-2x"></i>
+                    <i class="fa fa-github fa-2x"></i>
+                    <i class="fa fa-twitter fa-2x"></i>
+                    <i class="fa fa-pinterest fa-2x"></i>
+                    <i class="fa fa-google-plus fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <!-----------GATHER MAIN------------------------->
+        <div class="col-sm-9" contenteditable="false" >
+            <div class="panel panel-default">
+                <div class="panel-heading"><?php echo $row['gatheringName']; ?> Gathering Description</div>
+                <div class="panel-body"><?php echo $row['gatheringDescription']; ?></div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" contenteditable="false">Events<span class="pull-right"><a href="#">View More</a></span></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <?php foreach($events as $event): ?>
+                            <div class="col-md-4">
+                                <div class="thumbnail">
+                                    <img alt="300x200" src="http://lorempixel.com/300/150/technics">
+                                    <div class="caption">
+                                        <h4 class="pull-right"></h4>
+                                        <?php echo $event->EventName;
+                                        echo $event->EventDescription;
+                                        echo "<br/> ";
+                                        echo '$'. $event->price;
+                                        echo "<br/>";?>
+                                        <span><a href="<?php echo __httpRoot . "Event/bookEvents.php?id=".$event->id ?>" class="btn btn-danger" role="button">Book</a></span>
+                                        <span><a href="<?php echo __httpRoot . "Event/StripePaymentForm.php?id=".$event->id ?>" class="btn btn-info" role="button">Pay</a></span>
+                                    </div>
+                                    <div class="ratings">
+                                        <p class="pull-right">15 reviews</p>
+                                        <p>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                            <span class="glyphicon glyphicon-star"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
-            <!-----------GATHER MAIN------------------------->
-            <div class="col-sm-9" contenteditable="false" >
-                <div class="panel panel-default">
-                    <div class="panel-heading"><?php echo $row['gatheringName']; ?> Gathering Description</div>
-                    <div class="panel-body"><?php echo $row['gatheringDescription']; ?></div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading" contenteditable="false">Events<span class="pull-right"><a href="#">View More</a></span></div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <?php foreach($events as $event): ?>
-                                <div class="col-md-4">
-                                    <div class="thumbnail">
-                                        <img alt="300x200" src="http://lorempixel.com/300/150/technics">
-                                        <div class="caption">
-                                            <h4 class="pull-right"></h4>
-                                            <?php echo $event->EventName;
-                                            echo $event->EventDescription;
-                                            echo "<br/> ";
-                                            echo '$'. $event->price;
-                                            echo "<br/>";?>
-                                            <span><a href="<?php echo __httpRoot . "Event/bookEvents.php?id=".$event->id ?>" class="btn btn-danger" role="button">Book</a></span>
-                                                 <span><a href="<?php echo __httpRoot . "Event/StripePaymentForm.php?id=".$event->id ?>" class="btn btn-info" role="button">Pay</a></span>
-                                        </div>
-                                        <div class="ratings">
-                                            <p class="pull-right">15 reviews</p>
-                                            <p>
-                                                <span class="glyphicon glyphicon-star"></span>
-                                                <span class="glyphicon glyphicon-star"></span>
-                                                <span class="glyphicon glyphicon-star"></span>
-                                                <span class="glyphicon glyphicon-star"></span>
-                                                <span class="glyphicon glyphicon-star"></span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Review</div>
-                    <div class="panel-body"> Insert Reviews Here. </div>
-                </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Review</div>
+                <div class="panel-body"> Insert Reviews Here. </div>
+            </div>
                 <!------------------ Checklist (Kevin)-------------->
                 <div class="panel panel-default">
                     <div class="panel-heading">Checklist</div>
