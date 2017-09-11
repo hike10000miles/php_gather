@@ -1,0 +1,19 @@
+
+
+#pollMain{
+    padding: 1%;
+    border: 1px solid #86bfcf;
+}
+
+#pollQuestions{
+    font-weight: bold;
+    margin-bottom: 1%;
+}
+
+.optionsforthepoll{
+    margin-bottom: 2%;
+}
+
+.optionsforthepoll{
+    margin-bottom: 1%;
+}
